@@ -1,0 +1,775 @@
+/* ==========================================================================
+   BeyondGR PROJECT — Contacts Page Styles
+   File: css/contacts.css
+   Scope: Styles exclusive to contacts.html.
+   Requires: css/style.css (global tokens, shared components, .page-hero,
+             .page-body, .accent-rule)
+
+   Sections:
+     §18   .contacts-section — outer padding wrapper
+     §19   .location-dashboard — unified white card container
+     §20   Location dashboard panels (map + address)
+     §21   .accent-rule (defined globally in style.css — no override needed)
+     §22   Address card scoped overrides inside dashboard
+     §23   .inquiries-section — full-width white card
+     §24   .inquiries-grid — responsive PI card grid
+     §25   Map wrapper, iframe, anti-trapping states
+     §26   Map overlay & prompt badge
+     §27   Map external link
+     §28   .address-card — base standalone card rules
+     §29   .directory-list / item / link
+     §30   .btn-contact-cta
+     §31   .pi-card — individual researcher contact cards
+     §32   .hours-grid — office hours definition list
+     §33   Contacts page responsive breakpoints
+   ========================================================================== */
+
+
+/* --------------------------------------------------------------------------
+   §18  CONTACTS SECTION — Outer vertical padding wrapper
+   Sits inside .page-body (#F4F4F4 bg). Provides breathing room above
+   and below the two dashboard cards.
+   -------------------------------------------------------------------------- */
+.contacts-section {
+  padding-block: var(--space-3xl);
+}
+
+
+/* --------------------------------------------------------------------------
+   §19  LOCATION DASHBOARD — Unified white card container
+   Houses the map panel and the "Our Location" address panel.
+   No internal dividing borders — a single seamless elevated surface.
+
+   Mobile-first: flex-direction column (map on top, address below).
+   Desktop (≥992px): flex-direction row (map ~60% | address ~40%).
+
+   overflow: hidden clips iframe rounded corners to the card border-radius.
+   -------------------------------------------------------------------------- */
+.location-dashboard {
+  display: flex;
+  flex-direction: column;
+  background-color: var(--color-card-bg);
+  border-radius: 12px;
+  box-shadow: var(--shadow-md);
+  overflow: hidden;
+  margin-bottom: var(--space-3xl);
+  transition: background-color var(--transition-base),
+              box-shadow var(--transition-base);
+}
+
+[data-theme="dark"] .location-dashboard {
+  box-shadow: var(--shadow-lg);
+}
+
+@media (min-width: 992px) {
+  .location-dashboard {
+    flex-direction: row;
+    align-items: stretch;
+  }
+}
+
+
+/* --------------------------------------------------------------------------
+   §20  LOCATION DASHBOARD PANELS
+
+   MAP PANEL (~60%)
+   Internal padding creates breathing room between the iframe and the card
+   edges.
+   -------------------------------------------------------------------------- */
+.location-dashboard__map {
+  flex: 1 1 60%;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  padding: var(--space-lg);
+  padding-bottom: var(--space-xl);
+}
+
+/* ADDRESS PANEL (~40%)
+   No border-left on desktop. A very light border-top appears only on
+   mobile/tablet where the panel stacks below the map.
+   -------------------------------------------------------------------------- */
+.location-dashboard__address {
+  flex: 0 0 40%;
+  display: flex;
+  flex-direction: column;
+  padding: var(--space-xl);
+  border: none;
+}
+
+@media (max-width: 991px) {
+  .location-dashboard__address {
+    border-top: 1px solid var(--color-border);
+  }
+
+  [data-theme="dark"] .location-dashboard__address {
+    border-top-color: rgba(30, 58, 95, 0.6);
+  }
+}
+
+
+/* --------------------------------------------------------------------------
+   §22  ADDRESS CARD — Scoped overrides for the dashboard context
+   When .address-card is inside .location-dashboard__address the dashboard
+   panel IS the elevated surface, so the card strips its own chrome to
+   avoid double-boxing.
+   -------------------------------------------------------------------------- */
+
+.location-dashboard__address .address-card {
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  border-radius: 0;
+  padding: 0;
+  margin: 0;
+  gap: 0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.location-dashboard__address .address-card__body {
+  margin-top: 0;
+  margin-bottom: var(--space-lg);
+}
+
+/* Suppress legacy border-bottom on .address-card__header —
+   the <hr class="accent-rule"> immediately after handles this. */
+.location-dashboard__address .address-card__header {
+  border-bottom: none;
+  padding-bottom: 0;
+  margin-bottom: 0;
+}
+
+/* Dark mode: --color-primary = #001A33 is invisible on Deep Navy card surface.
+   Override heading to accent gold. */
+[data-theme="dark"] .location-dashboard__address .address-card__heading {
+  color: var(--color-accent);
+}
+
+/* Centre the "Get Directions" button inside the flex-column address panel */
+.location-dashboard__address .address-card__directions-btn {
+  align-self: center;
+  margin-top: var(--space-md);
+  margin-bottom: 0;
+}
+
+
+/* --------------------------------------------------------------------------
+   §23  INQUIRIES SECTION — Full-width white card
+   Visual language mirrors .location-dashboard: same border-radius,
+   box-shadow, and background token.
+   -------------------------------------------------------------------------- */
+.inquiries-section {
+  background-color: var(--color-card-bg);
+  border-radius: 12px;
+  box-shadow: var(--shadow-md);
+  padding: var(--space-xl);
+  transition: background-color var(--transition-base),
+              box-shadow var(--transition-base);
+}
+
+[data-theme="dark"] .inquiries-section {
+  box-shadow: var(--shadow-lg);
+}
+
+/* Section header: icon + h2 in a flex row */
+.inquiries-section__header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding-bottom: 0;
+  margin-bottom: 0;
+}
+
+.inquiries-section__icon {
+  width: 22px;
+  height: 22px;
+  flex-shrink: 0;
+  color: var(--color-primary);
+  stroke: currentColor;
+  transition: color var(--transition-base);
+}
+
+[data-theme="dark"] .inquiries-section__icon {
+  color: var(--color-accent);
+}
+
+.inquiries-section__title {
+  font-size: var(--font-size-h2);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-primary);
+  line-height: 1.2;
+  margin: 0;
+  transition: color var(--transition-base);
+}
+
+[data-theme="dark"] .inquiries-section__title {
+  color: var(--color-accent);
+}
+
+
+/* --------------------------------------------------------------------------
+   §24  INQUIRIES GRID — Responsive PI card grid
+
+   Mobile-first: 1 column.
+   Tablet  (768px–991px): 2 equal columns.
+   Desktop (≥992px):      3 equal columns.
+
+   Gap locked to --grid-gap (24px) per project specification.
+   -------------------------------------------------------------------------- */
+.inquiries-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--grid-gap);
+  align-items: start;
+  margin-top: 0;
+}
+
+@media (min-width: 768px) {
+  .inquiries-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 992px) {
+  .inquiries-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+
+/* --------------------------------------------------------------------------
+   §25  MAP WRAPPER — Container, aspect ratio, border, placeholder state
+   -------------------------------------------------------------------------- */
+.map-wrapper {
+  position: relative;
+  width: 100%;
+  height: 450px;
+  border-radius: var(--border-radius-lg);
+  border: 1px solid var(--color-border);
+  background-color: var(--color-bg-alt);
+  overflow: hidden;
+  cursor: pointer;
+  transition: border-color var(--transition-base),
+              box-shadow var(--transition-base);
+}
+
+/* Subtle ring when the map is active */
+.map-wrapper.is-active {
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px rgba(255, 184, 28, 0.20);
+}
+
+[data-theme="dark"] .map-wrapper.is-active {
+  box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.22);
+}
+
+/* MAP IFRAME — base rules & dark-mode filter */
+.map-wrapper iframe {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: none;
+  /* pointer-events: none prevents scroll-trapping in default idle state */
+  pointer-events: none;
+  transition: filter var(--transition-slow);
+}
+
+[data-theme="dark"] .map-wrapper iframe {
+  filter: invert(90%) hue-rotate(180deg) brightness(85%) contrast(85%);
+}
+
+/* Re-enable pointer-events when active (JS) or keyboard-focused (CSS) */
+.map-wrapper.is-active iframe,
+.map-wrapper:focus-within iframe {
+  pointer-events: auto;
+}
+
+/* Hide overlay when active */
+.map-wrapper.is-active .map-overlay,
+.map-wrapper:focus-within .map-overlay {
+  opacity: 0;
+  pointer-events: none;
+}
+
+
+/* --------------------------------------------------------------------------
+   §26  MAP OVERLAY — Click-prompt badge
+   -------------------------------------------------------------------------- */
+.map-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  background-color: rgba(0, 55, 108, 0.08);
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-start;
+  padding: var(--space-md);
+  transition: opacity var(--transition-base);
+  pointer-events: none;
+}
+
+[data-theme="dark"] .map-overlay {
+  background-color: rgba(0, 26, 51, 0.15);
+}
+
+.map-overlay__prompt {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: var(--space-xs) var(--space-md);
+  background-color: var(--color-primary);
+  color: var(--color-text-inverse);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  border-radius: 100px;
+  letter-spacing: 0.03em;
+  box-shadow: var(--shadow-md);
+  pointer-events: none;
+}
+
+[data-theme="dark"] .map-overlay__prompt {
+  background-color: var(--color-accent);
+  color: var(--color-primary);
+}
+
+.map-overlay__icon {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+  fill: currentColor;
+}
+
+
+/* --------------------------------------------------------------------------
+   §27  MAP EXTERNAL LINK — "Open in Google Maps" anchor below the map
+   -------------------------------------------------------------------------- */
+.map-external-link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  text-decoration: none;
+  padding: var(--space-xs) 0;
+  transition: color var(--transition-fast);
+  align-self: flex-start;
+}
+
+.map-external-link:hover {
+  opacity: 1;
+  color: var(--color-primary);
+}
+
+[data-theme="dark"] .map-external-link:hover {
+  color: var(--color-accent);
+}
+
+
+/* --------------------------------------------------------------------------
+   §28  ADDRESS CARD — Base rules (standalone, outside the dashboard)
+   When placed inside .location-dashboard__address the §22 scoped overrides
+   above neutralise the background, border, and shadow.
+   -------------------------------------------------------------------------- */
+.address-card {
+  background-color: #FFFFFF;
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-lg);
+  padding: var(--space-xl);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+  font-style: normal;
+  box-shadow: var(--shadow-sm);
+  transition: background-color var(--transition-base),
+              border-color var(--transition-base);
+}
+
+[data-theme="dark"] .address-card {
+  background-color: var(--color-card-bg);
+}
+
+.address-card__header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding-bottom: var(--space-md);
+  border-bottom: 1px solid var(--color-border);
+  transition: border-color var(--transition-base);
+}
+
+.address-card__pin-icon {
+  width: 22px;
+  height: 22px;
+  flex-shrink: 0;
+  fill: var(--color-primary);
+  transition: fill var(--transition-base);
+}
+
+[data-theme="dark"] .address-card__pin-icon {
+  fill: var(--color-accent);
+}
+
+.address-card__heading {
+  font-size: var(--font-size-h3);
+  color: var(--color-primary);
+  margin: 0;
+}
+
+[data-theme="dark"] .address-card__heading {
+  color: var(--color-accent);
+}
+
+.address-card__body {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-md) var(--space-xl);
+}
+
+.address-block {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.address-block__label {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--color-text-muted);
+  margin: 0;
+}
+
+.address-block__value {
+  font-size: var(--font-size-base);
+  color: var(--color-text);
+  line-height: 1.55;
+  margin: 0;
+  transition: color var(--transition-base);
+}
+
+.address-card__directions-btn {
+  align-self: flex-start;
+  margin-top: var(--space-xs);
+}
+
+
+/* --------------------------------------------------------------------------
+   §29  DIRECTORY LIST — Label / value rows inside directory blocks
+   -------------------------------------------------------------------------- */
+.directory-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.directory-list--compact {
+  gap: var(--space-xs);
+}
+
+.directory-item {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-sm);
+  flex-wrap: wrap;
+  font-size: var(--font-size-sm);
+  line-height: 1.5;
+}
+
+.directory-item__label {
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  flex-shrink: 0;
+  min-width: 80px;
+}
+
+.directory-item__value {
+  color: var(--color-text);
+  transition: color var(--transition-base);
+}
+
+.directory-item__value--link {
+  color: var(--color-primary);
+  text-decoration: none;
+  font-weight: var(--font-weight-bold);
+  border-bottom: 1px solid transparent;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+  transition: color var(--transition-fast),
+              border-color var(--transition-fast),
+              opacity var(--transition-fast);
+}
+
+.directory-item__value--link:hover,
+.directory-item__value--link:focus-visible {
+  opacity: 1;
+  color: var(--color-accent);
+  border-bottom-color: var(--color-accent);
+  outline: none;
+}
+
+[data-theme="dark"] .directory-item__value--link {
+  color: var(--color-accent);
+}
+
+[data-theme="dark"] .directory-item__value--link:hover,
+[data-theme="dark"] .directory-item__value--link:focus-visible {
+  color: #FFFFFF;
+  border-bottom-color: var(--color-accent);
+}
+
+
+/* --------------------------------------------------------------------------
+   §30  CONTACT CTA BUTTON
+   -------------------------------------------------------------------------- */
+.btn-contact-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: 0.55rem var(--space-lg);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: 0.04em;
+  color: var(--color-primary);
+  background-color: transparent;
+  border: 2px solid var(--color-accent);
+  border-radius: var(--border-radius);
+  text-decoration: none;
+  align-self: flex-start;
+  transition: background-color var(--transition-fast),
+              color var(--transition-fast),
+              border-color var(--transition-fast),
+              box-shadow var(--transition-fast);
+}
+
+.btn-contact-cta:hover,
+.btn-contact-cta:focus-visible {
+  opacity: 1;
+  background-color: var(--color-accent);
+  color: var(--color-primary);
+  box-shadow: var(--shadow-sm);
+  outline: none;
+}
+
+[data-theme="dark"] .btn-contact-cta {
+  color: var(--color-accent);
+  border-color: var(--color-accent);
+}
+
+[data-theme="dark"] .btn-contact-cta:hover,
+[data-theme="dark"] .btn-contact-cta:focus-visible {
+  background-color: var(--color-accent);
+  color: #01080E;
+}
+
+
+/* --------------------------------------------------------------------------
+   §31  PI CARDS — Individual researcher contact cards
+   Background uses --color-bg-alt so cards contrast against the white
+   .inquiries-section surface. In dark mode they use Midnight Slate (#0A2540),
+   one step lighter than the Deep Navy card background.
+   -------------------------------------------------------------------------- */
+.pi-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  padding: var(--space-md);
+  background-color: var(--color-bg-alt);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius);
+  transition: background-color var(--transition-base),
+              border-color var(--transition-base),
+              box-shadow var(--transition-base);
+}
+
+[data-theme="dark"] .pi-card {
+  background-color: #0A2540;
+  border-color: #1E3A5F;
+}
+
+.pi-card:hover {
+  box-shadow: var(--shadow-sm);
+  border-color: var(--color-accent);
+}
+
+.pi-card__identity {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+}
+
+.pi-card__avatar {
+  width: 44px;
+  height: 44px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background-color: var(--color-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  color: var(--color-text-muted);
+  transition: background-color var(--transition-base);
+}
+
+.pi-card__avatar svg {
+  width: 100%;
+  height: 100%;
+}
+
+.pi-card__info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.pi-card__name {
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-primary);
+  margin: 0;
+  transition: color var(--transition-base);
+}
+
+[data-theme="dark"] .pi-card__name {
+  color: var(--color-accent);
+}
+
+.pi-card__role {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  margin: 0;
+}
+
+
+/* --------------------------------------------------------------------------
+   §32  HOURS GRID — Definition list for office hours
+   -------------------------------------------------------------------------- */
+.hours-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.hours-row {
+  display: grid;
+  grid-template-columns: 90px 1fr 1fr;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm) 0;
+  border-bottom: 1px solid var(--color-border);
+  transition: border-color var(--transition-base),
+              background-color var(--transition-fast);
+}
+
+.hours-row:first-child { padding-top: 0; }
+
+.hours-row:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.hours-row:hover {
+  background-color: var(--color-bg-alt);
+  border-radius: var(--border-radius);
+}
+
+.hours-row__day {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text);
+  transition: color var(--transition-base);
+}
+
+.hours-row__time {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-primary);
+  transition: color var(--transition-base);
+}
+
+[data-theme="dark"] .hours-row__time {
+  color: var(--color-accent);
+}
+
+.hours-row__time--closed {
+  color: var(--color-text-muted);
+  font-weight: var(--font-weight-normal);
+}
+
+[data-theme="dark"] .hours-row__time--closed {
+  color: var(--color-text-muted);
+}
+
+.hours-row__note {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  font-style: italic;
+}
+
+.hours-note {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-xs);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  line-height: 1.6;
+  padding: var(--space-sm) var(--space-md);
+  background-color: var(--color-bg-alt);
+  border-radius: var(--border-radius);
+  border-left: 3px solid var(--color-accent);
+  margin: 0;
+  transition: background-color var(--transition-base);
+}
+
+.hours-note svg {
+  flex-shrink: 0;
+  margin-top: 2px;
+  stroke: var(--color-accent);
+}
+
+
+/* --------------------------------------------------------------------------
+   §33  CONTACTS PAGE — RESPONSIVE BREAKPOINTS
+   -------------------------------------------------------------------------- */
+
+/* Tablet: map height slightly reduced to avoid oversized appearance */
+@media (max-width: 1023px) {
+  .map-wrapper {
+    height: 380px;
+  }
+
+  .address-card__body {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Mobile: full single-column stack */
+@media (max-width: 767px) {
+  .map-wrapper {
+    height: auto;
+    aspect-ratio: 16 / 9;
+  }
+
+  .hours-row {
+    grid-template-columns: 80px 1fr;
+  }
+
+  .hours-row__note {
+    display: none;
+  }
+
+  .directory-item__label {
+    min-width: 64px;
+  }
+
+  .contacts-section {
+    padding-block: var(--space-2xl);
+  }
+}

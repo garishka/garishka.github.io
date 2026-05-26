@@ -1,0 +1,145 @@
+<!--
+  ARTICLE SNIPPET — articles/orbiting-hotspots.html
+  Source: §5 "Orbiting hotspots"
+  Angelov, Bekir, Gyulchev, Nedkova, Yazadjiev — EPJC 85, 1075 (2025)
+-->
+
+<div class="art-wrap">
+
+  <header class="art-header">
+    <h2 class="art-title">Orbiting Hotspots</h2>
+    <div class="art-meta">
+      <time class="art-date" datetime="2025-01-08">January 2025</time>
+      <span class="art-separator" aria-hidden="true">&middot;</span>
+      <span class="art-authors">T. Angelov, R. Bekir, G. Gyulchev, P. Nedkova, S. Yazadjiev</span>
+    </div>
+    <div class="art-divider" role="separator" aria-hidden="true"></div>
+  </header>
+
+  <div class="art-body">
+
+    <section class="art-section" aria-labelledby="hs-intro">
+      <h3 class="art-section-title" id="hs-intro">Physical Picture and Motivation</h3>
+
+      <p>
+        Orbiting hot spots are compact, localized regions of enhanced radiation within the accretion disk of a black hole \cite{Narayan:2021, Gelles:2021}. 
+        These features emerge as a result of magnetic reconnection, plasma instabilities, or turbulence in the surrounding environment \cite{Narayan:2021}. 
+        In our formulation, the hot spot is treated as a point-like emitter following a circular, counterclockwise, equatorial geodesic orbit. This idealized 
+        model does not account for internal effects such as shearing and cooling, which may alter the emission characteristics of the hot spot.
+      </p>
+
+      <p>
+        Studying the motion and polarization of such hot spots provides valuable insights into the underlying spacetime geometry and potential deviations 
+        induced by dark matter effects with respect to the Schwarzschild geometry. In particular, our main motivation is to investigate how the dark matter 
+        component of the galactic halo influences the Stokes polarization parameters, modifying the observed polarization loops. These effects could serve as 
+        a potential probe for the large-scale distribution of dark matter around supermassive black holes, revealing its influence on the surrounding plasma 
+        and spacetime curvature on galactic scales.
+      </p>
+    </section>
+
+    <section class="art-section" aria-labelledby="hs-kinematics">
+      <h3 class="art-section-title" id="hs-kinematics">Polarization properties of the hot spot</h3>
+
+      <p>
+        A hot spot in orbit moves along a circular geodesic within the equatorial plane, with its motion measured relative to a locally non-rotating frame 
+        (LNRF) in the presence of a dark matter halo. In a Schwarzschild spacetime, the innermost stable circular orbit (ISCO) is positioned at $r = 6M$. 
+        However, the addition of a dark matter halo modifies the ISCO radius, as described by Eq. (\ref{rISCO_GDM}), which in turn alters the orbital velocity 
+        profile. Specifically, for large compactness values of the halo, the ISCO radius decreases compared to its Schwarzschild counterpart, leading to 
+        stronger gravitational effects near the black hole.
+      </p>
+      
+      <p>Assuming a Keplerian motion of the hot spot around the central object, we consider circular orbits governed by the underlying spacetime geometry, 
+        (\ref{eq-lineelement}). The Keplerian orbital angular velocity at a radial coordinate $r=r_s$ is described by
+      </p>
+
+      $$
+        \Omega_K(r) = \frac{d\phi}{dt} = \left( \frac{f'(r)}{2r} \right)^{1/2},
+      $$
+
+      <p>
+        where the metric function $f(r)$ encodes the dependence on the total mass of the dark matter halo $M$ and its length scale $a_0$. 
+        The relativistic orbital velocity of the hot spot, as measured in the locally non-rotating frame (LNRF) along the azimuthal direction, 
+        can then be expressed as
+      </p>
+
+      $$
+        \beta = \frac{r}{\sqrt{f(r)}}\,\Omega_K(r) = \left( \frac{r}{2} \log'\big(f(r)\big) \right)^{1/2}, \quad \chi = -\pi/2.
+      $$
+
+      <p>
+        The change in orbital velocity affects both the motion and the Doppler-shifted emission of the hot spot, 
+        which in turn results in observable changes in its polarization properties.
+      </p>
+
+      <p>
+        The analysis of the polarization of the hot spot is performed most effectively using the Stokes parameters $Q$ and $U$, 
+        defined according to \cite{Gelles:2021} as
+      </p>
+
+      $$
+        Q=E_{obs}^{y}-E_{obs}^{x}, \quad U=-2E_{obs}^{x}E_{obs}^{y},.
+      $$
+
+      where $E_{obs}^{x}$ and $E_{obs}^{y}$ are the observed electrical field components, (\ref{pol_EVPA}). It is important to 
+      emphasize that our pure synchrotron radiation model assumes a total polarization of unity, expressed as $\sqrt{Q^2+U^2}=I$.
+    </section>
+
+    <section class="art-section" aria-labelledby="hs-stokes">
+      <h3 class="art-section-title" id="hs-stokes">Polarization of direct images</h3>
+
+      <p>
+        Figures \ref{fig:UQ_(rs=8.M)(k=0)(i=20deg)} and \ref{fig:UQ_(rs=8.M)(k=0)(i=70deg)} show loops in the $Q$--$U$ plane for 
+        inclination angles of $i = 20^\circ$ and $70^\circ$, respectively. In each case, the contours are obtained by numerically 
+        integrating the Hamilton equations and extracting the observed polarized intensity of the direct emission from a hot spot, 
+        according to equations (\ref{pol_EVPA}), under the assumption of a completely vertical magnetic field.
+      </p>
+
+      <p>
+      Each figure contains panels for two cases: a Schwarzschild black hole and a black hole surrounded by a dark matter halo, 
+      depicted in red and blue, respectively. The configurations further explore three values of the dark-matter halo compactness 
+      $M/a_0$, namely $10^{-1}$, $10^{-2}$, and $10^{-3}$, arranged from left to right. These are considered for halo masses 
+      $M/M_{\rm BH} = 10^2$, $10^3$, and $10^4$, ordered from top to bottom.
+      </p>
+
+      <p>
+        The orbit of the emitting hot spot has a radius of $r_s = 8M_{\rm BH}$, which lies outside the innermost stable circular 
+        orbit (ISCO) for both spacetimes. Additionally, the upper-left panel of each figure marks four azimuthal emission angles 
+        $\phi$, spaced $90^\circ$ apart along the orbit for both metrics. These angles are calculated based on the fact that 
+        geodesics in the spacetime of non-rotating black holes lie in a plane, assuming an initial condition $\phi = 0$, aligned 
+        with the direction toward the observer. 
+      </p>
+
+      <p>
+        In orbital motion around the Schwarzschild black hole, the relativistic orbital velocity of the hot spot at the chosen 
+        orbital radius is $\beta \simeq 0.4082$. In a geometry that includes the presence of dark matter, the velocity remains 
+        nearly unchanged, even at high compactness of the galactic halo, but increases slightly to $\beta \simeq 0.4092$ for 
+        $M/a_{0} = 10^{-1}$ with a halo mass of $M = 10^2\,M_{\rm BH}$. On the other hand, as the compactness $M/a_0$ of the 
+        dark matter halo decreases, the relativistic orbital velocity asymptotically approaches the Schwarzschild value, as 
+        expected. Specifically, the velocity decreases for higher halo masses and increases slightly for lower halo masses.
+      </p>
+
+    </section>
+
+  </div>
+
+  <aside class="art-related" aria-labelledby="hs-related-title">
+    <p class="art-related-title" id="hs-related-title">Related publications</p>
+    <ul class="art-related-list" role="list">
+      <li>
+        <a href="https://doi.org/10.1140/epjc/s10052-025-14537-8"
+           target="_blank" rel="noopener noreferrer">
+          Angelov et al. &mdash; Polarized equatorial emission and hot spots around black holes
+          with a dark matter halo (Eur. Phys. J. C 85, 1075, 2025)
+        </a>
+      </li>
+      <li>
+        <a href="https://doi.org/10.1103/PhysRevD.104.044060"
+           target="_blank" rel="noopener noreferrer">
+          Gelles et al. &mdash; Polarized Image of Equatorial Emission in the Kerr Geometry
+          (Phys. Rev. D 104, 044060, 2021)
+        </a>
+      </li>
+    </ul>
+  </aside>
+
+</div>

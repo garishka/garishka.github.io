@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<!--
+  ASTRO RESEARCH PROJECT — Home Page
+  File: index.html
+
+  Structure:
+    <header>   — Branding bar: site logo + institutional partner logos
+    <nav>      — Sticky horizontal nav + theme toggle + mobile hamburger
+    <main>
+      <section> hero         — Headline, tagline, CTA buttons, hero image
+      <section> research     — Dynamic research article preview cards (app.js §16)
+      <section> publications — Homepage preview strip (app.js §8)
+    </main>
+    <footer>   — 4-column grid: Group Info | Site | Resources | Legal/Social
+-->
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description"
+        content="Astro Research Project — Gravitational astrophysics research group
+                 exploring black holes, compact objects, and the geometry of spacetime." />
+  <meta name="keywords"
+        content="astrophysics, gravitational waves, black holes, wormholes,
+                 naked singularities, accretion disks, theoretical physics" />
+
+  <!-- Open Graph for sharing -->
+  <meta property="og:title"       content="Astro Research Project" />
+  <meta property="og:description" content="Promoting gravitational astrophysics research and
+                                           finding new collaborators worldwide." />
+  <meta property="og:type"        content="website" />
+
+  <title>Home | BeyondGR Project</title>
+
+  <!-- FontAwesome via CDN (icons used in footer social links) -->
+  <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+        integrity="sha512-Avb2QiuDEEvB4bZJYdft2mNjVShBftLdPG8FJ0V7irTLQ8Uo0qcPxh4Plq7G5tGm0rU+1SPhVotteLpBERwTkw=="
+        crossorigin="anonymous"
+        referrerpolicy="no-referrer" />
+
+  <!-- Global stylesheet -->
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/index.css" />
+</head>
+
+<body>
+<div class="site-wrapper">
+
+  <!-- ====================================================================
+       HEADER — Injected by app.js injectGlobalComponents()
+       ==================================================================== -->
+  <div id="global-header-target" aria-live="polite"></div>
+
+
+  <!-- ====================================================================
+       MAIN CONTENT
+       ==================================================================== -->
+  <main class="site-main" id="main-content" tabindex="-1">
+
+
+    <!-- ------------------------------------------------------------------
+         SECTION 1 — HERO
+         Full-width midnight-blue band.
+         Left column : headline, tagline, CTA buttons.
+         Right column: hero image.
+         ------------------------------------------------------------------ -->
+    <section class="hero section" aria-labelledby="hero-title">
+      <div class="container">
+        <div class="hero__inner">
+
+          <!-- Left column: headline, tagline, CTAs -->
+          <div class="hero__copy">
+            <span class="hero__label" aria-hidden="true">Beyond General Relativity</span>
+
+            <h1 class="hero__title" id="hero-title">
+              <span class="title-row">Insights about the nature of</span>
+              <span class="title-row accent-color">strong gravitational interaction</span>
+              <span class="title-row">with electromagnetic observations</span>
+            </h1>
+
+            <p class="hero__tagline">
+              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Exercitationem
+              dolores saepe perspiciatis rem placeat ullam quod, eaque odit eveniet in,
+              illum ut eligendi sit eius. Accusamus assumenda id incidunt delectus!
+            </p>
+
+            <div class="hero__cta-group">
+              <a href="research.html"     class="btn btn--primary">Our Research</a>
+              <a href="publications.html" class="btn btn--secondary">Publications</a>
+            </div>
+          </div>
+          <!-- /hero copy -->
+
+          <!-- Right column: high-impact picture -->
+          <div class="hero__image-wrap">
+            <img
+              src="assets/photos/home_page_picture.png"
+              alt="Visualisation of a black hole accretion disk with a dark matter halo"
+              class="hero__image"
+              loading="eager"
+              width="540"
+              height="400"
+            />
+          </div>
+          <!-- /hero image -->
+
+        </div>
+      </div>
+    </section>
+    <!-- /hero -->
+
+
+    <!-- ------------------------------------------------------------------
+         SECTION 2 — RESEARCH HIGHLIGHTS (Dynamic)
+         Cards are fetched and built by loadHomeResearchPreviews() in app.js §16.
+
+         Desktop  (≥1024px)  : CSS 3-col grid; JS prev/next pagination (right)
+                                "View All Articles →" sits flush-left in footer bar.
+         Tablet   (768–1023px): horizontal overflow scroll-snap, 2 cards visible;
+                                pagination buttons hidden (CSS), link only.
+         Mobile   (<768px)   : single-column stack; JS limits to 3 newest cards;
+                                pagination buttons hidden (CSS), link only.
+         ------------------------------------------------------------------ -->
+    <section class="section section--alt" aria-labelledby="research-highlights-title">
+      <div class="container">
+
+        <header class="section__header">
+          <span class="section__label" aria-hidden="true">What We Study</span>
+          <h2 class="section__title" id="research-highlights-title">
+            Core Research Areas
+          </h2>
+          <p class="section__desc lead">
+            Our work spans analytical and numerical methods to probe
+            the most extreme environments in the universe.
+          </p>
+        </header>
+
+        <!-- Card track wrapper ─────────────────────────────────────────────
+             .features-grid   → desktop 3-col CSS Grid (existing style.css rule)
+             .research-previews-track → tablet scroll-snap + mobile stack overrides
+             JS populates the interior with .feature-card <article> elements.    -->
+        <div class="research-previews-carousel">
+          <div class="features-grid research-previews-track"
+               id="research-previews-track"
+               role="list"
+               aria-label="Research article previews"
+               aria-live="polite">
+            <!-- .feature-card elements injected here by app.js §16 -->
+          </div>
+        </div>
+        <!-- /research-previews-carousel -->
+
+        <!-- Bottom bar ─────────────────────────────────────────────────────
+             Desktop : "View All Articles →" flush-left | prev/next flush-right
+             Tablet  : link only  (pagination hidden via CSS @media rule)
+             Mobile  : link only  (pagination hidden via CSS @media rule)        -->
+        <div class="research-previews-footer">
+
+          <a href="research.html"
+             class="view-all-link research-viewall-link"
+             aria-label="View all research articles on the Research page">
+            View All Articles
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+                 aria-hidden="true" focusable="false">
+              <line x1="5" y1="12" x2="19" y2="12"/>
+              <polyline points="12 5 19 12 12 19"/>
+            </svg>
+          </a>
+
+          <nav class="research-previews-pagination"
+               id="research-previews-pagination"
+               aria-label="Research article page controls"
+               hidden>
+            <button class="btn-rp-nav btn-rp-prev"
+                    id="btn-rp-prev"
+                    type="button"
+                    aria-label="Show previous research articles"
+                    disabled>
+              &#8249;
+            </button>
+            <span class="rp-page-indicator"
+                  id="rp-page-indicator"
+                  aria-live="polite"
+                  aria-atomic="true">
+              <!-- e.g. "1 / 2" — injected by renderResearchPage() in app.js §16 -->
+            </span>
+            <button class="btn-rp-nav btn-rp-next"
+                    id="btn-rp-next"
+                    type="button"
+                    aria-label="Show next research articles">
+              &#8250;
+            </button>
+          </nav>
+          <!-- /research-previews-pagination -->
+
+        </div>
+        <!-- /research-previews-footer -->
+
+      </div>
+      <!-- /container -->
+    </section>
+    <!-- /research highlights -->
+
+
+    <!-- ------------------------------------------------------------------
+         SECTION 3 — PUBLICATIONS PREVIEW
+         Most recent publications — loaded from assets/publications.json
+         by loadPublicationsPreview() in app.js §8.
+         ------------------------------------------------------------------ -->
+    <section class="section"
+             id="publications-preview-section"
+             aria-labelledby="pubs-preview-title">
+      <div class="container">
+
+        <header class="section__header">
+          <span class="section__label" aria-hidden="true">Latest Work</span>
+          <h2 class="section__title" id="pubs-preview-title">Recent Publications</h2>
+          <p class="section__desc lead">
+            A selection of our most recent contributions to the literature.
+          </p>
+        </header>
+
+        <!-- JS populates this list; section is hidden on fetch failure -->
+        <div class="publications-list"
+             id="publications-preview"
+             role="list"
+             aria-live="polite"
+             aria-label="Recent publications list">
+          <!-- Publication items injected here by app.js → loadPublicationsPreview() -->
+        </div>
+
+        <a href="publications.html"
+           class="view-all-link"
+           aria-label="View the complete list of all publications">
+          View All Publications
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+               stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+               aria-hidden="true" focusable="false">
+            <line x1="5" y1="12" x2="19" y2="12"/>
+            <polyline points="12 5 19 12 12 19"/>
+          </svg>
+        </a>
+
+      </div>
+    </section>
+    <!-- /publications preview -->
+
+
+  </main>
+  <!-- /main -->
+
+
+  <!-- ====================================================================
+       FOOTER — Injected by app.js injectGlobalComponents()
+       ==================================================================== -->
+  <div id="global-footer-target" aria-live="polite"></div>
+
+
+</div>
+<!-- /site-wrapper -->
+
+<!-- Global script — deferred so it runs after DOM is parsed -->
+<script src="js/app.js" defer></script>
+
+</body>
+</html>

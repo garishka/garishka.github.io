@@ -1,0 +1,285 @@
+<!--
+  ARTICLE SNIPPET — articles/polarized-ring.html
+  Source: §3 "Polarized image of an equatorial emitting ring"
+  Angelov, Bekir, Gyulchev, Nedkova, Yazadjiev — EPJC 85, 1075 (2025)
+-->
+
+<div class="art-wrap">
+
+  <header class="art-header">
+    <h2 class="art-title">Polarized Image of an Equatorial Emitting Ring</h2>
+    <div class="art-meta">
+      <time class="art-date" datetime="2024-07-15">July 2024</time>
+      <span class="art-separator" aria-hidden="true">&middot;</span>
+      <span class="art-authors">T. Angelov, R. Bekir, G. Gyulchev, P. Nedkova, S. Yazadjiev</span>
+    </div>
+    <div class="art-divider" role="separator" aria-hidden="true"></div>
+  </header>
+
+  <div class="art-body">
+
+    <section class="art-section" aria-labelledby="pr-setup">
+      <h3 class="art-section-title" id="pr-setup">Setup and Local Frame</h3>
+
+      <p>
+        The goal of this analysis is to describe the light reaching a distant observer from a
+        thin fluid ring orbiting at a fixed radial coordinate in the vicinity of a black hole with
+        a dark matter halo. The fluid emits linearly polarized synchrotron radiation in a locally
+        constant magnetic field, and the observable polarization at large distances is obtained by
+        parallel-transporting the polarization four-vector along null geodesics.
+      </p>
+
+      <p>
+        To carry out this procedure in the static spherically symmetric spacetime described
+        previously, we introduce an orthonormal tetrad $\{e^\mu_{(a)}\}$ adapted to the metric:
+      </p>
+
+      $$
+        e_{(t)} = \left(1 - \frac{2M_{\rm BH}}{r}\right)^{-1/2} e^{-\Upsilon/2},
+        \quad
+        e_{(r)} = \left(1 - \frac{2m(r)}{r}\right)^{1/2}\partial_r,
+        \quad
+        e_{(\theta)} = \frac{1}{r},
+        \quad
+        e_{(\phi)} = \frac{1}{r\sin\theta}.
+      $$
+
+      <p>
+        The orbiting fluid moves only in the equatorial $(\hat{r})$–$(\hat{\phi})$ plane. Its
+        velocity in the local frame has magnitude $\beta$ and direction angle $\chi$, so in
+        vector notation
+      </p>
+
+      $$
+        \vec{\beta}
+        = \beta\!\left(\cos\chi\,\hat{r} + \sin\chi\,\hat{\phi}\right).
+      $$
+    </section>
+
+    <section class="art-section" aria-labelledby="pr-lorentz">
+      <h3 class="art-section-title" id="pr-lorentz">Lorentz Boost and Synchrotron Emission</h3>
+
+      <p>
+        Since synchrotron emission is most naturally described in the rest frame of the fluid,
+        we switch between frames using the Lorentz transformation
+        $\hat{e}^{\,\mu}_{(a)} = \Lambda^{(b)}{}_{(a)}\,e^\mu_{(b)}$,
+        with the boost matrix
+      </p>
+
+      $$
+        \Lambda =
+        \begin{pmatrix}
+          \gamma & -\beta\gamma\cos\chi & -\beta\gamma\sin\chi & 0 \\
+          -\beta\gamma\cos\chi & (\gamma-1)\cos^2\!\chi+1 & (\gamma-1)\sin\chi\cos\chi & 0 \\
+          -\beta\gamma\sin\chi & (\gamma-1)\sin\chi\cos\chi & (\gamma-1)\sin^2\!\chi+1 & 0 \\
+          0 & 0 & 0 & 1
+        \end{pmatrix},
+        \quad
+        \gamma = (1-\beta^2)^{-1/2}.
+      $$
+
+      <p>
+        The magnetic field permeating the fluid is
+        $\vec{B} = (\hat{B}^r, \hat{B}^\phi, \hat{B}^\theta)$.
+        The polarization direction of the synchrotron emission is determined by the cross product
+        of the local photon three-momentum $\vec{p} = (\hat{p}^r, \hat{p}^\phi, \hat{p}^\theta)$
+        with the magnetic field:
+      </p>
+
+      $$
+        \vec{f} = \frac{\vec{p} \times \vec{B}}{|\vec{p}|}.
+      $$
+
+      <p>
+        The angle $\zeta$ between the magnetic field and the photon three-momentum controls the
+        emission intensity through
+      </p>
+
+      $$
+        \sin\zeta = \frac{|\vec{p}\times\vec{B}|}{|\vec{p}||\vec{B}|},
+        \qquad
+        \hat{f}^a\hat{f}_a = \sin^2\!\zeta\,|\vec{B}|^2.
+      $$
+
+      <p>
+        The polarization four-vector $f^\mu$ is then transformed from the fluid rest frame to the
+        black hole rest frame using the same Lorentz boost $\Lambda$.
+      </p>
+    </section>
+
+    <section class="art-section" aria-labelledby="pr-transport">
+      <h3 class="art-section-title" id="pr-transport">Parallel Transport and Constants of Motion</h3>
+
+      <p>
+        To propagate the polarization to the observer, $f^\mu$ must be parallel-transported along
+        the null geodesic. Since $f^\mu$ remains orthogonal to the photon four-momentum $p^\mu$,
+        both vectors satisfy
+      </p>
+
+      $$
+        p^\mu\nabla_\mu p_\nu = 0,
+        \qquad
+        p^\mu\nabla_\mu f_\nu = 0,
+        \qquad
+        p^\mu f_\mu = 0.
+      $$
+
+      <p>
+        In a static spherically symmetric spacetime these differential equations admit an
+        algebraic solution through the hidden symmetries encoded in the Killing–Yano tensor
+        $Y_{\mu\nu}$ and the conformal Killing–Yano tensor
+        $\tilde{Y}_{\mu\nu} = \tfrac{1}{2}\epsilon_{\mu\nu\alpha\beta}Y^{\alpha\beta}$.
+        The non-vanishing components of $Y_{\mu\nu}$ in the black hole with a dark matter halo
+        spacetime are
+      </p>
+
+      $$
+        Y_{\theta\phi} = -Y_{\phi\theta} = r^3\sin\theta.
+      $$
+
+      <p>
+        The two associated constants of motion along null geodesics are
+        $\kappa_1 = \tfrac{1}{2}\tilde{Y}_{\mu\nu}p^\mu f^\nu$ and
+        $\kappa_2 = Y_{\mu\nu}p^\mu f^\nu$. In the dark matter halo spacetime they evaluate to
+      </p>
+
+      $$
+        \kappa_1
+        = \left(\frac{1-2M_{\rm BH}/r}{1-2m(r)/r}\,e^{\Upsilon}\right)^{1/2}
+          r\!\left(p^t f^r - p^r f^t\right),
+      $$
+      $$
+        \kappa_2 = r^3\sin\theta\!\left(p^\theta f^\phi - p^\phi f^\theta\right).
+      $$
+    </section>
+
+    <section class="art-section" aria-labelledby="pr-observer">
+      <h3 class="art-section-title" id="pr-observer">Observer Coordinates and Observable Polarization</h3>
+
+      <p>
+        The celestial coordinates on the observer's sky are defined using the projection of the
+        photon four-momentum onto the local tetrad frame via the angles
+        $\sin\tilde\alpha = p^{(\theta)}/p^{(t)}$ and
+        $\tan\tilde\beta = p^{(\phi)}/p^{(r)}$.
+        After rescaling to $x = r\tilde\alpha$, $y = r\tilde\beta$, the image-plane coordinates
+        become
+      </p>
+
+      $$
+        x = -\frac{p_\phi}{\sin\theta_0},
+        \qquad
+        y = p_\theta,
+      $$
+
+      <p>
+        where $\theta_0$ is the observer's inclination angle.
+        The components of the polarization vector projected onto the observer's frame are
+      </p>
+
+      $$
+        f^x_{\rm obs}
+        = \frac{x\kappa_1 + y\kappa_2}{\sqrt{(\kappa_1^2+\kappa_2^2)(x^2+y^2)}},
+        \qquad
+        f^y_{\rm obs}
+        = \frac{y\kappa_1 - x\kappa_2}{\sqrt{(\kappa_1^2+\kappa_2^2)(x^2+y^2)}}.
+      $$
+
+      <p>
+        These are expressed entirely through the conserved quantities $\kappa_1$ and $\kappa_2$,
+        which can themselves be traced back to the emission point by projecting the polarization
+        vector (defined via the cross-product formula) onto the local tetrad. This yields
+      </p>
+
+      $$
+        \kappa_1
+        = \gamma r\!\left[\hat{p}^{(t)}\hat{f}^{(r)}
+          + \beta\!\left(\hat{p}^{(r)}\hat{f}^{(\theta)}
+          - \hat{f}^{(r)}\hat{p}^{(\theta)}\right)\right],
+      $$
+      $$
+        \kappa_2
+        = \gamma r\!\left[\left(\hat{p}^{(\theta)}\hat{f}^{(\phi)}
+          - \hat{f}^{(\theta)}\hat{p}^{(\phi)}\right)
+          - \beta\,\hat{p}^{(t)}\hat{f}^{(\phi)}\right].
+      $$
+    </section>
+
+    <section class="art-section" aria-labelledby="pr-intensity">
+      <h3 class="art-section-title" id="pr-intensity">Polarization Intensity and EVPA</h3>
+
+      <p>
+        The polarization intensity receives contributions from the angle $\zeta$, the photon
+        frequency, and the geodesic path length through the fluid
+      </p>
+
+      $$
+        l_p = \frac{\hat{p}^{(t)}}{\hat{p}^{(\theta)}}\,H,
+      $$
+
+      <p>
+        where $H$ is the disk thickness. The Doppler boost factor between the observer frame and
+        the fluid frame is $\delta = E_{\rm obs}/E_s = 1/\hat{p}^{(t)}$, which modulates the
+        intensity by a factor $\delta^{3+\alpha_\nu}$. The resulting polarization intensity is
+      </p>
+
+      $$
+        |I| = \delta^{3+\alpha_\nu}\,l_p\,(\sin\zeta)^{1+\alpha_\nu},
+      $$
+
+      <p>
+        where the spectral index $\alpha_\nu = 1$ is chosen for consistency with M87*
+        observations. The components of the observed electric field are therefore
+      </p>
+
+      $$
+        E^x_{\rm obs} = \delta^2\,l_p^{1/2}\,\sin\zeta\;f^x_{\rm obs},
+        \qquad
+        E^y_{\rm obs} = \delta^2\,l_p^{1/2}\,\sin\zeta\;f^y_{\rm obs},
+        \qquad
+        |I| = (E^x_{\rm obs})^2 + (E^y_{\rm obs})^2.
+      $$
+
+      <p>
+        The direction of the polarization vector on the observer's sky is characterised by the
+        electric vector position angle (EVPA), measured counter-clockwise from the positive
+        $x$-semi-axis:
+      </p>
+
+      $$
+        \mathrm{EVPA} = \arctan\!\left(-\frac{f^x_{\rm obs}}{f^y_{\rm obs}}\right).
+      $$
+    </section>
+
+  </div>
+
+  <div class="art-tags" aria-label="Related keywords">
+    <span class="art-tag">Synchrotron Emission</span>
+    <span class="art-tag">Polarization Transport</span>
+    <span class="art-tag">Killing–Yano Tensor</span>
+    <span class="art-tag">Null Geodesics</span>
+    <span class="art-tag">EVPA</span>
+    <span class="art-tag">Accretion Disk</span>
+    <span class="art-tag">Lorentz Boost</span>
+  </div>
+
+  <aside class="art-related" aria-labelledby="pr-related-title">
+    <p class="art-related-title" id="pr-related-title">Related publications</p>
+    <ul class="art-related-list" role="list">
+      <li>
+        <a href="https://doi.org/10.1140/epjc/s10052-025-14537-8"
+           target="_blank" rel="noopener noreferrer">
+          Angelov et al. &mdash; Polarized equatorial emission and hot spots around black holes
+          with a dark matter halo (Eur. Phys. J. C 85, 1075, 2025)
+        </a>
+      </li>
+      <li>
+        <a href="https://doi.org/10.1103/PhysRevD.104.044060"
+           target="_blank" rel="noopener noreferrer">
+          Gelles et al. &mdash; Polarized Image of Equatorial Emission in the Kerr Geometry
+          (Phys. Rev. D 104, 044060, 2021)
+        </a>
+      </li>
+    </ul>
+  </aside>
+
+</div>

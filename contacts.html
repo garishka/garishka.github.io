@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<!--
+  BEYONDGR PROJECT — Contacts Page
+  File: contacts.html
+
+  Layout Architecture (revised v2):
+    Macro: Single-column centered (max-width 1200px) — global standard.
+    Micro:
+      [1] .location-dashboard  — unified white card, internal flex split
+            Desktop  (≥992px):  row   → map 60% | address 40%
+            Tablet  (<992px):   column → map (full width) → address stacked below
+            Mobile  (<768px):   column → map 16:9 AR → address below
+      [2] .inquiries-section   — full-width white card, responsive pi-card grid
+            Desktop  (≥992px):  3 columns
+            Tablet   (768–991): 2 columns
+            Mobile   (<768px):  1 column
+          Gergana Daskalova (.pi-card--admin) is the 7th card in a 3-col grid;
+          auto-flow naturally places her at column 1 (leftmost) of row 3.
+          No explicit grid-column override needed.
+-->
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Contact the BeyondGR Project." />
+
+  <title>Contacts | BeyondGR Project</title>
+
+  <!-- FontAwesome icons via CDN -->
+  <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+        integrity="sha512-Avb2QiuDEEvB4bZJYdft2mNjVShBftLdPG8FJ0V7irTLQ8Uo0qcPxh4Plq7G5tGm0rU+1SPhVotteLpBERwTkw=="
+        crossorigin="anonymous"
+        referrerpolicy="no-referrer" />
+
+  <!-- Global stylesheet -->
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/contacts.css" />
+</head>
+
+<body>
+<div class="site-wrapper">
+
+  <!-- ====================================================================
+       HEADER — persistent branding bar, injected by JS
+       ==================================================================== -->
+  <div id="global-header-target" aria-live="polite"></div>
+
+
+  <!-- ====================================================================
+       MAIN CONTENT
+       ==================================================================== -->
+  <main class="site-main" id="main-content" tabindex="-1">
+
+
+    <!-- ------------------------------------------------------------------
+         PAGE HERO BANNER
+         ------------------------------------------------------------------ -->
+    <header class="page-hero" aria-labelledby="page-hero-title">
+      <div class="container">
+        <div class="page-hero__inner">
+          <div>
+            <h1 class="page-hero__title" id="page-hero-title">Contacts</h1>
+            <p class="page-hero__desc">
+              Find us at the Faculty of Physics or reach out by email.
+            </p>
+          </div>
+          <nav class="breadcrumb" aria-label="Breadcrumb">
+            <ol class="breadcrumb__list" role="list">
+              <li class="breadcrumb__item">
+                <a href="index.html" class="breadcrumb__link">Home</a>
+              </li>
+              <li class="breadcrumb__item breadcrumb__item--current" aria-current="page">
+                Contacts
+              </li>
+            </ol>
+          </nav>
+        </div>
+      </div>
+    </header>
+    <!-- /page-hero -->
+
+
+    <!-- ------------------------------------------------------------------
+         PAGE BODY — grey surface (#F4F4F4) below the hero
+         ------------------------------------------------------------------ -->
+    <div class="page-body">
+
+      <section class="contacts-section" aria-labelledby="contacts-heading">
+        <h2 class="sr-only" id="contacts-heading">Contact Information</h2>
+        <div class="container">
+
+
+          <!-- ============================================================
+               BLOCK 1 — LOCATION DASHBOARD
+               Single white card lifting map + address off the grey page-body.
+               Flex row on desktop (≥992px); flex column on tablet/mobile.
+               No internal dividing borders — clean seamless surface.
+               ============================================================ -->
+          <div class="location-dashboard" aria-label="Map and location details">
+
+
+            <!-- ----------------------------------------------------------
+                 MAP PANEL (~60% on desktop, full-width when stacked)
+                 Internal padding creates the breathing room between the
+                 iframe and the dashboard card edges.
+                 ---------------------------------------------------------- -->
+            <div class="location-dashboard__map">
+
+              <!-- Clickable map wrapper — JS adds .is-active on click -->
+              <div class="map-wrapper"
+                   id="map-wrapper"
+                   role="application"
+                   aria-label="Interactive map — click to enable zoom and pan">
+
+                <!-- Click-prompt overlay -->
+                <div class="map-overlay" id="map-overlay" aria-hidden="true">
+                  <div class="map-overlay__prompt">
+                    <svg class="map-overlay__icon" viewBox="0 0 24 24"
+                         xmlns="http://www.w3.org/2000/svg"
+                         aria-hidden="true" focusable="false">
+                      <path d="M4 4 L4 17 L8 13 L11 20 L13 19 L10 12 L15 12 Z"
+                            fill="currentColor"/>
+                    </svg>
+                    <span>Click to interact with map</span>
+                  </div>
+                </div>
+
+                <!--
+                  Google Maps embed — Faculty of Physics, Sofia University
+                  pointer-events controlled by CSS via .map-wrapper.is-active
+                -->
+                <iframe
+                  id="map-iframe"
+                  title="Google Maps — Faculty of Physics, Sofia University"
+                  src="https://maps.google.com/maps?q=Faculty+of+Physics+Sofia+University+St+Kliment+Ohridski+Bulgaria&t=&z=17&ie=UTF8&iwloc=&output=embed"
+                  allowfullscreen=""
+                  loading="lazy"
+                  referrerpolicy="no-referrer-when-downgrade"
+                  aria-label="Google Maps showing Faculty of Physics, Sofia University">
+                </iframe>
+
+                <p class="map-fallback sr-only">
+                  <a href="https://maps.google.com/maps?q=Faculty+of+Physics+Sofia+University+Bulgaria"
+                     target="_blank" rel="noopener noreferrer">
+                    View Faculty of Physics on Google Maps (opens in new tab)
+                  </a>
+                </p>
+
+              </div>
+              <!-- /map-wrapper -->
+
+              <!-- "Open in Google Maps" link — sits below map within the padded panel -->
+              <a class="map-external-link"
+                 href="https://maps.google.com/maps?q=Faculty+of+Physics+Sofia+University+Bulgaria"
+                 target="_blank"
+                 rel="noopener noreferrer"
+                 aria-label="Open Faculty of Physics location in Google Maps (opens in new tab)">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none"
+                     stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                     aria-hidden="true" focusable="false">
+                  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+                  <polyline points="15 3 21 3 21 9"/>
+                  <line x1="10" y1="14" x2="21" y2="3"/>
+                </svg>
+                Open in Google Maps
+              </a>
+
+            </div>
+            <!-- /location-dashboard__map -->
+
+
+            <!-- ----------------------------------------------------------
+                 ADDRESS PANEL (~40% on desktop, full-width when stacked)
+                 No internal border-left / border-top divider — clean card.
+                 The address-card inside renders as transparent so the panel
+                 padding is the sole spacing mechanism.
+                 ---------------------------------------------------------- -->
+            <div class="location-dashboard__address">
+
+              <address class="address-card" aria-label="Physical mailing address">
+
+                <!-- Header: pin icon + heading -->
+                <div class="address-card__header">
+                  <svg class="address-card__pin-icon" viewBox="0 0 24 24"
+                       xmlns="http://www.w3.org/2000/svg"
+                       aria-hidden="true" focusable="false">
+                    <path d="M12 2C8.134 2 5 5.134 5 9c0 5.25 7 13 7 13s7-7.75 7-13
+                             c0-3.866-3.134-7-7-7z"/>
+                    <circle cx="12" cy="9" r="2.5" fill="var(--color-bg)"/>
+                  </svg>
+                  <h3 class="address-card__heading">Our Location</h3>
+                </div>
+
+                <!--
+                  Accent rule — thin horizontal underline beneath the heading.
+                  Light mode: muted primary blue; Dark mode: amber gold.
+                  Replaces the old border-bottom on .address-card__header.
+                -->
+                <hr class="accent-rule" aria-hidden="true" />
+
+                <!-- Address fields -->
+                <div class="address-card__body">
+
+                  <div class="address-block">
+                    <p class="address-block__label">Institution</p>
+                    <p class="address-block__value">
+                      Department of Theoretical Physics<br />
+                      Faculty of Physics<br />
+                      Sofia University "St. Kliment Ohridski"
+                    </p>
+                  </div>
+
+                  <div class="address-block">
+                    <p class="address-block__label">Address</p>
+                    <p class="address-block__value">
+                      5 James Bourchier Blvd<br />
+                      Faculty of Physics, Bldg. "B", 3rd Fl.<br />
+                      1164 Sofia, Bulgaria
+                    </p>
+                  </div>
+
+                </div>
+                <!-- /address-card__body -->
+
+                <!-- Get Directions — centered within the address panel -->
+                <a class="btn btn--primary address-card__directions-btn"
+                   href="https://maps.google.com/maps?daddr=Faculty+of+Physics+Sofia+University+Bulgaria"
+                   target="_blank"
+                   rel="noopener noreferrer"
+                   aria-label="Get directions to the Faculty of Physics on Google Maps">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+                       stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+                       stroke-linejoin="round" aria-hidden="true" focusable="false">
+                    <polygon points="3 11 22 2 13 21 11 13 3 11"/>
+                  </svg>
+                  Get Directions
+                </a>
+
+              </address>
+              <!-- /address-card -->
+
+            </div>
+            <!-- /location-dashboard__address -->
+
+          </div>
+          <!-- /location-dashboard -->
+
+
+          <!-- ============================================================
+               BLOCK 2 — PROJECT INQUIRIES
+               Same white-card treatment as the location dashboard above.
+               Responsive grid: 3 col (≥992px) → 2 col (768–991px) → 1 col.
+               Gergana Daskalova is card 7 in a 3-col grid: auto-flow
+               places her at column 1 (leftmost) of row 3 — no override needed.
+               ============================================================ -->
+          <section class="inquiries-section" aria-labelledby="inquiries-heading">
+
+            <header class="inquiries-section__header">
+              <svg class="inquiries-section__icon" viewBox="0 0 24 24"
+                   xmlns="http://www.w3.org/2000/svg"
+                   aria-hidden="true" focusable="false">
+                <circle cx="12" cy="7" r="4"
+                        fill="none" stroke="currentColor" stroke-width="1.8"/>
+                <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"
+                      fill="none" stroke="currentColor" stroke-width="1.8"
+                      stroke-linecap="round"/>
+              </svg>
+              <h2 class="inquiries-section__title" id="inquiries-heading">
+                Project Inquiries
+              </h2>
+            </header>
+
+            <!--
+              Accent rule — same thin underline treatment as "Our Location".
+              Light: muted primary blue; Dark: amber gold.
+            -->
+            <hr class="accent-rule" aria-hidden="true" />
+
+            <div class="inquiries-grid">
+
+              <!-- --------------------------------------------------------
+                   CARD 1 — Project Secretary
+                   -------------------------------------------------------- -->
+              <article class="pi-card" aria-label="Project secretary contact card">
+                <div class="pi-card__identity">
+                  <div class="pi-card__avatar" role="img"
+                       aria-label="Photo placeholder for the Project Secretary">
+                    <svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg"
+                         aria-hidden="true" focusable="false">
+                      <circle cx="20" cy="15" r="7" fill="currentColor" opacity="0.35"/>
+                      <path d="M5 36c0-8 6.7-13 15-13s15 5 15 13"
+                            fill="currentColor" opacity="0.25"/>
+                    </svg>
+                  </div>
+                  <div class="pi-card__info">
+                    <p class="pi-card__name">Secretary Name</p>
+                    <p class="pi-card__role">Project Secretary</p>
+                  </div>
+                </div>
+                <ul class="directory-list directory-list--compact" role="list">
+                  <li class="directory-item">
+                    <span class="directory-item__label">Email</span>
+                    <a class="directory-item__value directory-item__value--link"
+                       href="mailto:secretary@uni-sofia.bg"
+                       aria-label="Send email to the Project Secretary">
+                      secretary@uni-sofia.bg
+                    </a>
+                  </li>
+                  <li class="directory-item">
+                    <span class="directory-item__label">Office</span>
+                    <span class="directory-item__value">Room 123, Main Bldg.</span>
+                  </li>
+                </ul>
+              </article>
+
+              <!-- --------------------------------------------------------
+                   CARD 2 — Group Leader
+                   -------------------------------------------------------- -->
+              <article class="pi-card" aria-label="Group leader contact card">
+                <div class="pi-card__identity">
+                  <div class="pi-card__avatar" role="img"
+                       aria-label="Photo placeholder for Dr. Petya Nedkova">
+                    <svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg"
+                         aria-hidden="true" focusable="false">
+                      <circle cx="20" cy="15" r="7" fill="currentColor" opacity="0.35"/>
+                      <path d="M5 36c0-8 6.7-13 15-13s15 5 15 13"
+                            fill="currentColor" opacity="0.25"/>
+                    </svg>
+                  </div>
+                  <div class="pi-card__info">
+                    <p class="pi-card__name">Dr. Petya G. Nedkova</p>
+                    <p class="pi-card__role">Group Leader</p>
+                  </div>
+                </div>
+                <ul class="directory-list directory-list--compact" role="list">
+                  <li class="directory-item">
+                    <span class="directory-item__label">Email</span>
+                    <a class="directory-item__value directory-item__value--link"
+                       href="mailto:pnedkova@phys.uni-sofia.bg"
+                       aria-label="Send email to Dr. Nedkova">
+                      pnedkova@phys.uni-sofia.bg
+                    </a>
+                  </li>
+                  <li class="directory-item">
+                    <span class="directory-item__label">Office</span>
+                    <span class="directory-item__value">Room 4(?), Physics Bldg. "B"</span>
+                  </li>
+                </ul>
+              </article>
+
+              <!-- --------------------------------------------------------
+                   CARD 3 — Assoc. Prof. Gyulchev
+                   -------------------------------------------------------- -->
+              <article class="pi-card" aria-label="Researcher contact card">
+                <div class="pi-card__identity">
+                  <div class="pi-card__avatar" role="img"
+                       aria-label="Photo placeholder for Dr. Galin Gyulchev">
+                    <svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg"
+                         aria-hidden="true" focusable="false">
+                      <circle cx="20" cy="15" r="7" fill="currentColor" opacity="0.35"/>
+                      <path d="M5 36c0-8 6.7-13 15-13s15 5 15 13"
+                            fill="currentColor" opacity="0.25"/>
+                    </svg>
+                  </div>
+                  <div class="pi-card__info">
+                    <p class="pi-card__name">Dr. Galin N. Gyulchev</p>
+                    <p class="pi-card__role">Assoc. Prof.</p>
+                  </div>
+                </div>
+                <ul class="directory-list directory-list--compact" role="list">
+                  <li class="directory-item">
+                    <span class="directory-item__label">Email</span>
+                    <a class="directory-item__value directory-item__value--link"
+                       href="mailto:gyulchev@phys.uni-sofia.bg"
+                       aria-label="Send email to Dr. Gyulchev">
+                      gyulchev@phys.uni-sofia.bg
+                    </a>
+                  </li>
+                  <li class="directory-item">
+                    <span class="directory-item__label">Office</span>
+                    <span class="directory-item__value">Room 4(?), Physics Bldg. "B"</span>
+                  </li>
+                </ul>
+              </article>
+
+              <!-- --------------------------------------------------------
+                   CARD 4 — Assoc. Prof. Staykov
+                   -------------------------------------------------------- -->
+              <article class="pi-card" aria-label="Researcher contact card">
+                <div class="pi-card__identity">
+                  <div class="pi-card__avatar" role="img"
+                       aria-label="Photo placeholder for Dr. Kalin Staykov">
+                    <svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg"
+                         aria-hidden="true" focusable="false">
+                      <circle cx="20" cy="15" r="7" fill="currentColor" opacity="0.35"/>
+                      <path d="M5 36c0-8 6.7-13 15-13s15 5 15 13"
+                            fill="currentColor" opacity="0.25"/>
+                    </svg>
+                  </div>
+                  <div class="pi-card__info">
+                    <p class="pi-card__name">Dr. Kalin V. Staykov</p>
+                    <p class="pi-card__role">Assoc. Prof.</p>
+                  </div>
+                </div>
+                <ul class="directory-list directory-list--compact" role="list">
+                  <li class="directory-item">
+                    <span class="directory-item__label">Email</span>
+                    <a class="directory-item__value directory-item__value--link"
+                       href="mailto:kstaykov@phys.uni-sofia.bg"
+                       aria-label="Send email to Dr. Staykov">
+                      kstaykov@phys.uni-sofia.bg
+                    </a>
+                  </li>
+                  <li class="directory-item">
+                    <span class="directory-item__label">Office</span>
+                    <span class="directory-item__value">Room 4(?), Physics Bldg. "B"</span>
+                  </li>
+                </ul>
+              </article>
+
+              <!-- --------------------------------------------------------
+                   CARD 5 — Prof. Yazadjiev
+                   -------------------------------------------------------- -->
+              <article class="pi-card" aria-label="Researcher contact card">
+                <div class="pi-card__identity">
+                  <div class="pi-card__avatar" role="img"
+                       aria-label="Photo placeholder for Prof. Stoytcho Yazadjiev">
+                    <svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg"
+                         aria-hidden="true" focusable="false">
+                      <circle cx="20" cy="15" r="7" fill="currentColor" opacity="0.35"/>
+                      <path d="M5 36c0-8 6.7-13 15-13s15 5 15 13"
+                            fill="currentColor" opacity="0.25"/>
+                    </svg>
+                  </div>
+                  <div class="pi-card__info">
+                    <p class="pi-card__name">Stoytcho Yazadjiev</p>
+                    <p class="pi-card__role">Prof.</p>
+                  </div>
+                </div>
+                <ul class="directory-list directory-list--compact" role="list">
+                  <li class="directory-item">
+                    <span class="directory-item__label">Email</span>
+                    <a class="directory-item__value directory-item__value--link"
+                       href="mailto:yazad@phys.uni-sofia.bg"
+                       aria-label="Send email to Prof. Yazadjiev">
+                      yazad@phys.uni-sofia.bg
+                    </a>
+                  </li>
+                  <li class="directory-item">
+                    <span class="directory-item__label">Office</span>
+                    <span class="directory-item__value">Room 4(?), Physics Bldg. "B"</span>
+                  </li>
+                </ul>
+              </article>
+
+              <!-- --------------------------------------------------------
+                   CARD 6 — Asst. Prof. Deliyski
+                   -------------------------------------------------------- -->
+              <article class="pi-card" aria-label="Researcher contact card">
+                <div class="pi-card__identity">
+                  <div class="pi-card__avatar" role="img"
+                       aria-label="Photo placeholder for Dr. Valentin Deliyski">
+                    <svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg"
+                         aria-hidden="true" focusable="false">
+                      <circle cx="20" cy="15" r="7" fill="currentColor" opacity="0.35"/>
+                      <path d="M5 36c0-8 6.7-13 15-13s15 5 15 13"
+                            fill="currentColor" opacity="0.25"/>
+                    </svg>
+                  </div>
+                  <div class="pi-card__info">
+                    <p class="pi-card__name">Valentin Deliyski</p>
+                    <p class="pi-card__role">Asst. Prof.</p>
+                  </div>
+                </div>
+                <ul class="directory-list directory-list--compact" role="list">
+                  <li class="directory-item">
+                    <span class="directory-item__label">Email</span>
+                    <a class="directory-item__value directory-item__value--link"
+                       href="mailto:valentin.deliyski@phys.uni-sofia.bg"
+                       aria-label="Send email to Dr. Deliyski">
+                      valentin.deliyski@phys.uni-sofia.bg
+                    </a>
+                  </li>
+                  <li class="directory-item">
+                    <span class="directory-item__label">Office</span>
+                    <span class="directory-item__value">Room 4(?), Physics Bldg. "B"</span>
+                  </li>
+                </ul>
+              </article>
+
+              <!-- --------------------------------------------------------
+                   CARD 7 — PhD Candidate & Site Admin  (LAST IN SOURCE)
+                   With 7 cards in a 3-col grid, auto-flow places this card
+                   at column 1 (leftmost) of row 3 — exactly as required.
+                   No explicit grid-column override is needed.
+                   -------------------------------------------------------- -->
+              <article class="pi-card pi-card--admin"
+                       aria-label="PhD candidate and site administrator contact card">
+                <div class="pi-card__identity">
+                  <div class="pi-card__avatar" role="img"
+                       aria-label="Photo placeholder for Gergana Daskalova">
+                    <svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg"
+                         aria-hidden="true" focusable="false">
+                      <circle cx="20" cy="15" r="7" fill="currentColor" opacity="0.35"/>
+                      <path d="M5 36c0-8 6.7-13 15-13s15 5 15 13"
+                            fill="currentColor" opacity="0.25"/>
+                    </svg>
+                  </div>
+                  <div class="pi-card__info">
+                    <p class="pi-card__name">Gergana Daskalova</p>
+                    <p class="pi-card__role">PhD Candidate &amp; Site Admin</p>
+                  </div>
+                </div>
+                <ul class="directory-list directory-list--compact" role="list">
+                  <li class="directory-item">
+                    <span class="directory-item__label">Email</span>
+                    <a class="directory-item__value directory-item__value--link"
+                       href="mailto:gidaskalov@phys.uni-sofia.bg"
+                       aria-label="Send email to G. Daskalova">
+                      gidaskalov@phys.uni-sofia.bg
+                    </a>
+                  </li>
+                  <li class="directory-item">
+                    <span class="directory-item__label">Office</span>
+                    <span class="directory-item__value">Room 4(?), Physics Bldg. "B"</span>
+                  </li>
+                </ul>
+              </article>
+
+            </div>
+            <!-- /inquiries-grid -->
+
+          </section>
+          <!-- /inquiries-section -->
+
+
+        </div>
+        <!-- /container -->
+      </section>
+      <!-- /contacts-section -->
+
+    </div>
+    <!-- /page-body -->
+
+
+  </main>
+
+  <div id="global-footer-target" aria-live="polite"></div>
+
+</div>
+<!-- /site-wrapper -->
+
+<script src="js/app.js" defer></script>
+
+</body>
+</html>

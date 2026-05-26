@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <!--
+    ASTRO RESEARCH PROJECT — Members Page  (members.html)
+    Cards are built at runtime by buildMemberCard() in js/app.js.
+    See §12 in app.js for the full JSON schema and DOM template reference.
+  -->
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description"
+        content="Meet the BeyondGR research team — principal investigators, postdoctoral
+                 researchers, and PhD candidates working in gravitational astrophysics." />
+
+  <title>Members | BeyondGR Project</title>
+
+  <!-- Google Material Icons — person placeholder icon in photo column -->
+  <link rel="stylesheet"
+        href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+
+  <!-- FontAwesome 6 — loading spinner and global UI chrome -->
+  <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+        integrity="sha512-Avb2QiuDEEvB4bZJYdft2mNjVShBftLdPG8FJ0V7irTLQ8Uo0qcPxh4Plq7G5tGm0rU+1SPhVotteLpBERwTkw=="
+        crossorigin="anonymous"
+        referrerpolicy="no-referrer" />
+
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/members.css" />
+</head>
+
+<body>
+<div class="site-wrapper">
+
+
+  <!-- ====================================================================
+       HEADER + NAV — Injected by injectGlobalComponents() in app.js.
+       aria-live="polite" notifies screen readers when markup is stamped in
+       after DOMContentLoaded fires.
+       ==================================================================== -->
+  <div id="global-header-target" aria-live="polite"></div>
+
+
+  <!-- ====================================================================
+       MAIN CONTENT
+       ==================================================================== -->
+  <main class="site-main" id="main-content" tabindex="-1">
+
+
+    <!-- ------------------------------------------------------------------
+         PAGE HERO — Full-width dark navy banner, shared by all inner pages.
+         ------------------------------------------------------------------ -->
+    <header class="page-hero page-hero--members" aria-labelledby="members-page-title">
+      <div class="container">
+        <div class="page-hero__inner">
+
+          <div>
+            <h1 class="page-hero__title" id="members-page-title">Our Team</h1>
+            <p class="page-hero__desc">
+              Principal investigators, postdoctoral researchers, and PhD candidates
+              advancing the frontiers of gravitational astrophysics.
+            </p>
+          </div>
+
+          <nav class="breadcrumb" aria-label="Breadcrumb">
+            <ol class="breadcrumb__list" role="list">
+              <li class="breadcrumb__item">
+                <a href="index.html" class="breadcrumb__link">Home</a>
+              </li>
+              <li class="breadcrumb__item breadcrumb__item--current" aria-current="page">
+                Members
+              </li>
+            </ol>
+          </nav>
+
+        </div>
+      </div>
+    </header>
+    <!-- /page-hero -->
+
+
+    <!-- ------------------------------------------------------------------
+         PAGE BODY — Off-white academic canvas; flex-grow:1 keeps the footer
+         pinned to the bottom even with only one or two cards present.
+         ------------------------------------------------------------------ -->
+    <div class="page-body page-body--members">
+      <div class="container">
+
+
+        <!-- ------------------------------------------------------------
+             MEMBERS GRID — VERTICAL FLEX LIST, EMPTY AT BUILD TIME.
+
+             JS populates this with one <article class="member-card"> per
+             team member (see buildMemberCard in js/app.js §12).
+             The `hidden` attribute is removed by showMembersState(null)
+             once all cards are appended, preventing layout flash during load.
+
+             aria-live="polite" + aria-relevant="additions" announces new
+             cards to screen readers without interrupting ongoing speech.
+             ------------------------------------------------------------ -->
+        <section
+          class="members-grid"
+          id="members-grid"
+          aria-label="Research group members"
+          aria-live="polite"
+          aria-relevant="additions"
+          hidden>
+        </section>
+        <!-- /members-grid -->
+
+
+        <!-- ------------------------------------------------------------
+             STATE REGION — Loading / empty / error feedback.
+             aria-live="assertive" ensures errors are read out immediately.
+             JS controls which child is visible via .is-visible class toggling.
+             ------------------------------------------------------------ -->
+        <div class="members-state"
+             id="members-state"
+             aria-live="assertive"
+             role="status">
+
+          <!-- Loading spinner — visible during fetch -->
+          <div class="members-state__loading" id="members-loading">
+            <i class="fa-solid fa-circle-notch fa-spin" aria-hidden="true"></i>
+            <span>Loading team members&hellip;</span>
+          </div>
+
+          <!-- Error notice — visible on network or parse failure -->
+          <p class="members-state__error" id="members-error" role="alert">
+            <i class="fa-solid fa-circle-exclamation" aria-hidden="true"></i>
+            The member directory could not be loaded. Please try again later.
+          </p>
+
+          <!-- Empty notice — visible when JSON loads but array is empty -->
+          <p class="members-state__empty" id="members-empty">
+            No team members are listed at this time.
+          </p>
+
+        </div>
+        <!-- /members-state -->
+
+
+      </div>
+    </div>
+    <!-- /page-body -->
+
+
+  </main>
+
+
+  <!-- ====================================================================
+       FOOTER — Injected by injectGlobalComponents() in app.js.
+       ==================================================================== -->
+  <div id="global-footer-target" aria-live="polite"></div>
+
+</div>
+<!-- /site-wrapper -->
+
+
+<!-- Mobile nav drawer is injected by js/app.js into #global-header-target.
+     Do NOT add a static drawer here — a duplicate id="mobile-nav-drawer"
+     breaks getElementById() and the drawer-link active CSS state. -->
+
+<script src="js/app.js" defer></script>
+</body>
+</html>

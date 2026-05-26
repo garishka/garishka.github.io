@@ -1,0 +1,228 @@
+<!--
+  ARTICLE SNIPPET — articles/black-holes-accretion.html
+  ────────────────────────────────────────────────────────────────────────────
+  This file is a self-contained HTML fragment (no DOCTYPE / <html> / <head>).
+  It is fetched and injected verbatim into #article-viewer by app.js §15.
+
+  All styling is handled by the .art-* CSS classes defined in §R-9 of the
+  research page CSS additions. No inline styles. No external scripts.
+
+  Structure:
+    .art-wrap
+      .art-header       — title, meta (date + authors), horizontal divider
+      .art-body         — paragraphs, equations, section headings
+      .art-tags         — keyword chips
+      .art-related      — links to related publications
+  ────────────────────────────────────────────────────────────────────────────
+-->
+
+<div class="art-wrap">
+
+  <!-- ======================================================================
+       ARTICLE HEADER
+       ====================================================================== -->
+  <header class="art-header">
+
+    <h2 class="art-title">Black Holes and Accretion Disk Physics</h2>
+
+    <div class="art-meta">
+      <time class="art-date" datetime="2025-03-15">March 2025</time>
+      <span class="art-separator" aria-hidden="true">&middot;</span>
+      <span class="art-authors">
+        G. Gyulchev, L. Collodel, S. Yazadjiev, D. Doneva, P. Nedkova
+      </span>
+    </div>
+
+    <div class="art-divider" role="separator" aria-hidden="true"></div>
+
+  </header>
+
+
+  <!-- ======================================================================
+       ARTICLE BODY
+       ====================================================================== -->
+  <div class="art-body">
+
+    <p>
+      One of the central observational windows into strong-field gravity is the
+      thermal radiation emitted by matter accreting onto compact objects. When gas
+      and dust spiral inward under gravity, viscous dissipation heats the material
+      to temperatures at which it radiates across a broad electromagnetic spectrum
+      &mdash; most luminously in the X-ray band for stellar-mass black holes and in
+      the optical-to-ultraviolet range for supermassive ones. The detailed structure
+      of this <em>accretion disk</em> encodes a wealth of information about the
+      underlying spacetime geometry.
+    </p>
+
+    <p>
+      The standard theoretical framework is the Novikov&ndash;Thorne model, which
+      treats the disk as geometrically thin, optically thick, and in local
+      thermodynamic equilibrium. Each annulus radiates as a blackbody at a
+      temperature determined by the local energy dissipation rate. The luminosity
+      profile peaks near the innermost stable circular orbit (ISCO), whose location
+      is set entirely by the mass and spin of the central compact object.
+    </p>
+
+
+    <!-- SECTION: Geodesic Structure -->
+    <section class="art-section" aria-labelledby="bh-geodesic-title">
+
+      <h3 class="art-section-title" id="bh-geodesic-title">
+        Geodesic Structure and the ISCO
+      </h3>
+
+      <p>
+        For a Kerr black hole with mass <em>M</em> and dimensionless spin parameter
+        <em>a&#775;</em> = <em>a</em>/<em>M</em> &isin; [&minus;1, 1], the ISCO radius
+        in Boyer&ndash;Lindquist coordinates depends sensitively on the spin. For a
+        Schwarzschild (non-rotating) black hole the ISCO sits at exactly 6<em>M</em>.
+        As spin increases toward the prograde extremal limit, the ISCO contracts to
+        <em>r</em><sub>ISCO</sub> &rarr; <em>M</em>, dramatically increasing the
+        efficiency of accretion energy conversion.
+      </p>
+
+      <!-- Equation block — uses the gold left-bar blockquote style -->
+      <blockquote class="art-equation" aria-label="Schwarzschild ISCO radius formula">
+        <p>
+          <em>r</em><sub>ISCO</sub> = 6 <em>GM</em> / <em>c</em><sup>2</sup>
+          &nbsp;&nbsp;(Schwarzschild limit)
+        </p>
+      </blockquote>
+
+      <p>
+        Modifications to general relativity &mdash; or the presence of additional
+        matter fields such as scalar hair or a surrounding dark matter halo &mdash;
+        can shift the ISCO location and alter the disk's luminosity profile in ways
+        that are, in principle, detectable by current and next-generation X-ray
+        observatories such as NICER, eXTP, and Athena.
+      </p>
+
+    </section>
+    <!-- /geodesic structure -->
+
+
+    <!-- SECTION: Thin Disk Observables -->
+    <section class="art-section" aria-labelledby="bh-observables-title">
+
+      <h3 class="art-section-title" id="bh-observables-title">
+        Observational Signatures of Disk Emission
+      </h3>
+
+      <p>
+        The total luminosity emitted by a thin disk between the ISCO and some outer
+        radius is found by integrating the local flux <em>F</em>(<em>r</em>) over the
+        disk surface. The flux itself is determined by the energy, angular momentum,
+        and effective potential of circular geodesics in the given spacetime:
+      </p>
+
+      <blockquote class="art-equation" aria-label="Disk flux formula">
+        <p>
+          <em>F</em>(<em>r</em>) =
+          &minus; (&Omega;&#775; / (4&pi;&radic;<span style="text-decoration:overline">&nbsp;&minus;g&nbsp;</span>))
+          &sdot; (<em>E&nbsp;</em>&minus;&nbsp;&Omega; <em>L</em>)<sup>&minus;2</sup>
+          &int;<sub><em>r</em><sub>ISCO</sub></sub><sup><em>r</em></sup>
+          (<em>E&nbsp;</em>&minus;&nbsp;&Omega; <em>L</em>) <em>L</em>&#775; d<em>r</em>
+        </p>
+      </blockquote>
+
+      <p>
+        where &Omega; is the angular velocity of circular orbits, <em>E</em> and
+        <em>L</em> are the specific energy and angular momentum of a test particle,
+        and <em>g</em> is the metric determinant. Our group has evaluated these
+        integrals for several parameterised families of alternative compact objects
+        and published the resulting spectral energy distributions for comparison
+        with observational data.
+      </p>
+
+      <p>
+        Beyond integrated spectra, the <em>image</em> of the disk &mdash; including
+        photon-ring features produced by light bending close to the photon sphere
+        &mdash; is now directly accessible to very-long-baseline interferometric
+        arrays. The Event Horizon Telescope's images of M87* and Sgr A* have opened
+        an entirely new regime of spacetime tomography that our theoretical models
+        directly address.
+      </p>
+
+    </section>
+    <!-- /observables -->
+
+
+    <!-- SECTION: Kerr Black Hole with Scalar Hair -->
+    <section class="art-section" aria-labelledby="bh-scalar-title">
+
+      <h3 class="art-section-title" id="bh-scalar-title">
+        Images of Kerr Black Holes with Scalar Hair
+      </h3>
+
+      <p>
+        A recent focus of the group is the imaging appearance of Kerr black holes
+        surrounded by synchronized scalar hair &mdash; a family of solutions that
+        bifurcates from the Kerr family along a one-parameter set of stationary,
+        rotating boson stars. These solutions, discovered by Herdeiro and Radu,
+        satisfy the no-hair theorems' conditions at the horizon but carry additional
+        structure at finite radii that leaves a distinct imprint on the observed disk
+        luminosity profile and photon ring width.
+      </p>
+
+      <p>
+        Using ray-tracing codes developed within the group, we have produced
+        synthetic images of thin accretion disks around these hairy black holes
+        for a range of spin and scalar charge parameters. The results, recently
+        published in <em>IOP Publishing</em> (2025), show systematic deviations from
+        the standard Kerr case that are potentially measurable with next-generation
+        VLBI arrays operating at 345 GHz.
+      </p>
+
+    </section>
+    <!-- /scalar hair -->
+
+  </div>
+  <!-- /art-body -->
+
+
+  <!-- ======================================================================
+       KEYWORD TAGS
+       ====================================================================== -->
+  <div class="art-tags" aria-label="Related keywords">
+    <span class="art-tag">Black Holes</span>
+    <span class="art-tag">Accretion Disks</span>
+    <span class="art-tag">Kerr Spacetime</span>
+    <span class="art-tag">ISCO</span>
+    <span class="art-tag">Scalar Hair</span>
+    <span class="art-tag">EHT Imaging</span>
+    <span class="art-tag">Photon Ring</span>
+  </div>
+
+
+  <!-- ======================================================================
+       RELATED PUBLICATIONS
+       ====================================================================== -->
+  <aside class="art-related" aria-labelledby="bh-related-title">
+
+    <p class="art-related-title" id="bh-related-title">Related publications</p>
+
+    <ul class="art-related-list" role="list">
+      <li>
+        <a href="https://iopscience.iop.org/article/10.1088/1742-6596/3002/1/012002"
+           target="_blank"
+           rel="noopener noreferrer"
+           aria-label="Open: Images of a thin accretion disk around Kerr Black Hole with synchronized scalar hair (opens in new tab)">
+          Gyulchev et al. — Images of a thin accretion disk around Kerr Black Hole
+          with synchronized scalar hair (IOP Publishing, 2025)
+        </a>
+      </li>
+      <li>
+        <a href="https://doi.org/10.1140/epjc/s10052-020-08575-7"
+           target="_blank"
+           rel="noopener noreferrer"
+           aria-label="Open: Observational signatures of strongly naked singularities (opens in new tab)">
+          Gyulchev et al. — Observational signatures of strongly naked singularities:
+          image of the thin accretion disk (EPJC, 2020)
+        </a>
+      </li>
+    </ul>
+
+  </aside>
+
+</div>
+<!-- /art-wrap -->

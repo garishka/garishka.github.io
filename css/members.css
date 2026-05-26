@@ -1,0 +1,401 @@
+/* ==========================================================================
+   BeyondGR PROJECT — Members Page Styles
+   File: css/members.css
+   Scope: Styles exclusive to members.html.
+   Requires: css/style.css (global tokens, shared components, .page-hero,
+             .page-body, .accent-rule)
+
+   Sections:
+     §45   .page-body--members — list canvas
+     §46   .members-grid — vertical list engine
+     §47   .member-card — horizontal row anatomy
+     §48   .member-card__photo-col — portrait column (left)
+     §49   .member-card__info-col — text details column (right)
+     §50   .member-details — definition list inside card
+     §51   .member-profiles — external profile link pills
+     §52   State feedback (.members-state — loading / error)
+     §53   Page hero modifier (.page-hero--members)
+     §54   Members page responsive breakpoints
+   ========================================================================== */
+
+
+/* --------------------------------------------------------------------------
+   §45  PAGE BODY — MEMBERS CANVAS
+   Slightly cooler off-white (#f8f9fa) so pure white horizontal row-cards
+   read as clearly elevated surfaces. Dark mode uses Deep Void (#01080E).
+   -------------------------------------------------------------------------- */
+.page-body--members {
+  background-color: #f8f9fa;
+  padding-block: var(--space-2xl);
+  flex-grow: 1;
+}
+
+[data-theme="dark"] .page-body--members {
+  background-color: var(--color-bg-alt); /* #01080E — Deep Void */
+}
+
+
+/* --------------------------------------------------------------------------
+   §46  MEMBERS GRID — Vertical list engine
+   One card per row, full container width. Gap locked at 24px (--space-lg)
+   consistent with the rest of the system.
+   -------------------------------------------------------------------------- */
+.members-grid {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);         /* 24px between row-cards */
+  padding-block: var(--space-lg) 0;
+}
+
+
+/* --------------------------------------------------------------------------
+   §47  MEMBER CARD — Horizontal row anatomy
+   Each card is a semantic <article> split into two horizontal columns:
+     .member-card__photo-col  — fixed-width portrait, left side
+     .member-card__info-col   — all text details, right side (flex-grow: 1)
+
+   On mobile (< 768px) the card switches to flex-direction: column, centring
+   the photo above the text block. No inline style mutations.
+   -------------------------------------------------------------------------- */
+.member-card {
+  display: flex;
+  flex-direction: row;          /* Horizontal split on desktop */
+  align-items: stretch;         /* Both columns fill the card height */
+
+  background-color: #ffffff;
+  border-radius: var(--border-radius-lg);   /* 8px */
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--color-border);
+
+  overflow: hidden;             /* Clips photo rounded-left corners cleanly */
+
+  transition:
+    transform var(--transition-base),
+    box-shadow var(--transition-base),
+    border-color var(--transition-base);
+}
+
+[data-theme="dark"] .member-card {
+  background-color: var(--color-card-bg);   /* #001A33 Deep Navy */
+  border-color: var(--color-border);        /* #1E3A5F steel border */
+}
+
+/* Subtle hover: 2px upward lift + deeper shadow */
+.member-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--color-accent);
+}
+
+[data-theme="dark"] .member-card:hover {
+  box-shadow: var(--shadow-lg);
+  border-color: var(--color-accent);
+}
+
+
+/* --------------------------------------------------------------------------
+   §48  MEMBER CARD: PHOTO COLUMN (LEFT)
+   Fixed width of 220px on desktop — enough for a professional head-shot.
+   The <img> fills the column with object-fit:cover so any aspect ratio
+   source image is cropped consistently to center-top (face priority).
+   -------------------------------------------------------------------------- */
+.member-card__photo-col {
+  flex: 0 0 220px;              /* Locked width; never shrinks or grows */
+  position: relative;
+  overflow: hidden;
+  background-color: var(--color-bg-alt);  /* Fill behind placeholder */
+}
+
+/* Actual <img> — fills the column completely */
+.member-photo {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;  /* Crop from top — keeps faces in frame */
+  border-radius: 0;
+}
+
+/* Placeholder — shown when no photo is available or img fails to load.
+   Centres a Material Icon person silhouette in the column. */
+.member-photo-placeholder {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  background-color: var(--color-bg-alt);
+  color: var(--color-border);
+}
+
+[data-theme="dark"] .member-photo-placeholder {
+  background-color: rgba(255, 255, 255, 0.04);
+  color: var(--color-border);
+}
+
+.member-photo-placeholder .material-icons {
+  font-size: 3.5rem;
+  opacity: 0.45;
+}
+
+
+/* --------------------------------------------------------------------------
+   §49  MEMBER CARD: INFO COLUMN (RIGHT)
+   Takes all remaining horizontal space (flex-grow: 1).
+   Internally a vertical flex column: header → details dl → profiles row.
+   Padding uses --space-xl (32px) for generous academic white-space.
+   -------------------------------------------------------------------------- */
+.member-card__info-col {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);         /* 16px between header, details, profiles */
+  padding: var(--space-xl);     /* 32px all sides */
+  min-width: 0;                 /* Prevents flex overflow on narrow viewports */
+}
+
+/* ── Card Header (Name + Role) ──────────────────────────────── */
+
+.member-card__header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  padding-bottom: var(--space-md);
+  border-bottom: 2px solid var(--color-accent); /* Gold accent underline */
+}
+
+/* Member name — semantic <h3>, bold, midnight blue */
+.member-name {
+  font-size: var(--font-size-h3);               /* 1.25rem / 20px */
+  font-weight: var(--font-weight-bold);
+  color: var(--color-primary);
+  line-height: 1.3;
+  margin: 0;
+}
+
+[data-theme="dark"] .member-name {
+  color: var(--color-accent);                   /* Amber gold on Deep Navy */
+}
+
+/* Academic title / role — one step smaller, muted */
+.member-title {
+  font-size: var(--font-size-sm);               /* 0.875rem / 14px */
+  font-weight: var(--font-weight-normal);
+  color: var(--color-text-muted);
+  margin: 0;
+  line-height: 1.5;
+  font-style: italic;
+}
+
+
+/* --------------------------------------------------------------------------
+   §50  MEMBER CARD: DETAILS LIST
+   A <dl> element displays all explicitly labelled fields:
+     Email, Research Focus, Office (optional).
+   Each <div.member-detail> is a flex row: label badge left, value right.
+   -------------------------------------------------------------------------- */
+.member-details {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);         /* 8px between detail rows */
+  flex-grow: 1;                 /* Pushes .member-profiles to the bottom */
+}
+
+/* Single detail row — dt + dd side by side */
+.member-detail {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-sm);
+  flex-wrap: wrap;              /* Wraps gracefully when value is long */
+}
+
+/* Label badge — "Email:", "Research Focus:", etc.
+   Minimum width ensures all labels align at the same horizontal start point. */
+.member-detail__label {
+  flex-shrink: 0;
+  min-width: 130px;             /* Alignment anchor across all detail rows */
+  font-size: 0.7rem;
+  font-weight: var(--font-weight-bold);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-text-muted);
+  line-height: 1.6;
+  margin: 0;                    /* Reset <dt> browser margin */
+}
+
+/* Value text — email address, focus areas, etc. */
+.member-detail__value {
+  font-size: var(--font-size-sm);               /* 0.875rem / 14px */
+  color: var(--color-text);
+  line-height: 1.6;
+  margin: 0;                    /* Reset <dd> browser margin / indent */
+}
+
+/* Email link inside the value */
+.member-detail__value a {
+  color: var(--color-primary);
+  font-weight: var(--font-weight-bold);
+  text-decoration: none;
+  word-break: break-all;        /* Prevents long addresses from overflowing */
+  transition: color var(--transition-fast);
+}
+
+[data-theme="dark"] .member-detail__value a {
+  color: var(--color-accent);
+}
+
+.member-detail__value a:hover {
+  opacity: 1;
+  text-decoration: underline;
+}
+
+
+/* --------------------------------------------------------------------------
+   §51  MEMBER CARD: EXTERNAL PROFILES ROW
+   Named external links (InspireHEP, ORCID, Google Scholar, GitHub…) as
+   small pill-shaped buttons. Sits below the details list; margin-top: auto
+   pins it to the card bottom.
+   -------------------------------------------------------------------------- */
+.member-profiles {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  flex-wrap: wrap;
+  padding-top: var(--space-md);
+  border-top: 1px solid var(--color-border);    /* Subtle separator */
+  margin-top: auto;             /* Belt-and-suspenders: flush to bottom */
+}
+
+/* "PROFILES:" label */
+.member-profiles__label {
+  font-size: 0.7rem;
+  font-weight: var(--font-weight-bold);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-text-muted);
+  flex-shrink: 0;
+}
+
+/* Pill list wrapper */
+.member-profiles__list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+  list-style: none;
+}
+
+/* Individual named-link pill */
+.member-profile-link {
+  display: inline-block;
+  padding: 3px var(--space-sm);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-primary);
+  border: 1.5px solid var(--color-primary);
+  border-radius: var(--border-radius);
+  text-decoration: none;
+  line-height: 1.6;
+  letter-spacing: 0.01em;
+  transition:
+    background-color var(--transition-fast),
+    color var(--transition-fast),
+    border-color var(--transition-fast);
+}
+
+[data-theme="dark"] .member-profile-link {
+  color: var(--color-accent);
+  border-color: var(--color-accent);
+}
+
+.member-profile-link:hover {
+  background-color: var(--color-primary);
+  color: #ffffff;
+  opacity: 1;                   /* Override global a:hover opacity: 0.8 */
+}
+
+[data-theme="dark"] .member-profile-link:hover {
+  background-color: var(--color-accent);
+  color: var(--color-primary);
+  border-color: var(--color-accent);
+}
+
+
+/* --------------------------------------------------------------------------
+   §52  MEMBERS PAGE: STATE & ERROR FEEDBACK
+   Mirrors the pub-state pattern so loading / error UX is consistent.
+   -------------------------------------------------------------------------- */
+.members-state {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-md);
+  padding: var(--space-3xl) var(--space-xl);
+  text-align: center;
+  color: var(--color-text-muted);
+}
+
+.members-state.is-visible {
+  display: flex;
+}
+
+.members-state__loading {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  font-size: var(--font-size-lg);
+}
+
+.members-state__loading .fa-spin {
+  color: var(--color-accent);
+}
+
+.members-state__error {
+  font-size: var(--font-size-lg);
+  color: #FF6B6B;
+}
+
+
+/* --------------------------------------------------------------------------
+   §53  MEMBERS PAGE: HERO MODIFIER
+   Members page uses the shared .page-hero structure but applies its own
+   page-specific modifier class for colour / future overrides.
+   -------------------------------------------------------------------------- */
+.page-hero--members {
+  background-color: var(--color-hero-bg);
+  color: var(--color-hero-text);
+}
+
+
+/* --------------------------------------------------------------------------
+   §54  MEMBERS PAGE: RESPONSIVE BREAKPOINTS
+   Desktop (>= 768px):  horizontal two-column layout (photo | details).
+   Mobile  (< 768px):   vertical stack (photo centred on top, text below).
+   -------------------------------------------------------------------------- */
+@media (max-width: 767px) {
+
+  /* Switch card from row to column layout */
+  .member-card {
+    flex-direction: column;
+  }
+
+  /* Photo column: fixed-height banner across the card top.
+     160px gives a readable headshot without dominating the screen. */
+  .member-card__photo-col {
+    flex: 0 0 160px;            /* Height in column-direction mode */
+    width: 100%;                /* Full card width */
+  }
+
+  /* Info column: standard vertical padding, left-aligned */
+  .member-card__info-col {
+    padding: var(--space-lg);
+  }
+
+  /* Label column no longer needs a fixed min-width on narrow screens —
+     allow it to shrink so values have more room. */
+  .member-detail__label {
+    min-width: 100px;
+  }
+}

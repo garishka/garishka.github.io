@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<!--
+  ASTRO RESEARCH PROJECT — Publications Page
+  File: publications.html
+
+  Layout architecture:
+    .site-wrapper          — CSS Grid skeleton (auto auto 1fr auto), min-height 100vh
+    <header.site-header>   — Persistent branding bar
+    <nav.site-nav>         — Sticky horizontal nav
+    <main.site-main>
+      <header.page-hero>   — Full-width dark navy banner, no eyebrow label
+      <div.page-body
+           .page-body--publications>
+        .pub-toolbar       — Count readout + sort toggle buttons
+        .pub-table-wrapper — Horizontal scroll safety wrapper
+          <table.pub-table> — Fixed-layout academic grid (desktop)
+            <colgroup>     — Explicit column widths: 45/25/10/10/10
+            <thead>        — Column headers, sortable columns have aria-sort
+            <tbody#pub-list-body> — EMPTY at build time; JS populates
+          </table>
+        .pub-state         — Loading / empty-state / error feedback region
+    <footer.site-footer>   — Standard 4-column block
+
+  Data flow:
+    initPublicationsPage() in app.js:
+      1. fetch('assets/publications.json')
+      2. sort by current sort mode (year desc | title alpha)
+      3. buildPubRow(pub) → <tr class="pub-row"> template
+      4. inject fragment into #pub-list-body
+      5. sort toggle buttons re-trigger steps 2-4
+
+  Responsive strategy:
+    >= 768px  → semantic <table> with fixed column layout
+    < 768px   → CSS turns every <tr> into a block card via display:block rules;
+                 .mobile-label spans (hidden on desktop) provide field headers
+-->
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description"
+        content="Publications of the Astro Research Project — peer-reviewed papers,
+                 preprints, and conference proceedings in gravitational astrophysics." />
+
+  <title>Publications | BeyondGR Project</title>
+
+  <!-- FontAwesome 6 — used for link-type icons in the Links column -->
+  <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+        integrity="sha512-Avb2QiuDEEvB4bZJYdft2mNjVShBftLdPG8FJ0V7irTLQ8Uo0qcPxh4Plq7G5tGm0rU+1SPhVotteLpBERwTkw=="
+        crossorigin="anonymous"
+        referrerpolicy="no-referrer" />
+
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/publications.css" />
+</head>
+
+<body>
+<div class="site-wrapper">
+
+
+  <!-- ====================================================================
+       HEADER — Persistent branding bar
+       ==================================================================== -->
+  <div id="global-header-target" aria-live="polite"></div>
+
+
+  <!-- ====================================================================
+       MAIN CONTENT
+       ==================================================================== -->
+  <main class="site-main" id="main-content" tabindex="-1">
+
+
+    <!-- ------------------------------------------------------------------
+         PAGE HERO — Dark navy banner, clean H1 only (no eyebrow label)
+         ------------------------------------------------------------------ -->
+    <header class="page-hero page-hero--publications" aria-labelledby="pub-page-title">
+      <div class="container">
+        <div class="page-hero__inner">
+
+          <div>
+            <h1 class="page-hero__title" id="pub-page-title">Publications</h1>
+            <p class="page-hero__desc">
+              Peer-reviewed articles, preprints, and conference proceedings
+              from our project.
+            </p>
+          </div>
+
+          <nav class="breadcrumb" aria-label="Breadcrumb">
+            <ol class="breadcrumb__list" role="list">
+              <li class="breadcrumb__item">
+                <a href="index.html" class="breadcrumb__link">Home</a>
+              </li>
+              <li class="breadcrumb__item breadcrumb__item--current" aria-current="page">
+                Publications
+              </li>
+            </ol>
+          </nav>
+
+        </div>
+      </div>
+    </header>
+    <!-- /page-hero -->
+
+
+    <!-- ------------------------------------------------------------------
+         PAGE BODY — Light-grey surface (#F4F4F4 / #01080E dark)
+         flex-grow: 1 pushes the footer to the bottom on sparse data sets.
+         ------------------------------------------------------------------ -->
+    <div class="page-body page-body--publications">
+      <div class="container">
+
+
+        <!-- ------------------------------------------------------------
+             TOOLBAR — Publication count readout + sort toggle controls
+             ------------------------------------------------------------ -->
+        <div class="pub-toolbar" role="toolbar" aria-label="Publication list controls">
+
+          <!-- Populated by JS once data loads -->
+          <p class="pub-count" id="pub-count" aria-live="polite" aria-atomic="true">
+            Loading&hellip;
+          </p>
+
+          <div class="pub-sort-controls" role="group" aria-label="Sort publications by">
+            <span class="pub-sort-label" aria-hidden="true">Sort by:</span>
+
+            <!-- data-sort attribute read by JS to determine sort function -->
+            <button class="btn-sort is-active"
+                    data-sort="year"
+                    type="button"
+                    aria-pressed="true"
+                    aria-label="Sort by year, newest first">
+              <i class="fa-solid fa-calendar-days" aria-hidden="true"></i>
+              Year
+            </button>
+
+            <button class="btn-sort"
+                    data-sort="title"
+                    type="button"
+                    aria-pressed="false"
+                    aria-label="Sort alphabetically by title">
+              <i class="fa-solid fa-arrow-down-a-z" aria-hidden="true"></i>
+              Title
+            </button>
+          </div>
+
+        </div>
+        <!-- /pub-toolbar -->
+
+
+        <!-- ------------------------------------------------------------
+             TABLE WRAPPER — Provides horizontal scroll safety on
+             intermediate viewport widths where the table may squeeze.
+             The table itself never overflows; columns word-wrap instead.
+             ------------------------------------------------------------ -->
+        <div class="pub-table-wrapper">
+
+          <table class="pub-table"
+                 aria-label="List of publications"
+                 aria-describedby="pub-count">
+
+            <!-- Fixed column widths — table-layout: fixed enforced in CSS.
+                 Title + Authors absorb narrow windows; Year/Publisher/Links hold firm. -->
+            <colgroup>
+              <col class="col--title"     />  <!-- 45% -->
+              <col class="col--authors"   />  <!-- 25% -->
+              <col class="col--year"      />  <!-- 10% -->
+              <col class="col--publisher" />  <!-- 10% -->
+              <col class="col--links"     />  <!-- 10% -->
+            </colgroup>
+
+            <thead class="pub-thead">
+              <tr>
+                <th class="pub-th pub-th--title"     scope="col">Title</th>
+                <th class="pub-th pub-th--authors"   scope="col">Authors</th>
+                <th class="pub-th pub-th--year"      scope="col">Year</th>
+                <th class="pub-th pub-th--publisher" scope="col">Publisher</th>
+                <th class="pub-th pub-th--links"     scope="col">Links</th>
+              </tr>
+            </thead>
+
+            <!--
+              EMPTY AT BUILD TIME — JS populates this via buildPubRow().
+              aria-live="polite" announces changes to screen readers after sort.
+            -->
+            <tbody id="pub-list-body"
+                   aria-live="polite"
+                   aria-relevant="additions removals">
+            </tbody>
+
+          </table>
+
+        </div>
+        <!-- /pub-table-wrapper -->
+
+
+        <!-- ------------------------------------------------------------
+             STATE REGION — Loading / empty / error feedback.
+             JS shows/hides this and the table wrapper as appropriate.
+             ------------------------------------------------------------ -->
+        <div class="pub-state" id="pub-state" aria-live="assertive" role="status">
+          <!-- Loading indicator — visible on initial load -->
+          <div class="pub-state__loading" id="pub-loading">
+            <i class="fa-solid fa-circle-notch fa-spin" aria-hidden="true"></i>
+            <span>Loading publications&hellip;</span>
+          </div>
+        </div>
+        <!-- /pub-state -->
+
+
+      </div>
+    </div>
+    <!-- /page-body -->
+
+
+  </main>
+
+
+  <!-- ====================================================================
+       FOOTER — Standard 4-column block
+       ==================================================================== -->
+  <div id="global-footer-target" aria-live="polite"></div>
+
+</div>
+<!-- /site-wrapper -->
+
+
+<!-- Mobile nav drawer is injected by js/app.js into #global-header-target.
+     Do NOT add a static drawer here — duplicate id="mobile-nav-drawer" breaks
+     getElementById() and the wrong link classes break drawer-link CSS rules. -->
+
+<script src="js/app.js" defer></script>
+</body>
+</html>

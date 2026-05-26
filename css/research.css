@@ -1,0 +1,898 @@
+/* ==========================================================================
+   BeyondGR PROJECT — Research Page Styles
+   File: css/research.css
+   Scope: Styles exclusive to research.html.
+   Requires: css/style.css (global tokens, shared components, .page-hero,
+             .page-body, .accent-rule)
+
+   Sections:
+     §R-1  Design token additions (research-specific variables)
+     §R-2  Page hero modifier (.page-hero--research)
+     §R-3  Research canvas (.research-canvas)
+     §R-4  Research workspace (.research-workspace)
+     §R-5  Workspace toolbar (.workspace-toolbar, .btn-research-sort)
+     §R-6  Two-column layout (.research-layout)
+     §R-7  Article panel (.article-panel)
+     §R-8  Article state regions (.article-state and children)
+     §R-9  Article viewer (.article-viewer + injected .art-* content styles)
+     §R-10 Research sidebar (.research-sidebar)
+     §R-11 Sidebar search (.sidebar-search and children)
+     §R-12 Sidebar nav list (.sidebar-nav and children)
+     §R-13 Utility helpers (.is-filtered-out)
+     §R-14 Responsive breakpoints
+     §KaTeX KaTeX overflow & layout containment
+   ========================================================================== */
+
+
+/* --------------------------------------------------------------------------
+   §R-1  DESIGN TOKEN ADDITIONS
+   New tokens extend the existing :root system. Scoped to research-specific
+   UI patterns that have no equivalent in the global token set.
+   -------------------------------------------------------------------------- */
+:root {
+  /* Article content typography — spec-mandated colours */
+  --color-art-title:    #00376C;   /* Midnight Blue — article h2 title          */
+  --color-art-date:     #666666;   /* Dark Grey     — date / time elements       */
+  --color-art-author:   #000000;   /* Pure Black    — author name string         */
+  --color-art-border:   #E1E4E8;   /* Light Grey    — dividers, component edges  */
+
+  /* Sidebar dimensions */
+  --sidebar-max-height: calc(100vh - var(--header-height) - var(--nav-height) - 4rem);
+}
+
+[data-theme="dark"] {
+  /* In dark mode, shift article colours to readable equivalents */
+  --color-art-title:    #F59E0B;   /* Amber Gold  — vivid on Deep Navy card     */
+  --color-art-date:     #9AAFC8;   /* Muted blue-grey                            */
+  --color-art-author:   #E8EDF3;   /* Off-white body copy                        */
+  --color-art-border:   #1E3A5F;   /* Dark steel border                          */
+}
+
+
+/* --------------------------------------------------------------------------
+   §R-2  PAGE HERO MODIFIER — .page-hero--research
+   Mirrors the .page-hero--publications pattern for visual consistency.
+   The base .page-hero block and .page-hero__inner styles live in style.css;
+   this modifier only overrides the background token.
+   -------------------------------------------------------------------------- */
+.page-hero--research {
+  background-color: var(--color-hero-bg);   /* #00376C light / #001A33 dark */
+  color: var(--color-hero-text);
+}
+
+
+/* --------------------------------------------------------------------------
+   §R-3  RESEARCH CANVAS
+   Outer wrapper that establishes the #F4F4F4 background surface behind the
+   white workspace box. flex-grow: 1 fills the space between nav and footer.
+   -------------------------------------------------------------------------- */
+.research-canvas {
+  background-color: var(--color-bg-alt);   /* #F4F4F4 / #01080E (dark) */
+  padding-block: var(--space-2xl);         /* 48px top + bottom breathing room */
+}
+
+[data-theme="dark"] .research-canvas {
+  background-color: var(--color-bg-alt);   /* #01080E — deep void surface */
+}
+
+
+/* --------------------------------------------------------------------------
+   §R-4  RESEARCH WORKSPACE
+   The pure-white (#FFFFFF) editorial box. All interactive chrome lives inside.
+   Uses a subtle shadow to lift it from the grey canvas.
+   -------------------------------------------------------------------------- */
+.research-workspace {
+  background-color: var(--color-bg);       /* #FFFFFF / #0A2540 (dark) */
+  border: 1px solid var(--color-art-border);
+  border-radius: var(--border-radius-lg);  /* 8px */
+  box-shadow: var(--shadow-md);
+  overflow: hidden;                        /* Clip children to rounded corners */
+}
+
+[data-theme="dark"] .research-workspace {
+  background-color: var(--color-card-bg);  /* #001A33 deep navy card surface */
+  border-color: var(--color-art-border);
+}
+
+
+/* --------------------------------------------------------------------------
+   §R-5  WORKSPACE TOOLBAR
+   Flex row: article count on the left, sort controls on the right.
+   Separated from the layout grid below by a 1px border.
+   -------------------------------------------------------------------------- */
+.workspace-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-md);
+  padding: var(--space-md) var(--space-lg);
+  border-bottom: 1px solid var(--color-art-border);
+  background-color: var(--color-bg);        /* Matches workspace surface */
+  flex-wrap: wrap;
+}
+
+[data-theme="dark"] .workspace-toolbar {
+  background-color: var(--color-card-bg);
+  border-bottom-color: var(--color-art-border);
+}
+
+/* Article count text — muted, label-weight */
+.workspace-article-count {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  font-weight: var(--font-weight-normal);
+  margin: 0;
+}
+
+/* Controls group — flex row for sort button(s) */
+.workspace-controls {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+/* Sort toggle button — mirrors .btn-sort from publications.css */
+.btn-research-sort {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: var(--space-xs) var(--space-md);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-primary);
+  background-color: transparent;
+  border: 1px solid var(--color-primary);
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  transition:
+    background-color var(--transition-fast),
+    color            var(--transition-fast),
+    border-color     var(--transition-fast);
+}
+
+.btn-research-sort:hover,
+.btn-research-sort:focus-visible {
+  background-color: var(--color-primary);
+  color: var(--color-text-inverse);
+  outline: none;
+}
+
+.btn-research-sort:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+[data-theme="dark"] .btn-research-sort {
+  color: var(--color-accent);
+  border-color: var(--color-accent);
+}
+
+[data-theme="dark"] .btn-research-sort:hover,
+[data-theme="dark"] .btn-research-sort:focus-visible {
+  background-color: var(--color-accent);
+  color: #000000;                           /* Black text on gold for contrast */
+}
+
+/* Directional icon inside sort button — inherits button colour */
+.btn-research-sort .fa-solid {
+  font-size: 0.8rem;
+  transition: transform var(--transition-fast);
+}
+
+
+/* --------------------------------------------------------------------------
+   §R-6  TWO-COLUMN RESEARCH LAYOUT
+   CSS Grid: viewer (62fr) | sidebar (38fr).
+   align-items: start is critical — it allows .research-sidebar to use
+   position: sticky (stretch would pin height and break sticky scrolling).
+   -------------------------------------------------------------------------- */
+.research-layout {
+  display: grid;
+  grid-template-columns: 62fr 38fr;
+  align-items: start;
+}
+
+
+/* --------------------------------------------------------------------------
+   §R-7  ARTICLE PANEL (LEFT COLUMN)
+   The viewer and state regions share this container.
+   min-height ensures the panel never collapses on sparse / empty states.
+   Right border acts as the column divider (no gutter needed).
+   -------------------------------------------------------------------------- */
+.article-panel {
+  min-height: 520px;
+  border-right: 1px solid var(--color-art-border);
+  display: flex;
+  flex-direction: column;
+}
+
+[data-theme="dark"] .article-panel {
+  border-right-color: var(--color-art-border);
+}
+
+
+/* --------------------------------------------------------------------------
+   §R-8  ARTICLE STATE REGIONS
+   Three child panels share the same container (.article-state):
+     .article-state__welcome  — shown before first article load
+     .article-state__loading  — shown during active fetch
+     .article-state__error    — shown on fetch failure
+   JS toggles .is-hidden on each child; the parent is always present in DOM.
+   -------------------------------------------------------------------------- */
+.article-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex-grow: 1;
+  min-height: 480px;
+  padding: var(--space-2xl) var(--space-xl);
+  text-align: center;
+  color: var(--color-text-muted);
+  gap: var(--space-md);
+}
+
+/* All state children share centred column layout */
+.article-state__welcome,
+.article-state__loading,
+.article-state__error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-md);
+  max-width: 380px;
+}
+
+/* Large decorative icon — welcome and error states */
+.article-state__icon {
+  font-size: 2.5rem;
+  color: var(--color-border);
+  opacity: 0.7;
+}
+
+.article-state__icon--error {
+  color: #E05252;                           /* Warm red — universally signals error */
+}
+
+/* Heading inside state panels — smaller than main H2 */
+.article-state__heading {
+  font-size: var(--font-size-h3);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text);
+  margin: 0;
+}
+
+/* Body copy in state panels */
+.article-state__body {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  line-height: var(--line-height-base);
+  margin: 0;
+}
+
+/* Loading spinner glyph */
+.article-state__spinner {
+  font-size: 1.75rem;
+  color: var(--color-accent);
+}
+
+/* Retry button — shown in error state */
+.btn-article-retry {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  margin-top: var(--space-sm);
+  padding: var(--space-xs) var(--space-md);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-inverse);
+  background-color: var(--color-primary);
+  border: none;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  transition: opacity var(--transition-fast);
+}
+
+.btn-article-retry:hover {
+  opacity: 0.85;
+}
+
+
+/* --------------------------------------------------------------------------
+   §R-9  ARTICLE VIEWER
+   The injection target for dynamically loaded article HTML. Hidden (.is-hidden)
+   until JS successfully loads a snippet. All .art-* child styles are scoped to
+   .article-viewer so they apply only to injected HTML.
+
+   Colour assignments per spec:
+     .art-title   → --color-art-title   (#00376C / #F59E0B dark)
+     .art-date    → --color-art-date    (#666666 / #9AAFC8 dark)
+     .art-authors → --color-art-author  (#000000 / #E8EDF3 dark)
+     dividers     → --color-art-border  (#E1E4E8 / #1E3A5F dark)
+   -------------------------------------------------------------------------- */
+.article-viewer {
+  padding: var(--space-2xl);               /* 48px — generous editorial margins */
+  flex-grow: 1;
+  color: var(--color-art-author);          /* Default body text: solid black */
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-base);
+  animation: articleFadeIn var(--transition-slow) ease both;
+}
+
+[data-theme="dark"] .article-viewer {
+  color: var(--color-text);               /* Off-white in dark mode */
+}
+
+/* Entry animation — subtle fade-in on each article load */
+@keyframes articleFadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0);   }
+}
+
+/* ── Article wrapper ─────────────────────────────────────────── */
+.article-viewer .art-wrap {
+  max-width: 680px;                        /* Optimal reading line length */
+}
+
+/* ── Article header block ────────────────────────────────────── */
+.article-viewer .art-header {
+  margin-bottom: var(--space-xl);
+}
+
+/* Article title — Midnight Blue, bold, generous line height */
+.article-viewer .art-title {
+  font-size: var(--font-size-h2);          /* 1.75rem / 28px */
+  font-weight: var(--font-weight-bold);
+  color: var(--color-art-title);
+  line-height: 1.25;
+  margin-bottom: var(--space-md);
+}
+
+[data-theme="dark"] .article-viewer .art-title {
+  color: var(--color-art-title);           /* Amber Gold in dark mode */
+}
+
+/* Meta row: date · authors */
+.article-viewer .art-meta {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-xs) var(--space-sm);
+  margin-bottom: var(--space-md);
+}
+
+/* Date — Dark Grey #666666, small caps feel */
+.article-viewer .art-date {
+  font-size: var(--font-size-sm);
+  color: var(--color-art-date);
+  font-weight: var(--font-weight-normal);
+  letter-spacing: 0.02em;
+}
+
+/* Mid-dot separator between date and authors */
+.article-viewer .art-separator {
+  color: var(--color-art-border);
+  font-size: var(--font-size-sm);
+  user-select: none;
+}
+
+/* Authors string — Pure Black, regular weight */
+.article-viewer .art-authors {
+  font-size: var(--font-size-sm);
+  color: var(--color-art-author);
+  font-weight: var(--font-weight-normal);
+}
+
+[data-theme="dark"] .article-viewer .art-authors {
+  color: var(--color-art-author);          /* Off-white in dark */
+}
+
+/* Horizontal rule beneath the header block */
+.article-viewer .art-divider {
+  border: none;
+  border-top: 1px solid var(--color-art-border);
+  margin-top: var(--space-md);
+}
+
+/* ── Article body ─────────────────────────────────────────────── */
+.article-viewer .art-body {
+  color: var(--color-text);
+}
+
+.article-viewer .art-body p {
+  margin-bottom: var(--space-md);
+  line-height: var(--line-height-base);
+}
+
+.article-viewer .art-body p:last-child {
+  margin-bottom: 0;
+}
+
+/* Section heading — dark navy, lighter than article title */
+.article-viewer .art-section {
+  margin-top: var(--space-xl);
+}
+
+.article-viewer .art-section-title {
+  font-size: var(--font-size-h3);         /* 1.25rem / 20px */
+  font-weight: var(--font-weight-bold);
+  color: var(--color-primary);
+  margin-bottom: var(--space-sm);
+  padding-bottom: var(--space-xs);
+  border-bottom: 2px solid var(--color-accent);  /* Gold underline accent */
+  display: inline-block;
+}
+
+[data-theme="dark"] .article-viewer .art-section-title {
+  color: var(--color-text);
+}
+
+/* Equation / formula blockquote — left gold bar per project brand */
+.article-viewer .art-equation {
+  margin: var(--space-lg) 0;
+  padding: var(--space-md) var(--space-lg);
+  border-left: 3px solid var(--color-blockquote-bar);  /* Gold / Amber */
+  background-color: var(--color-bg-alt);
+  border-radius: 0 var(--border-radius) var(--border-radius) 0;
+  font-family: 'Georgia', 'Times New Roman', serif;    /* Serif = mathematical feel */
+  font-size: var(--font-size-lg);
+  text-align: center;
+  color: var(--color-text);
+}
+
+[data-theme="dark"] .article-viewer .art-equation {
+  background-color: rgba(255,255,255,0.03);
+}
+
+.article-viewer .art-equation p {
+  margin: 0;
+}
+
+/* Subscript / superscript cleanup inside equations */
+.article-viewer .art-equation sub,
+.article-viewer .art-equation sup {
+  font-size: 0.75em;
+}
+
+/* Tag / keyword chips — related topics listed at article foot */
+.article-viewer .art-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+  margin-top: var(--space-xl);
+  padding-top: var(--space-md);
+  border-top: 1px solid var(--color-art-border);
+}
+
+.article-viewer .art-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px var(--space-sm);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-normal);
+  color: var(--color-primary);
+  background-color: transparent;
+  border: 1px solid var(--color-primary);
+  border-radius: 999px;
+  line-height: 1.6;
+  transition: background-color var(--transition-fast), color var(--transition-fast);
+}
+
+[data-theme="dark"] .article-viewer .art-tag {
+  color: var(--color-accent);
+  border-color: var(--color-accent);
+}
+
+/* Related publications links block */
+.article-viewer .art-related {
+  margin-top: var(--space-xl);
+}
+
+.article-viewer .art-related-title {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-text-muted);
+  margin-bottom: var(--space-sm);
+}
+
+.article-viewer .art-related-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.article-viewer .art-related-list a {
+  font-size: var(--font-size-sm);
+  color: var(--color-primary);
+  text-decoration: underline;
+  text-decoration-color: transparent;
+  transition: text-decoration-color var(--transition-fast);
+}
+
+[data-theme="dark"] .article-viewer .art-related-list a {
+  color: var(--color-accent);
+}
+
+.article-viewer .art-related-list a:hover {
+  text-decoration-color: currentColor;
+  opacity: 1;
+}
+
+
+/* --------------------------------------------------------------------------
+   §R-10  RESEARCH SIDEBAR (RIGHT COLUMN)
+   position: sticky + align-self: start work together in the CSS Grid
+   context to keep the sidebar fixed in view while the article panel scrolls.
+   max-height + overflow-y: auto enables internal scrolling on long lists.
+   -------------------------------------------------------------------------- */
+.research-sidebar {
+  position: sticky;
+  top: calc(var(--header-height) + var(--nav-height) + var(--space-md));
+  align-self: start;                        /* Critical — disables grid stretch */
+  max-height: var(--sidebar-max-height);
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: var(--space-lg);
+
+  /* Subtle scrollbar styling (Chrome/Edge/Safari) */
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-border) transparent;
+}
+
+.research-sidebar::-webkit-scrollbar {
+  width: 4px;
+}
+
+.research-sidebar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.research-sidebar::-webkit-scrollbar-thumb {
+  background-color: var(--color-border);
+  border-radius: 2px;
+}
+
+
+/* --------------------------------------------------------------------------
+   §R-11  SIDEBAR SEARCH BAR
+   Full-width search with inline leading icon and trailing clear button.
+   -------------------------------------------------------------------------- */
+.sidebar-search {
+  margin-bottom: var(--space-md);
+}
+
+/* "Filter articles" label — small uppercase, icon + text row */
+.sidebar-search__label {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  font-size: 0.7rem;
+  font-weight: var(--font-weight-bold);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-text-muted);
+  margin-bottom: var(--space-xs);
+  cursor: default;
+}
+
+/* Wrapper positions the icon and clear button over the input */
+.sidebar-search__input-wrap {
+  position: relative;
+}
+
+/* Leading magnifying glass — non-interactive, purely decorative */
+.sidebar-search__icon {
+  position: absolute;
+  left: var(--space-sm);
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  pointer-events: none;
+  transition: color var(--transition-fast);
+}
+
+/* The text input itself */
+.sidebar-search__input {
+  width: 100%;
+  padding: var(--space-sm) var(--space-xl) var(--space-sm) 2rem;
+  font-size: var(--font-size-sm);
+  color: var(--color-text);
+  background-color: var(--color-bg-alt);
+  border: 1px solid var(--color-art-border);
+  border-radius: var(--border-radius);
+  outline: none;
+  transition:
+    border-color var(--transition-fast),
+    box-shadow   var(--transition-fast);
+  -webkit-appearance: none;                 /* Remove Safari search field chrome */
+}
+
+.sidebar-search__input::placeholder {
+  color: var(--color-border);
+}
+
+.sidebar-search__input:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(0, 55, 108, 0.12);
+  background-color: var(--color-bg);
+}
+
+.sidebar-search__input:focus + .sidebar-search__icon,
+.sidebar-search__input-wrap:focus-within .sidebar-search__icon {
+  color: var(--color-primary);
+}
+
+[data-theme="dark"] .sidebar-search__input {
+  background-color: rgba(255,255,255,0.04);
+  border-color: var(--color-art-border);
+  color: var(--color-text);
+}
+
+[data-theme="dark"] .sidebar-search__input:focus {
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.15);
+}
+
+/* Clear (×) button — absolutely positioned trailing element */
+.sidebar-search__clear {
+  position: absolute;
+  right: var(--space-xs);
+  top: 50%;
+  transform: translateY(-50%);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  color: var(--color-text-muted);
+  border-radius: 50%;
+  font-size: 0.8rem;
+  transition:
+    color            var(--transition-fast),
+    background-color var(--transition-fast);
+}
+
+.sidebar-search__clear:hover {
+  color: var(--color-text);
+  background-color: var(--color-bg-alt);
+}
+
+/* No-results notice — appears between search and nav list */
+.sidebar-no-results {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  text-align: center;
+  padding: var(--space-md) 0;
+  margin: 0;
+}
+
+
+/* --------------------------------------------------------------------------
+   §R-12  SIDEBAR NAV LIST
+   Ordered list of article entry buttons. Each <li> is a card-like item;
+   the <button> inside is the full click target.
+   -------------------------------------------------------------------------- */
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  list-style: none;
+}
+
+/* Individual article entry */
+.sidebar-nav__item {
+  border-bottom: 1px solid var(--color-art-border);
+  transition: opacity var(--transition-fast);
+}
+
+.sidebar-nav__item:first-child {
+  border-top: 1px solid var(--color-art-border);
+}
+
+/* Hidden by filterSidebarArticles() when search query has no match */
+.sidebar-nav__item.is-filtered-out {
+  display: none;
+}
+
+/* Clickable button — full-width, left-aligned, no default styles */
+.sidebar-nav__btn {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-xs);
+  width: 100%;
+  padding: var(--space-md) var(--space-sm);
+  text-align: left;
+  background: none;
+  border: none;
+  cursor: pointer;
+  border-left: 3px solid transparent;      /* Active indicator placeholder */
+  transition:
+    background-color var(--transition-fast),
+    border-left-color var(--transition-fast),
+    color var(--transition-fast);
+}
+
+.sidebar-nav__btn:hover {
+  background-color: var(--color-bg-alt);
+}
+
+[data-theme="dark"] .sidebar-nav__btn:hover {
+  background-color: rgba(255,255,255,0.04);
+}
+
+/* Active state — set by JS updateActiveNavBtn() */
+.sidebar-nav__btn.is-active {
+  border-left-color: var(--color-accent);   /* Gold left bar = currently loaded */
+  background-color: var(--color-bg-alt);
+}
+
+[data-theme="dark"] .sidebar-nav__btn.is-active {
+  background-color: rgba(245, 158, 11, 0.07);
+}
+
+.sidebar-nav__btn:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: -2px;
+}
+
+/* Meta row inside button: date only (authors omitted for sidebar brevity) */
+.sidebar-nav__meta {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+}
+
+/* Date chip — Dark Grey per spec, uppercase label feel */
+.sidebar-nav__date {
+  font-size: 0.7rem;
+  font-weight: var(--font-weight-bold);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--color-art-date);
+}
+
+.sidebar-nav__btn.is-active .sidebar-nav__date {
+  color: var(--color-accent);
+}
+
+/* Article title inside sidebar button — bold, primary colour */
+.sidebar-nav__title {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-primary);
+  line-height: 1.4;
+  transition: color var(--transition-fast);
+}
+
+[data-theme="dark"] .sidebar-nav__title {
+  color: var(--color-text);
+}
+
+.sidebar-nav__btn:hover .sidebar-nav__title,
+.sidebar-nav__btn.is-active .sidebar-nav__title {
+  color: var(--color-primary);
+}
+
+[data-theme="dark"] .sidebar-nav__btn:hover .sidebar-nav__title,
+[data-theme="dark"] .sidebar-nav__btn.is-active .sidebar-nav__title {
+  color: var(--color-accent);
+}
+
+
+/* --------------------------------------------------------------------------
+   §R-13  UTILITY HELPERS (research-page scope)
+   .is-filtered-out is defined above as part of sidebar-nav__item.
+   No additional helpers needed here — global .is-hidden is in style.css.
+   -------------------------------------------------------------------------- */
+
+
+/* --------------------------------------------------------------------------
+   §R-14  RESPONSIVE BREAKPOINTS
+   Tablet (< 900px): sidebar narrower but still visible.
+   Mobile (< 768px): collapse to single column, sidebar moves above viewer.
+   -------------------------------------------------------------------------- */
+
+/* --- Intermediate: tighten layout at 900px --- */
+@media (max-width: 900px) {
+  .research-layout {
+    grid-template-columns: 58fr 42fr;      /* Give sidebar slightly more room */
+  }
+
+  .article-viewer {
+    padding: var(--space-lg);
+  }
+}
+
+/* --- Mobile: single-column stacked layout --- */
+@media (max-width: 767px) {
+
+  /* Stack: sidebar moves above the article viewer on mobile */
+  .research-layout {
+    grid-template-columns: 1fr;
+  }
+
+  /* Sidebar loses sticky positioning — it sits above and scrolls with page */
+  .research-sidebar {
+    position: static;
+    max-height: none;
+    overflow-y: visible;
+    border-right: none;
+    border-bottom: 1px solid var(--color-art-border);
+    padding: var(--space-md);
+    /* On mobile sidebar is shown BEFORE the article panel.
+       Use order to push article-panel below without changing HTML source order. */
+    order: -1;
+  }
+
+  /* Article panel loses its right border on mobile */
+  .article-panel {
+    border-right: none;
+    min-height: 360px;
+  }
+
+  .article-viewer {
+    padding: var(--space-md);
+  }
+
+  .article-state {
+    min-height: 300px;
+    padding: var(--space-xl) var(--space-md);
+  }
+
+  /* Toolbar wraps gracefully on small screens */
+  .workspace-toolbar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-sm);
+  }
+
+  /* Sidebar nav items get more padding on touch targets */
+  .sidebar-nav__btn {
+    padding: var(--space-md) var(--space-sm);
+  }
+
+  .research-canvas {
+    padding-block: var(--space-xl);        /* Reduce vertical padding on mobile */
+  }
+}
+
+
+/* ==========================================================================
+   §KaTeX  KATEX — Overflow & layout containment
+   Scoped to .article-viewer so these overrides never bleed into other pages.
+   ========================================================================== */
+
+/* Block-display equations ($$...$$) — allow horizontal scroll on overflow
+   rather than letting wide matrices or long fractions break the white box. */
+.article-viewer .katex-display {
+  overflow-x: auto;
+  overflow-y: hidden;          /* Never clip descenders vertically            */
+  padding-block: var(--space-xs);   /* Tiny breathing room above/below the block  */
+  margin-block: var(--space-md);    /* Consistent vertical rhythm with paragraphs */
+}
+
+/* Prevent the KaTeX HTML tree from forcing its parent wider than the panel. */
+.article-viewer .katex-display > .katex {
+  max-width: 100%;
+  white-space: normal;         /* Allow line-wrap on very long token sequences */
+}
+
+/* Inline math — keep baseline alignment tight with surrounding body text. */
+.article-viewer .katex {
+  font-size: 1.05em;           /* Slightly larger than body to match x-height  */
+  line-height: 1;
+}
+
+/* Dark mode — KaTeX ships its own colours; force text to inherit so
+   fractions and symbols stay readable on the deep navy card surface. */
+[data-theme="dark"] .article-viewer .katex {
+  color: var(--color-text);
+}

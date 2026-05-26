@@ -1,0 +1,33 @@
+[
+  {
+    "id": "angelov-2025-polarized",
+    "title": "Polarized equatorial emission and hot spots around black holes with a dark matter halo",
+    "authors": "Tsanimir Angelov, Rasim Bekir, Galin Gyulchev, Petya Nedkova, Stoytcho Yazadjiev",
+    "publisher": "Eur. Phys. J. C ",
+    "year": 2025,
+    "links": [
+      { "name": "Journal", "url": " https://doi.org/10.1140/epjc/s10052-025-14537-8", "icon": "fa-square-poll-horizontal" },
+      { "name": "arXiv", "url": "https://arxiv.org/abs/2503.21395", "icon": "fa-file-pdf" }
+    ]
+  },
+  {
+    "id": "gyulchev-2026-kerr",
+    "title": "Images of the Thin Accretion Disk Around Kerr Black Holes coupled to time periodic scalar fields",
+    "authors": "Galin Gyulchev, Daniela Doneva, Valentin Deliyski, Petya Nedkova, Stoytcho Yazadjiev",
+    "publisher": "arXiv Preprint",
+    "year": 2026,
+    "links": [
+      { "name": "arXiv", "url": "https://arxiv.org/abs/2603.08796", "icon": "fa-file-pdf" }
+    ]
+  },
+  {
+    "id": "deliyski-2026-polemission",
+    "title": "Polarized Equatorial Emission around Kerr Black Holes with Synchronized Scalar Hair. I. Direct images",
+    "authors": "Valentin Deliyski, Galin Gyulchev, Daniela Doneva, Petya Nedkova, Stoytcho Yazadjiev",
+    "publisher": "arXiv Preprint",
+    "year": 2026,
+    "links": [
+      { "name": "arXiv", "url": "https://doi.org/10.48550/arXiv.2605.03006", "icon": "fa-file-pdf" }
+    ]
+  }
+]

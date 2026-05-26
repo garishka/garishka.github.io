@@ -1,0 +1,322 @@
+<!--
+  ARTICLE SNIPPET — articles/polarized-dark-matter-halo.html
+  ────────────────────────────────────────────────────────────────────────────
+  Self-contained HTML fragment — no DOCTYPE / <html> / <head>.
+  Injected into #article-viewer by app.js §15 loadArticle().
+  KaTeX auto-render scans this subtree immediately after injection.
+
+  Source paper:
+    Angelov, Bekir, Gyulchev, Nedkova, Yazadjiev
+    "Polarized equatorial emission and hot spots around black holes
+     with a dark matter halo"
+    European Physical Journal C 85, 1075 (2025)
+    DOI: 10.1140/epjc/s10052-025-14537-8
+    arXiv: 2503.21395 [gr-qc]
+
+  Math notation conventions used in this file:
+    Block display equations  → $$...$$   (KaTeX renders as centred display)
+    Inline equations         → $...$     (KaTeX renders inline with body text)
+    All LaTeX source is written in plain text inside the HTML — KaTeX
+    auto-render handles parsing and typesetting after DOM injection.
+  ────────────────────────────────────────────────────────────────────────────
+-->
+
+<div class="art-wrap">
+
+  <!-- ======================================================================
+       ARTICLE HEADER
+       ====================================================================== -->
+  <header class="art-header">
+
+    <h2 class="art-title">
+      Polarized Equatorial Emission and Hot Spots Around Black Holes
+      with a Dark Matter Halo
+    </h2>
+
+    <div class="art-meta">
+      <time class="art-date" datetime="2025-09-29">September 2025</time>
+      <span class="art-separator" aria-hidden="true">&middot;</span>
+      <span class="art-authors">
+        T. Angelov, R. Bekir, G. Gyulchev, P. Nedkova, S. Yazadjiev
+      </span>
+      <span class="art-separator" aria-hidden="true">&middot;</span>
+      <span class="art-journal">
+        <em>European Physical Journal C</em> 85, 1075
+      </span>
+    </div>
+
+    <div class="art-divider" role="separator" aria-hidden="true"></div>
+
+  </header>
+
+
+  <!-- ======================================================================
+       ABSTRACT
+       ====================================================================== -->
+  <section class="art-abstract" aria-labelledby="dm-abstract-title">
+
+    <h3 class="art-section-title" id="dm-abstract-title">Abstract</h3>
+
+    <p>
+      This work investigates the linear polarization of accretion disk emissions
+      around black holes embedded in a galactic dark matter halo. The gravitational
+      interaction between the black hole and the surrounding dark matter is modelled
+      using an exact solution to the Einstein field equations
+      $G_{\mu\nu} = 8\pi G\, T_{\mu\nu}$
+      that superposes a Schwarzschild black hole with a Hernquist-type matter
+      distribution &mdash; a density profile well established in galactic simulations
+      and consistent with observed rotation curves.
+    </p>
+
+    <p>
+      Observable polarization from a magnetized fluid ring orbiting the black hole
+      is simulated across a range of magnetic field configurations whose parameters
+      are physically motivated by the dark matter distribution in real galaxies.
+      For direct images, polarization intensity and direction deviate by less than
+      $1\%$ from the isolated Schwarzschild case across the full set of
+      configurations tested. For indirect (lensed) images the deviation grows by
+      roughly an order of magnitude yet remains below $10\%$ at the small
+      inclination angles relevant to the galactic targets M87* and Sgr&nbsp;A*.
+      The findings indicate that detecting the imprint of a dark matter halo on
+      accretion-disk polarization will remain extremely challenging with near-future
+      instrumentation.
+    </p>
+
+  </section>
+  <!-- /abstract -->
+
+
+  <!-- ======================================================================
+       ARTICLE BODY
+       ====================================================================== -->
+  <div class="art-body">
+
+
+    <!-- SECTION 2: The Spacetime Geometry -->
+    <section class="art-section" aria-labelledby="dm-spacetime-title">
+
+      <h3 class="art-section-title" id="dm-spacetime-title">
+        The Spacetime Geometry
+      </h3>
+
+      <p>
+        The analysis is conducted in a static, spherically symmetric spacetime that
+        combines a central black hole with a dark matter halo situated at galactic
+        scales. The construction follows the philosophy of the Einstein cluster
+        framework: starting from the Hernquist density profile for the dark matter
+        distribution, one derives an anisotropic energy&ndash;momentum tensor
+        $T_{\mu\nu}$ that, together with the black hole mass term, constitutes an
+        exact solution of the Einstein equations. The resulting metric retains the
+        Schwarzschild form in the black hole&rsquo;s immediate vicinity while the
+        halo contribution becomes significant only at distances characteristic of
+        galactic structure.
+      </p>
+
+      <!-- ── Display equation: static spherically symmetric line element ── -->
+      <blockquote class="art-equation"
+                  aria-label="Static spherically symmetric metric line element">
+        $$
+          ds^2 = -f(r)\,dt^2 + f(r)^{-1}\,dr^2 + r^2\,d\Omega^2
+        $$
+      </blockquote>
+
+      <p>
+        The metric function $f(r)$ encodes both the Schwarzschild mass term and the
+        dark matter contribution. At radii much smaller than the halo scale radius
+        $r_s$, the geometry reduces cleanly to Schwarzschild; deviations grow
+        gradually and become appreciable only beyond the astrophysically relevant
+        accretion region. This separation of scales is crucial for assessing the
+        halo&rsquo;s observational impact: the near-horizon geodesics that determine
+        photon trajectories and polarization transfer are only weakly perturbed by
+        the halo.
+      </p>
+
+      <p>
+        Explicitly, the metric function takes the form
+      </p>
+
+      <!-- ── Display equation: metric function f(r) ── -->
+      <blockquote class="art-equation"
+                  aria-label="Metric function encoding Schwarzschild mass and dark matter halo">
+        $$
+          f(r) = 1 - \frac{2M}{r} - \frac{2M_{\mathrm{DM}}(r)}{r}
+        $$
+      </blockquote>
+
+      <p>
+        where $M$ is the black hole mass and $M_{\mathrm{DM}}(r)$ is the dark matter
+        mass enclosed within radius $r$, obtained by integrating the Hernquist
+        density profile $\rho_{\mathrm{DM}}(r)$ outward from the origin.
+      </p>
+
+      <!-- ── Display equation: Hernquist density profile ── -->
+      <blockquote class="art-equation"
+                  aria-label="Hernquist-type dark matter density profile">
+        $$
+          \rho_{\mathrm{DM}}(r)
+          = \frac{M_{\mathrm{DM}}}{2\pi}
+            \cdot \frac{r_s}{r\,(r + r_s)^3}
+        $$
+      </blockquote>
+
+      <p>
+        Here $M_{\mathrm{DM}}$ is the total dark matter halo mass and $r_s$ is the
+        characteristic halo scale radius. Both parameters are fixed to values
+        compatible with observational constraints on the dark matter distribution in
+        galaxies hosting M87* and Sgr&nbsp;A*, allowing the simulations to remain
+        physically grounded while spanning a realistic parameter space. The enclosed
+        mass follows as
+      </p>
+
+      <!-- ── Display equation: enclosed dark matter mass M_DM(r) ── -->
+      <blockquote class="art-equation"
+                  aria-label="Dark matter mass enclosed within radius r">
+        $$
+          M_{\mathrm{DM}}(r)
+          = M_{\mathrm{DM}}
+            \left(\frac{r}{r + r_s}\right)^{\!2}
+        $$
+      </blockquote>
+
+      <p>
+        A key consequence of this construction is that the event horizon location
+        $r_h$ and the innermost stable circular orbit (ISCO) radius $r_{\mathrm{ISCO}}$
+        remain close to their Schwarzschild values $r_h = 2M$ and
+        $r_{\mathrm{ISCO}} = 6M$ for all halo parameters considered. The effective
+        potential governing photon orbits,
+      </p>
+
+      <!-- ── Display equation: effective photon potential ── -->
+      <blockquote class="art-equation"
+                  aria-label="Effective potential for null geodesics">
+        $$
+          V_{\mathrm{eff}}(r)
+          = f(r)\left(\frac{L^2}{r^2} - \frac{E^2}{f(r)}\right)
+          = \frac{L^2 f(r)}{r^2} - E^2
+        $$
+      </blockquote>
+
+      <p>
+        whose shape determines the photon sphere radius $r_{\mathrm{ph}}$ through
+        the simultaneous conditions $V_{\mathrm{eff}}(r_{\mathrm{ph}}) = 0$ and
+        $V_{\mathrm{eff}}'(r_{\mathrm{ph}}) = 0$, is similarly robust against the
+        dark matter perturbation. Here $E$ and $L$ denote the conserved energy and
+        angular momentum of the photon along its null geodesic, respectively.
+      </p>
+
+      <p>
+        This insensitivity at small radii ultimately explains why the polarization
+        signatures in the direct images are so weakly affected by the halo, and
+        motivates the more careful analysis of indirect images, where photons travel
+        on longer paths through the perturbed exterior geometry — accumulating an
+        additional rotation of the polarization angle $\chi$ via Faraday rotation
+        before reaching the observer.
+      </p>
+
+    </section>
+    <!-- /spacetime geometry -->
+
+
+    <!-- SECTION: Polarization Transfer -->
+    <section class="art-section" aria-labelledby="dm-polar-title">
+
+      <h3 class="art-section-title" id="dm-polar-title">
+        Polarized Emission and Transfer Formalism
+      </h3>
+
+      <p>
+        The polarized radiative transfer is formulated in terms of the Stokes
+        parameters $\{I, Q, U, V\}$. For synchrotron emission from a magnetized
+        fluid element in the equatorial plane, the two key observables that encode
+        the polarization state of a received photon are the polarization fraction
+        $\Pi$ and the electric vector position angle (EVPA) $\chi$, defined by
+      </p>
+
+      <!-- ── Display equations: polarization fraction and EVPA ── -->
+      <blockquote class="art-equation"
+                  aria-label="Polarization fraction and EVPA definitions">
+        $$
+          \Pi = \frac{\sqrt{Q^2 + U^2}}{I},
+          \qquad
+          \chi = \frac{1}{2}\arctan\!\left(\frac{U}{Q}\right)
+        $$
+      </blockquote>
+
+      <p>
+        The transfer equations along each null geodesic are integrated from the
+        emitting fluid element to the distant observer&rsquo;s image plane using a
+        parallel-transport frame anchored to the photon four-momentum $k^\mu$. The
+        polarization vector $f^\mu$ is Lie-transported along the geodesic subject
+        to $f^\mu k_\mu = 0$, ensuring the polarization state evolves only due to
+        geometric and plasma effects and not from coordinate artifacts.
+      </p>
+
+    </section>
+    <!-- /polarization transfer -->
+
+
+  </div>
+  <!-- /art-body -->
+
+
+  <!-- ======================================================================
+       KEYWORD TAGS
+       ====================================================================== -->
+  <div class="art-tags" aria-label="Related keywords">
+    <span class="art-tag">Dark Matter Halo</span>
+    <span class="art-tag">Linear Polarization</span>
+    <span class="art-tag">Schwarzschild Spacetime</span>
+    <span class="art-tag">Hernquist Profile</span>
+    <span class="art-tag">Accretion Disks</span>
+    <span class="art-tag">Hot Spots</span>
+    <span class="art-tag">Null Geodesics</span>
+    <span class="art-tag">Stokes Parameters</span>
+    <span class="art-tag">M87*</span>
+    <span class="art-tag">Sgr A*</span>
+    <span class="art-tag">EHT</span>
+    <span class="art-tag">GRAVITY</span>
+  </div>
+
+
+  <!-- ======================================================================
+       RELATED PUBLICATIONS
+       ====================================================================== -->
+  <aside class="art-related" aria-labelledby="dm-related-title">
+
+    <p class="art-related-title" id="dm-related-title">Related publications</p>
+
+    <ul class="art-related-list" role="list">
+      <li>
+        <a href="https://doi.org/10.1140/epjc/s10052-025-14537-8"
+           target="_blank"
+           rel="noopener noreferrer"
+           aria-label="Open: Polarized equatorial emission and hot spots around black holes with a dark matter halo, EPJC 2025 (opens in new tab)">
+          Angelov et al. &mdash; Polarized equatorial emission and hot spots around
+          black holes with a dark matter halo
+          (Eur. Phys. J. C 85, 1075, 2025)
+        </a>
+      </li>
+      <li>
+        <a href="https://doi.org/10.48550/arXiv.2512.13327"
+           target="_blank"
+           rel="noopener noreferrer"
+           aria-label="Open: Shadows of rotating traversable wormholes surrounded by plasma, arXiv preprint (opens in new tab)">
+          Angelov et al. &mdash; Shadows of rotating traversable wormholes
+          surrounded by plasma (arXiv:2512.13327, 2025)
+        </a>
+      </li>
+      <li>
+        <a href="https://doi.org/10.1140/epjc/s10052-020-08575-7"
+           target="_blank"
+           rel="noopener noreferrer"
+           aria-label="Open: Observational signatures of strongly naked singularities, EPJC 2020 (opens in new tab)">
+          Gyulchev et al. &mdash; Observational signatures of strongly naked
+          singularities: image of the thin accretion disk (EPJC, 2020)
+        </a>
+      </li>
+    </ul>
+
+  </aside>
+
+</div>
+<!-- /art-wrap -->

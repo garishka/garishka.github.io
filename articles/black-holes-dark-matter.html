@@ -1,0 +1,259 @@
+<!--
+  ARTICLE SNIPPET — articles/black-holes-dark-matter.html
+  Source: §2 "Black holes surrounded by a dark matter halo"
+  Angelov, Bekir, Gyulchev, Nedkova, Yazadjiev — EPJC 85, 1075 (2025)
+-->
+
+<div class="art-wrap">
+
+  <header class="art-header">
+    <h2 class="art-title">Black Holes Surrounded by a Dark Matter Halo</h2>
+    <div class="art-meta">
+      <time class="art-date" datetime="2024-03-10">March 2024</time>
+      <span class="art-separator" aria-hidden="true">&middot;</span>
+      <span class="art-authors">T. Angelov, R. Bekir, G. Gyulchev, P. Nedkova, S. Yazadjiev</span>
+    </div>
+    <div class="art-divider" role="separator" aria-hidden="true"></div>
+  </header>
+
+  <div class="art-body">
+
+    <section class="art-section" aria-labelledby="bhdm-construction">
+      <h3 class="art-section-title" id="bhdm-construction">The Einstein Cluster Construction</h3>
+
+      <p>
+        We consider a spacetime geometry describing a superposition of a black hole and a dark matter
+        halo at large distance. The solution is inspired by the Einstein cluster — a stationary
+        self-gravitating system of many massive particles moving on circular geodesics in the field
+        created by their collective superposition, first described by Einstein and subsequently
+        revisited in the literature. Such a system is spherically symmetric, and the metric takes
+        the general static form
+      </p>
+
+      $$
+        ds^2 = -e^{\nu}\,dt^2 + e^{\lambda}\,dr^2
+               + r^2\!\left(d\theta^2 + \sin^2\!\theta\; d\phi^2\right),
+      $$
+
+      <p>
+        where the metric functions $\nu$ and $\lambda$ depend only on the radial coordinate $r$.
+        For $n$ particles of mass $m_p$, four-velocity $U^\mu$, and four-momentum
+        $P^\mu = m_p U^\mu$ satisfying the geodesic equations, the averaged stress-energy tensor
+        over all geodesic trajectories passing through a given point is
+      </p>
+
+      $$
+        \langle T^{\mu}{}_{\nu}\rangle = \frac{n}{m_p}\langle P^{\mu}P_{\nu}\rangle.
+      $$
+
+      <p>
+        Evaluating this expression using the symmetries of the system, the only non-vanishing
+        components are the energy density $\rho$ and the tangential pressure $p$:
+      </p>
+
+      $$
+        \langle T^t{}_t \rangle = -\rho,
+        \qquad
+        \langle T^\theta{}_\theta \rangle = \langle T^\phi{}_\phi \rangle = p.
+      $$
+
+      <p>
+        The corresponding Einstein equations then read
+      </p>
+
+      $$
+        \frac{1}{r^2}\bigl[r(1-e^{-\lambda})\bigr]' = 8\pi\rho,
+      $$
+      $$
+        \nu' = \frac{1}{r}\!\left(e^{-\lambda}-1\right),
+      $$
+      $$
+        \frac{e^{-\lambda}}{2}\!\left[\nu''+\frac{\nu'^{\,2}}{2}
+        +\frac{\nu'-\lambda'}{r}-\frac{\nu'\lambda'}{2}\right] = 8\pi p,
+      $$
+
+      <p>
+        and imply the following algebraic relation between the energy density and the tangential
+        pressure:
+      </p>
+
+      $$
+        p = \frac{\rho}{4}\!\left(e^{\lambda}-1\right) = \frac{r\nu'}{4}\,\rho.
+      $$
+    </section>
+
+    <section class="art-section" aria-labelledby="bhdm-mass">
+      <h3 class="art-section-title" id="bhdm-mass">Gravitational Mass and the Metric Functions</h3>
+
+      <p>
+        Introducing the gravitational mass $m(r)$ enclosed within a sphere of radius $r$,
+      </p>
+
+      $$
+        m(r) = 4\pi\int_0^r \rho\, r^2\,dr,
+      $$
+
+      <p>
+        all characteristics of the system can be expressed in terms of this single function.
+        The Einstein equations yield its relation to the metric potential $\nu$,
+      </p>
+
+      $$
+        \frac{r}{2}\,\nu' = \frac{m(r)}{r - 2m(r)},
+      $$
+
+      <p>
+        from which the metric function $\lambda$ and the tangential pressure follow as
+      </p>
+
+      $$
+        e^{\lambda} = \left(1 - \frac{2m(r)}{r}\right)^{-1},
+        \qquad
+        p = \frac{m(r)}{2\!\left(r - 2m(r)\right)}\,\rho.
+      $$
+
+      <p>
+        Because of their anisotropic energy-momentum tensor, Einstein clusters are natural
+        candidates for modelling galactic dark matter halos: any observed rotation curve can be
+        reproduced by specifying an appropriate tangential pressure profile, or equivalently by
+        prescribing the mass function $m(r)$. Clusters with King-type, Burkert-type, and
+        Navarro–Frenk–White density distributions have all been constructed in this framework.
+      </p>
+    </section>
+
+    <section class="art-section" aria-labelledby="bhdm-halo">
+      <h3 class="art-section-title" id="bhdm-halo">The Black Hole–Dark Matter Halo Mass Function</h3>
+
+      <p>
+        To describe simultaneously a central black hole and an extended dark matter halo, we
+        adopt the following mass function:
+      </p>
+
+      $$
+        m(r) = M_{\rm BH}
+               + \frac{M r^2}{\left(a_0 + r\right)^2}
+                 \left(1 - \frac{2M_{\rm BH}}{r}\right)^{\!2},
+      $$
+
+      <p>
+        where $M$, $a_0$, and $M_{\rm BH}$ are constants representing the halo mass, its
+        characteristic length scale, and the black hole mass, respectively. Integrating the
+        Einstein equations yields the metric function
+      </p>
+
+      $$
+        e^{\lambda} = \left(1 - \frac{2M_{\rm BH}}{r}\right)e^{\Upsilon},
+      $$
+
+      <p>
+        with the auxiliary function
+      </p>
+
+      $$
+        \Upsilon = -\pi\sqrt{\frac{M}{\xi}}
+                   + 2\sqrt{\frac{M}{\xi}}\,
+                     \arctan\!\left(\frac{r + a_0 - M}{\sqrt{M\xi}}\right),
+        \quad
+        \xi = 2a_0 - M + 4M_{\rm BH}.
+      $$
+
+      <p>
+        The matter density resulting from this mass function is
+      </p>
+
+      $$
+        4\pi\rho
+        = \frac{m'}{r^2}
+        = \frac{2M\!\left(a_0 + 2M_{\rm BH}\right)\!\left(1-2M_{\rm BH}/r\right)}
+               {r\!\left(r+a_0\right)^3}.
+      $$
+
+      <p>
+        The spacetime contains a horizon at $r = 2M_{\rm BH}$ and a curvature singularity at
+        $r = 0$. When the solution parameters satisfy $M_{\rm BH} \ll M \ll a_0$, no further
+        curvature singularities arise. Under this ordering the solution reduces to the
+        Schwarzschild black hole with mass $M_{\rm BH}$ at small radii and to a Hernquist-type
+        matter distribution at large radii, and can therefore be interpreted as a black hole in
+        gravitational interaction with a galactic dark matter halo. The ADM mass of the full
+        configuration is $M_{\rm ADM} = M + M_{\rm BH}$.
+      </p>
+    </section>
+
+    <section class="art-section" aria-labelledby="bhdm-geodesic">
+      <h3 class="art-section-title" id="bhdm-geodesic">Geodesic Structure and the Compactness Parameter</h3>
+
+      <p>
+        The dark matter halo modifies the photon sphere radius $r_{\rm ph}$ and the innermost
+        stable circular orbit $r_{\rm ISCO}$ relative to their Schwarzschild values. Approximate
+        expressions at first order in $1/a_0$ read
+      </p>
+
+      $$
+        r_{\rm ph}
+        \approx 3M_{\rm BH}\!\left(1 + \frac{M M_{\rm BH}}{a_0^2}\right),
+        \qquad
+        r_{\rm ISCO}
+        \approx 6M_{\rm BH}\!\left(1 - \frac{32 M M_{\rm BH}}{a_0^2}\right).
+      $$
+
+      <p>
+        The critical impact parameter on null geodesics, which governs the size of the black
+        hole shadow, is correspondingly shifted to
+      </p>
+
+      $$
+        b_{\rm crit}
+        = 3\sqrt{3}\,M_{\rm BH}
+          \left(1 + \frac{M}{a_0}
+                + \frac{M\!\left(5M - 18M_{\rm BH}\right)}{6a_0^2}\right).
+      $$
+
+      <p>
+        Although the dark matter halo is characterised by two independent parameters, $M$
+        and $a_0$, much of its influence on strong-gravity phenomenology is governed by their
+        ratio — the halo compactness
+      </p>
+
+      $$
+        C = \frac{M}{a_0}.
+      $$
+
+      <p>
+        For supermassive black holes at the centres of galaxies, astrophysical constraints
+        on the dark matter content imply compactness values in the range
+        $10^{-8} < C < 10^{-3}$, which defines the parameter space explored in our simulations.
+      </p>
+    </section>
+
+  </div>
+
+  <div class="art-tags" aria-label="Related keywords">
+    <span class="art-tag">Dark Matter Halo</span>
+    <span class="art-tag">Einstein Cluster</span>
+    <span class="art-tag">Schwarzschild Spacetime</span>
+    <span class="art-tag">Hernquist Profile</span>
+    <span class="art-tag">Photon Sphere</span>
+    <span class="art-tag">ISCO</span>
+    <span class="art-tag">Black Hole Shadow</span>
+  </div>
+
+  <aside class="art-related" aria-labelledby="bhdm-related-title">
+    <p class="art-related-title" id="bhdm-related-title">Related publications</p>
+    <ul class="art-related-list" role="list">
+      <li>
+        <a href="https://doi.org/10.1140/epjc/s10052-025-14537-8"
+           target="_blank" rel="noopener noreferrer">
+          Angelov et al. &mdash; Polarized equatorial emission and hot spots around black holes
+          with a dark matter halo (Eur. Phys. J. C 85, 1075, 2025)
+        </a>
+      </li>
+      <li>
+        <a href="https://arxiv.org/abs/2503.21395"
+           target="_blank" rel="noopener noreferrer">
+          arXiv:2503.21395 [gr-qc]
+        </a>
+      </li>
+    </ul>
+  </aside>
+
+</div>

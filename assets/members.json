@@ -1,0 +1,65 @@
+[
+  {
+    "name": "Petya Nedkova",
+    "title": "Group Leader, Assoc. Prof.",
+    "interests": [
+      "Gravitational Lensing",
+      "Black Hole Thermodynamics"
+      
+    ],
+    "email": "pnedkova@phys.uni-sofia.bg",
+    "arxiv": "https://arxiv.org/search/?searchtype=author&query=Nedkova+P",
+    "researchgate": "https://www.researchgate.net/profile/Petya-Nedkova",
+    "photo": "assets/photos/nedkova.jpg"
+  },
+  {
+    "name": "Stoytcho Yazadjiev",
+    "title": "Prof.",
+    "interests": [
+      "Modified Gravity",
+      "Mathematical Relativity",
+      "Black Hole Physics",
+      "Neutron Stars"
+    ],
+    "email": "yazad@phys.uni-sofia.bg",
+    "arxiv": "https://arxiv.org/search/?searchtype=author&query=Yazadjiev+S",
+    "researchgate": "https://www.researchgate.net/profile/Stoytcho-Yazadjiev",
+    "photo": "assets/photos/yazadjiev.jpg"
+  },
+  {
+    "name": "Galin Gyulchev",
+    "title": "Assoc. Prof.",
+    "interests": [
+      "Gravitational Lensing",
+      "Accretion Disks"
+    ],
+    "email": "gyulchev@phys.uni-sofia.bg",
+    "arxiv": "https://arxiv.org/search/?searchtype=author&query=Gyulchev+G",
+    "researchgate": null,
+    "photo": "assets/photos/gyulchev.jpg"
+  },
+  {
+    "name": "Kalin Staykov",
+    "title": "Assoc. Prof.",
+    "interests": [
+      "Alternative Gravity",
+      "Neutron Stars"
+    ],
+    "email": "kstaykov@phys.uni-sofia.bg",
+    "arxiv": "https://arxiv.org/search/?searchtype=author&query=Staykov+K",
+    "researchgate": null,
+    "photo": "assets/photos/staykov.png"
+  },
+  {
+    "name": "Valentin Deliyski",
+    "title": "Asst. Prof.",
+    "interests": [
+      "Numerical Relativity",
+      "Radiative Transfer"
+    ],
+    "email": "valentin.deliyski@phys.uni-sofia.bg",
+    "arxiv": "https://arxiv.org/search/?searchtype=author&query=Deliyski+V",
+    "researchgate": null,
+    "photo": "assets/photos/deliyski.jpg"
+  }
+]

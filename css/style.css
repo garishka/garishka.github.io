@@ -1,0 +1,1218 @@
+/* ==========================================================================
+   BeyondGR PROJECT — Global Stylesheet
+   File: css/style.css
+   Scope: Design tokens · Reset · Shared components (header, nav, footer,
+          page-hero, section utilities, buttons) · Global responsive rules.
+
+   Page-specific styles live in their own companion files:
+     css/index.css        — Home page (hero, feature cards, collab form)
+     css/contacts.css     — Contacts page
+     css/publications.css — Publications page
+     css/members.css      — Members page
+     css/research.css     — Research page
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. DESIGN TOKEN SYSTEM — CSS Custom Properties
+   All colors, spacing, typography, and transitions live here.
+   Toggle between light and dark modes by swapping values on :root.
+   -------------------------------------------------------------------------- */
+:root {
+  /* --- Light Mode (HU Berlin Copycat) — DEFAULT --- */
+  --color-primary:        #00376C;   /* Midnight Blue  — headers, nav, CTAs     */
+  --color-accent:         #FFB81C;   /* Egg Yolk Gold  — highlights, active nav  */
+  --color-bg:             #FFFFFF;   /* Pure White     — page background          */
+  --color-bg-alt:         #F4F4F4;   /* Background Grey — section alternates      */
+  --color-text:           #1A1A1A;   /* Near-black     — body copy               */
+  --color-text-muted:     #555555;   /* Mid-grey       — secondary text           */
+  --color-text-inverse:   #FFFFFF;   /* White          — text on dark surfaces    */
+  --color-border:         #DCDCDC;   /* Light grey     — dividers, card borders   */
+  --color-card-bg:        #FFFFFF;   /* Card surface   — member/pub cards         */
+  --color-nav-bg:         #00376C;   /* Nav bar fill                              */
+  --color-nav-text:       #FFFFFF;   /* Nav link color                            */
+  --color-footer-bg:      #00376C;   /* Footer fill                               */
+  --color-footer-text:    #FFFFFF;   /* Footer text                               */
+  --color-hero-bg:        #00376C;   /* Hero section background                   */
+  --color-hero-text:      #FFFFFF;   /* Hero headline and body                    */
+  --color-blockquote-bar: #FFB81C;   /* Left border on equation/quote blocks      */
+
+  /* --- Spacing Scale --- */
+  --space-xs:   0.25rem;   /*  4px */
+  --space-sm:   0.5rem;    /*  8px */
+  --space-md:   1rem;      /* 16px */
+  --space-lg:   1.5rem;    /* 24px */
+  --space-xl:   2rem;      /* 32px */
+  --space-2xl:  3rem;      /* 48px */
+  --space-3xl:  4rem;      /* 64px */
+
+  /* --- Typography Scale --- */
+  --font-family: Arial, Helvetica, sans-serif;
+  --font-size-base: 1rem;        /* 16px — body */
+  --font-size-sm:   0.875rem;    /* 14px — captions, labels */
+  --font-size-lg:   1.125rem;    /* 18px — lead text */
+  --font-size-h3:   1.25rem;     /* 20px */
+  --font-size-h2:   1.75rem;     /* 28px */
+  --font-size-h1:   2.5rem;      /* 40px */
+  --font-size-hero: clamp(2rem, 5vw, 3.25rem); /* Fluid hero headline */
+  --line-height-base: 1.65;
+  --font-weight-normal: 400;
+  --font-weight-bold:   700;
+
+  /* --- Layout --- */
+  --max-width:     1200px;
+  --nav-height:    56px;
+  --header-height: 72px;
+  --grid-gap:      16px;
+  --border-radius: 4px;
+  --border-radius-lg: 8px;
+
+  /* --- Transitions --- */
+  --transition-fast:   150ms ease;
+  --transition-base:   250ms ease;
+  --transition-slow:   400ms ease;
+
+  /* --- Shadows --- */
+  --shadow-sm:  0 1px 3px rgba(0,0,0,0.08);
+  --shadow-md:  0 4px 12px rgba(0,0,0,0.10);
+  --shadow-lg:  0 8px 24px rgba(0,0,0,0.12);
+
+  /* --- Logo color --- */
+  --color-logo: var(--color-primary);   /* Midnight Blue on white header */
+}
+
+/* --- Dark Mode Token Overrides ---
+   Applied when <html> carries the `data-theme="dark"` attribute.
+   JS toggles this attribute; CSS does the rest. */
+[data-theme="dark"] {
+  --color-primary:        #001A33;   /* Deep Navy                                 */
+  --color-accent:         #F59E0B;   /* Amber Gold                                */
+  --color-bg:             #0A2540;   /* Midnight Slate — page background           */
+  --color-bg-alt:         #01080E;   /* Deep Void — section separators only        */
+  --color-text:           #E8EDF3;   /* Off-white body copy                        */
+  --color-text-muted:     #9AAFC8;   /* Muted blue-grey                            */
+  --color-text-inverse:   #E8EDF3;
+  --color-border:         #1E3A5F;
+  --color-card-bg:        #001A33;   /* Deep Navy — all card/tile surfaces         */
+  --color-nav-bg:         #001A33;
+  --color-nav-text:       #E8EDF3;
+  --color-footer-bg:      #01080E;
+  --color-footer-text:    #9AAFC8;
+  --color-hero-bg:        #001A33;
+  --color-hero-text:      #E8EDF3;
+  --color-blockquote-bar: #F59E0B;
+  --shadow-sm:  0 1px 3px rgba(0,0,0,0.4);
+  --shadow-md:  0 4px 12px rgba(0,0,0,0.5);
+  --shadow-lg:  0 8px 24px rgba(0,0,0,0.6);
+
+  /* Dark mode: logo becomes white so it pops on Deep Navy / Midnight Slate */
+  --color-logo: #ffffff;
+}
+
+
+/* --------------------------------------------------------------------------
+   2. CSS RESET & BASE
+   -------------------------------------------------------------------------- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-size: 16px; /* rem anchor */
+}
+
+body {
+  font-family: var(--font-family);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-normal);
+  line-height: var(--line-height-base);
+  color: var(--color-text);
+  background-color: var(--color-bg);
+  transition: background-color var(--transition-base), color var(--transition-base);
+}
+
+img,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+a {
+  color: var(--color-primary);
+  text-decoration: none;
+  transition: color var(--transition-fast), opacity var(--transition-fast);
+}
+
+[data-theme="dark"] a {
+  color: var(--color-accent);
+}
+
+a:hover {
+  opacity: 0.8;
+}
+
+ul,
+ol {
+  list-style: none;
+}
+
+button {
+  cursor: pointer;
+  font-family: inherit;
+  border: none;
+  background: none;
+}
+
+input,
+textarea,
+select {
+  font-family: inherit;
+  font-size: inherit;
+}
+
+/* ============================================================
+   beyondGR Logo — Version A (Standard Clean Spacing)
+   Slash stands fully separated, centred between segments.
+   Imports DM Sans exclusively for the logotype.
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@200;400;500;700;800&display=swap');
+
+.site-header__logo-text {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 1.85rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  line-height: 1;
+  color: var(--color-accent);
+  align-items: baseline;
+}
+
+.site-header__logo-text strong {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 1.85rem;
+  font-weight: 550;
+  letter-spacing: 0.01em;
+  color: var(--color-primary);
+}
+
+[data-theme="dark"] .site-header__logo-text strong {
+  color: var(--color-text-inverse);
+}
+
+.site-header__logo-text strong::before {
+  content: '/';
+  font-weight: 200;
+  font-size: 1.95rem;
+  color: var(--color-accent);
+  opacity: 0.85;
+  margin: 0 -2px 0 -2px;
+  display: inline-block;
+  transform: scaleX(0.7);
+}
+
+
+/* --------------------------------------------------------------------------
+   3. TYPOGRAPHY HIERARCHY
+   -------------------------------------------------------------------------- */
+h1 { font-size: var(--font-size-h1); }
+h2 { font-size: var(--font-size-h2); }
+h3 { font-size: var(--font-size-h3); }
+
+p {
+  margin-bottom: var(--space-md);
+}
+
+p:last-child {
+  margin-bottom: 0;
+}
+
+.lead {
+  font-size: var(--font-size-lg);
+  color: var(--color-text-muted);
+}
+
+
+/* --------------------------------------------------------------------------
+   4. GLOBAL LAYOUT SKELETON
+   Uses CSS Grid for page structure; max-width centred container.
+   -------------------------------------------------------------------------- */
+.site-wrapper {
+  display: grid;
+  grid-template-rows: auto auto 1fr auto; /* header | nav | main | footer */
+  min-height: 100vh;
+}
+
+.container {
+  width: 100%;
+  max-width: var(--max-width);
+  margin-inline: auto;
+  padding-inline: var(--space-xl);
+}
+
+/* Narrower container for long-form text content */
+.container--narrow {
+  max-width: 800px;
+}
+
+
+/* --------------------------------------------------------------------------
+   5. HEADER — Top branding bar (institution logos, site identity)
+   -------------------------------------------------------------------------- */
+.site-header {
+  background-color: var(--color-bg);
+  border-bottom: 1px solid var(--color-border);
+  height: var(--header-height);
+  display: flex;
+  align-items: center;
+  transition: background-color var(--transition-base), border-color var(--transition-base);
+}
+
+.site-header .container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* Logo block: SVG star icon + group name */
+.site-logo {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-sm);
+  text-decoration: none;
+  color: var(--color-logo);
+  font-weight: var(--font-weight-bold);
+  font-size: 1.1rem;
+  letter-spacing: 0.03em;
+  transition: color var(--transition-base, 0.25s ease);
+}
+
+[data-theme="dark"] .site-logo {
+  color: var(--color-accent);
+}
+
+.site-logo:hover,
+.site-logo:focus-visible {
+  opacity: 1;
+  color: var(--color-accent);
+  outline: none;
+}
+
+/* SVG inherits color from .site-logo; only set layout dimensions here */
+.site-logo svg {
+  width: 48px;
+  height: auto;
+  display: block;
+  flex-shrink: 0;
+}
+
+.logo-icon {
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+}
+
+/* Institutional partner logos in the header right slot */
+.header-institutions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-lg);
+}
+
+.institution-logo-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 80px;
+  height: 44px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  background-color: var(--color-bg-alt);
+  transition: background-color var(--transition-base), border-color var(--transition-base);
+}
+
+.header-logo-img {
+  height: 65px;
+  width: auto;
+  object-fit: contain;
+  display: block;
+}
+
+
+/* --------------------------------------------------------------------------
+   6. NAVIGATION BAR — Sticky horizontal nav below the header
+   -------------------------------------------------------------------------- */
+.site-nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background-color: var(--color-nav-bg);
+  height: var(--nav-height);
+  display: flex;
+  align-items: center;
+  transition: background-color var(--transition-base),
+              box-shadow var(--transition-base);
+}
+
+/* Scrolled state — added by JS when page scrolls past 50px */
+.site-nav.is-scrolled {
+  box-shadow: var(--shadow-lg);
+  background-color: rgba(0, 55, 108, 0.92);
+  backdrop-filter: blur(6px);
+}
+
+[data-theme="dark"] .site-nav.is-scrolled {
+  background-color: rgba(0, 26, 51, 0.92);
+}
+
+.site-nav .container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* Primary nav link list */
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+}
+
+.nav-links__item {
+  position: relative;
+}
+
+.nav-links__link {
+  display: block;
+  padding: var(--space-sm) var(--space-md);
+  color: var(--color-nav-text);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-normal);
+  letter-spacing: 0.02em;
+  text-decoration: none;
+  border-radius: var(--border-radius);
+  transition: background-color var(--transition-fast), color var(--transition-fast);
+}
+
+.nav-links__link:hover {
+  opacity: 1;
+  color: var(--color-accent);
+  background-color: rgba(255, 255, 255, 0.12);
+}
+
+/* Active page indicator: gold background pill.
+   JS stamps the standalone 'is-active' class so both desktop nav and
+   mobile drawer share the same sentinel class name. */
+.nav-links__link.is-active {
+  background-color: var(--color-accent);
+  color: var(--color-primary);
+  font-weight: var(--font-weight-bold);
+}
+
+[data-theme="dark"] .nav-links__link.is-active {
+  color: var(--color-primary);
+}
+
+/* Nav right cluster: theme toggle + hamburger */
+.nav-controls {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+/* Theme toggle button */
+.btn-theme-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.15);
+  color: var(--color-nav-text);
+  transition: background-color var(--transition-fast);
+}
+
+.btn-theme-toggle:hover {
+  background-color: rgba(255, 255, 255, 0.28);
+}
+
+.btn-theme-toggle svg {
+  width: 18px;
+  height: 18px;
+  fill: currentColor;
+}
+
+/* Hamburger — only visible on mobile */
+.btn-hamburger {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  width: 36px;
+  height: 36px;
+  padding: var(--space-xs);
+  border-radius: var(--border-radius);
+  background-color: rgba(255, 255, 255, 0.15);
+  transition: background-color var(--transition-fast);
+}
+
+.btn-hamburger:hover {
+  background-color: rgba(255, 255, 255, 0.28);
+}
+
+.hamburger-line {
+  display: block;
+  width: 22px;
+  height: 2px;
+  background-color: var(--color-nav-text);
+  border-radius: 2px;
+  transform-origin: center;
+  transition: transform var(--transition-base), opacity var(--transition-fast);
+}
+
+/* Animated open state — JS adds .is-open to the hamburger button */
+.btn-hamburger.is-open .hamburger-line:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+
+.btn-hamburger.is-open .hamburger-line:nth-child(2) {
+  opacity: 0;
+}
+
+.btn-hamburger.is-open .hamburger-line:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+/* Mobile drawer — hidden by default, animated open by JS */
+.mobile-nav-drawer {
+  position: fixed;
+  inset: 0;
+  z-index: 99;
+  pointer-events: none;
+}
+
+/* Semi-transparent overlay behind drawer */
+.nav-overlay {
+  position: absolute;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  opacity: 0;
+  transition: opacity var(--transition-base);
+}
+
+/* Slide-in panel */
+.mobile-nav-drawer__panel {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: min(320px, 85vw);
+  height: 100%;
+  background-color: var(--color-nav-bg);
+  padding: var(--space-2xl) var(--space-xl);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  transform: translateX(100%);
+  transition: transform var(--transition-slow);
+  overflow-y: auto;
+}
+
+/* Open state — JS adds .is-open to .mobile-nav-drawer */
+.mobile-nav-drawer.is-open {
+  pointer-events: all;
+}
+
+.mobile-nav-drawer.is-open .nav-overlay {
+  opacity: 1;
+}
+
+.mobile-nav-drawer.is-open .mobile-nav-drawer__panel {
+  transform: translateX(0);
+}
+
+.drawer-link {
+  display: block;
+  padding: var(--space-md);
+  color: var(--color-nav-text);
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-bold);
+  border-radius: var(--border-radius);
+  text-decoration: none;
+  transition: background-color var(--transition-fast);
+}
+
+.drawer-link:hover,
+.drawer-link.is-active {
+  opacity: 1;
+  background-color: var(--color-accent);
+  color: var(--color-primary);
+}
+
+
+/* --------------------------------------------------------------------------
+   7. MAIN CONTENT AREA
+   -------------------------------------------------------------------------- */
+.site-main {
+  background-color: var(--color-bg);
+  transition: background-color var(--transition-base);
+}
+
+
+/* --------------------------------------------------------------------------
+   9. SECTION UTILITIES
+   -------------------------------------------------------------------------- */
+.section {
+  padding-block: var(--space-3xl);
+}
+
+.section--alt {
+  background-color: var(--color-bg-alt);
+  transition: background-color var(--transition-base);
+}
+
+.section__header {
+  margin-bottom: var(--space-2xl);
+}
+
+.section__label {
+  display: inline-block;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+  margin-bottom: var(--space-sm);
+}
+
+[data-theme="dark"] .section__label {
+  color: var(--color-accent);
+}
+
+.section__title {
+  font-size: var(--font-size-h2);
+  color: var(--color-primary);
+  margin-bottom: var(--space-md);
+}
+
+.section__desc {
+  max-width: 640px;
+  color: var(--color-text-muted);
+  font-size: var(--font-size-lg);
+}
+
+
+/* --------------------------------------------------------------------------
+   13. BUTTON SYSTEM
+   -------------------------------------------------------------------------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-xs);
+  padding: 0.6rem 1.4rem;
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-bold);
+  border-radius: var(--border-radius);
+  text-decoration: none;
+  transition: background-color var(--transition-fast),
+              color var(--transition-fast),
+              border-color var(--transition-fast),
+              box-shadow var(--transition-fast);
+  cursor: pointer;
+  border: 2px solid transparent;
+  font-family: inherit;
+}
+
+/* Primary — filled gold */
+.btn--primary {
+  background-color: var(--color-accent);
+  color: var(--color-primary);
+  border-color: var(--color-accent);
+}
+
+.btn--primary:hover {
+  opacity: 1;
+  background-color: #e6a618;
+  border-color: #e6a618;
+  box-shadow: var(--shadow-md);
+}
+
+/* Dark mode: force Deep Void (#01080E) text on Amber Gold background. */
+[data-theme="dark"] .btn--primary,
+[data-theme="dark"] .btn--primary:hover {
+  color: #01080E;
+}
+
+/* Secondary — outlined */
+.btn--secondary {
+  background-color: transparent;
+  color: #FFFFFF;
+  border-color: rgba(255, 255, 255, 0.6);
+}
+
+.btn--secondary:hover {
+  opacity: 1;
+  background-color: rgba(255, 255, 255, 0.12);
+  border-color: #FFFFFF;
+}
+
+[data-theme="dark"] .btn--secondary {
+  color: var(--color-text);
+  border-color: var(--color-border);
+}
+
+/* Submit / form button */
+.btn--submit {
+  background-color: var(--color-accent);
+  color: var(--color-primary);
+  border-color: var(--color-accent);
+  width: 100%;
+  padding-block: 0.75rem;
+  font-size: var(--font-size-lg);
+}
+
+.btn--submit:hover {
+  opacity: 1;
+  background-color: #e6a618;
+}
+
+[data-theme="dark"] .btn--submit,
+[data-theme="dark"] .btn--submit:hover {
+  color: #01080E;
+}
+
+
+/* --------------------------------------------------------------------------
+   14. FOOTER
+   -------------------------------------------------------------------------- */
+.site-footer {
+  background-color: var(--color-footer-bg);
+  color: var(--color-footer-text);
+  padding-block: var(--space-2xl);
+  transition: background-color var(--transition-base);
+}
+
+/* 3-column grid: identity+contacts | site nav | institutional zone */
+.footer-grid {
+  display: grid;
+  grid-template-columns: 1.4fr 1.8fr 1.4fr;
+  gap: var(--space-xl);
+  margin-bottom: var(--space-2xl);
+}
+
+.footer-col__heading {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-accent);
+  margin-bottom: var(--space-md);
+}
+
+.footer-col__desc {
+  font-size: var(--font-size-sm);
+  color: rgba(255, 255, 255, 0.6);
+  line-height: 1.7;
+  margin: 0;
+}
+
+[data-theme="dark"] .footer-col__desc {
+  color: rgba(154, 175, 200, 0.7);
+}
+
+/* Sub-heading inside a footer column */
+.footer-col__subheading {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-accent);
+  margin-top: var(--space-lg);
+  margin-bottom: var(--space-sm);
+}
+
+/* <address> wrapper for inline contacts block in col 1 */
+.footer-contacts {
+  font-style: normal;
+}
+
+/* Each line in the contacts block: icon + text/link side by side */
+.footer-contacts__item {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-sm);
+  font-size: var(--font-size-sm);
+  color: rgba(255, 255, 255, 0.6);
+  margin-bottom: var(--space-sm);
+}
+
+.footer-contacts__item:last-child {
+  margin-bottom: 0;
+}
+
+.footer-contacts__item i {
+  margin-top: 2px;
+  flex-shrink: 0;
+  color: var(--color-accent);
+  font-size: 0.8rem;
+}
+
+.footer-contacts__item a {
+  color: rgba(255, 255, 255, 0.6);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+.footer-contacts__item a:hover {
+  opacity: 1;
+  color: var(--color-accent);
+}
+
+[data-theme="dark"] .footer-contacts__item,
+[data-theme="dark"] .footer-contacts__item a {
+  color: rgba(154, 175, 200, 0.7);
+}
+
+/* ── Column 3 — Institutional zone ────────────────────────────────── */
+
+.footer-institutional__block {
+  padding-bottom: var(--space-lg);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.footer-institutional__block:last-child {
+  padding-bottom: 0;
+  border-bottom: none;
+}
+
+[data-theme="dark"] .footer-institutional__block {
+  border-color: rgba(30, 58, 95, 0.6);
+}
+
+.footer-institutional__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-md);
+}
+
+.footer-institutional__grant-text {
+  font-size: var(--font-size-sm);
+  color: rgba(255, 255, 255, 0.55);
+  line-height: 1.6;
+  margin: 0;
+  flex: 1 1 auto;
+}
+
+[data-theme="dark"] .footer-institutional__grant-text {
+  color: rgba(154, 175, 200, 0.65);
+}
+
+.footer-logo-link {
+  display: inline-flex;
+  flex-shrink: 0;
+  text-decoration: none;
+  border-radius: var(--border-radius);
+  transition: opacity var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.footer-logo-link:hover {
+  opacity: 0.8;
+  box-shadow: 0 0 0 2px var(--color-accent);
+}
+
+.footer-logo-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: var(--border-radius);
+  font-size: 0.65rem;
+  font-weight: var(--font-weight-bold);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.5);
+  background-color: rgba(255, 255, 255, 0.06);
+  transition: background-color var(--transition-fast), border-color var(--transition-fast);
+}
+
+.footer-logo-placeholder--bnsf {
+  width: 64px;
+  height: 40px;
+}
+
+.footer-logo-placeholder--faculty,
+.footer-logo-placeholder--university {
+  width: 52px;
+  height: 40px;
+}
+
+.footer-logo-group {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  flex-shrink: 0;
+}
+
+.footer-links {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.footer-links a {
+  font-size: var(--font-size-sm);
+  color: rgba(255, 255, 255, 0.65);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+[data-theme="dark"] .footer-links a {
+  color: rgba(154, 175, 200, 0.7);
+}
+
+.footer-links a:hover {
+  opacity: 1;
+  color: var(--color-accent);
+}
+
+/* Site nav inside col 1 — spreads links into 2 equal columns */
+.footer-sitenav {
+  margin-top: var(--space-lg);
+  padding-top: var(--space-sm);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+[data-theme="dark"] .footer-sitenav {
+  border-color: rgba(30, 58, 95, 0.6);
+}
+
+.footer-nav-2col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto auto;
+  gap: 0 var(--space-md);
+  align-items: start;
+}
+
+.footer-nav-site-label {
+  grid-column: 1;
+  grid-row: 1;
+  margin-top: 0;
+  margin-bottom: var(--space-sm);
+}
+
+.footer-nav-2col > ul:first-of-type {
+  grid-column: 1;
+  grid-row: 2;
+}
+
+.footer-nav-col2 {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+}
+
+/* Social icons row */
+.social-icons {
+  display: flex;
+  gap: var(--space-sm);
+  margin-top: var(--space-md);
+}
+
+.social-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.7);
+  text-decoration: none;
+  transition: background-color var(--transition-fast), color var(--transition-fast);
+}
+
+.social-icon:hover {
+  opacity: 1;
+  background-color: var(--color-accent);
+  color: var(--color-primary);
+}
+
+.social-icon svg {
+  width: 16px;
+  height: 16px;
+  fill: currentColor;
+}
+
+/* Footer bottom bar — single centred copyright line */
+.footer-bottom {
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  padding-top: var(--space-lg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+[data-theme="dark"] .footer-bottom {
+  border-color: rgba(30, 58, 95, 0.8);
+}
+
+.footer-bottom__copy {
+  font-size: var(--font-size-sm);
+  color: rgba(255, 255, 255, 0.45);
+}
+
+.footer-logo-img {
+  height: 80px;
+  width: auto;
+  object-fit: contain;
+  display: block;
+}
+
+.footer-block {
+  padding-bottom: var(--space-xl);
+}
+
+.footer-affil-logos {
+  display: flex;
+  align-items: center;
+  gap: var(--space-lg);
+  margin-top: var(--space-xl);
+}
+
+
+/* --------------------------------------------------------------------------
+   15. UTILITY CLASSES
+   -------------------------------------------------------------------------- */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.text-accent {
+  color: var(--color-accent);
+}
+
+.mt-auto { margin-top: auto; }
+
+/* General-purpose display toggle used across pages */
+.is-hidden {
+  display: none !important;
+}
+
+
+/* --------------------------------------------------------------------------
+   PAGE HERO — Shared interior-page banner (contacts, publications,
+   members, research). The home page uses a separate .hero block in index.css.
+   -------------------------------------------------------------------------- */
+.page-hero {
+  background-color: var(--color-hero-bg);
+  color: var(--color-hero-text);
+  padding-block: var(--space-2xl);
+  transition: background-color var(--transition-base);
+}
+
+.page-hero__inner {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-xl);
+  flex-wrap: wrap;
+}
+
+.page-hero__label {
+  display: inline-block;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+  margin-bottom: var(--space-sm);
+}
+
+.page-hero__title {
+  font-size: var(--font-size-h1);
+  color: #FFFFFF;
+  margin-top: 0;
+  margin-bottom: var(--space-sm);
+  line-height: 1.15;
+}
+
+.page-hero__desc {
+  font-size: var(--font-size-lg);
+  color: rgba(255, 255, 255, 0.78);
+  max-width: 540px;
+  margin: 0;
+  line-height: 1.65;
+}
+
+[data-theme="dark"] .page-hero__desc {
+  color: rgba(232, 237, 243, 0.72);
+}
+
+/* BREADCRUMB — inverse colours for dark hero surface */
+.breadcrumb {
+  flex-shrink: 0;
+  padding-top: var(--space-xs);
+  align-self: flex-start;
+}
+
+.breadcrumb__list {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  flex-wrap: wrap;
+}
+
+.breadcrumb__item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  font-size: var(--font-size-sm);
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.breadcrumb__item:not(:last-child)::after {
+  content: '›';
+  color: rgba(255, 255, 255, 0.30);
+  font-size: 1rem;
+  line-height: 1;
+}
+
+.breadcrumb__link {
+  color: var(--color-accent);
+  text-decoration: none;
+  font-weight: var(--font-weight-bold);
+  transition: color var(--transition-fast), opacity var(--transition-fast);
+}
+
+.breadcrumb__link:hover {
+  opacity: 1;
+  color: #FFFFFF;
+}
+
+.breadcrumb__item--current {
+  color: rgba(255, 255, 255, 0.55);
+  font-weight: var(--font-weight-normal);
+}
+
+/* PAGE BODY — Light grey canvas used by contacts, publications, members */
+.page-body {
+  background-color: var(--color-bg-alt);
+  transition: background-color var(--transition-base);
+}
+
+/* ACCENT RULE — Thin professional heading underline shared across pages */
+.accent-rule {
+  border: none;
+  height: 2px;
+  border-radius: 1px;
+  background-color: var(--color-primary);
+  opacity: 0.18;
+  margin-top: var(--space-sm);
+  margin-bottom: var(--space-lg);
+  transition: background-color var(--transition-base), opacity var(--transition-base);
+}
+
+[data-theme="dark"] .accent-rule {
+  background-color: var(--color-accent);
+  opacity: 0.45;
+}
+
+
+/* --------------------------------------------------------------------------
+   16. GLOBAL RESPONSIVE BREAKPOINTS
+   Only rules that affect global / shared components are here.
+   Page-specific breakpoints live inside their own CSS files.
+   -------------------------------------------------------------------------- */
+
+/* Tablet — up to 1023px */
+@media (max-width: 1023px) {
+  .footer-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-xl);
+  }
+
+  /* Funding column spans full row on tablet */
+  .footer-col--funding {
+    grid-column: 1 / -1;
+  }
+
+  .footer-institutional__row {
+    gap: var(--space-lg);
+  }
+
+  .footer-institutional__row--spaced {
+    gap: var(--space-xl);
+    align-items: center;
+  }
+
+  .footer-institutional__row--funding {
+    gap: var(--space-lg);
+    align-items: center;
+  }
+}
+
+/* Mobile — up to 767px */
+@media (max-width: 767px) {
+  /* Fluid type scale adjustments */
+  :root {
+    --font-size-h1: 2rem;
+    --font-size-h2: 1.5rem;
+  }
+
+  .container {
+    padding-inline: var(--space-md);
+  }
+
+  /* Hide desktop nav links; show hamburger */
+  .nav-links {
+    display: none;
+  }
+
+  .btn-hamburger {
+    display: flex;
+  }
+
+  .footer-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .footer-bottom {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .footer-bottom__funding {
+    text-align: center;
+  }
+
+  /* Hide partner logos on very small screens */
+  .header-institutions {
+    display: none;
+  }
+
+  .page-hero__inner {
+    flex-direction: column;
+    gap: var(--space-md);
+  }
+}

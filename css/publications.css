@@ -1,0 +1,503 @@
+/* ==========================================================================
+   BeyondGR PROJECT — Publications Page Styles
+   File: css/publications.css
+   Scope: Styles exclusive to publications.html.
+   Requires: css/style.css (global tokens, shared components, .page-hero,
+             .page-body, .accent-rule)
+
+   Sections:
+     §34   .page-body--publications modifier + .page-hero--publications hook
+     §35   .pub-toolbar — count readout + sort toggle row
+     §36   .pub-table-wrapper — horizontal scroll safety
+     §37   .pub-table — fixed-layout academic grid matrix
+     §38   Table header row (.pub-thead, .pub-th)
+     §39   Publication row (.pub-row, .pub-cell)
+     §40   Cell content typography (.pub-title, .pub-authors, .pub-year…)
+     §41   Links cluster (.links-cluster, .pub-link, arXiv colour treatment)
+     §42   State region (.pub-state — loading / empty / error)
+     §43   Mobile label (.mobile-label — hidden on desktop)
+     §44   Mobile responsive — table deconstruction → floating card blocks
+   ========================================================================== */
+
+
+/* --------------------------------------------------------------------------
+   §34  PAGE BODY MODIFIER + HERO HOOK
+   flex-grow: 1 keeps footer pinned to the bottom even with only 1-2 entries.
+   Background resolves to #F4F4F4 (light) / #01080E (dark) via --color-bg-alt.
+   -------------------------------------------------------------------------- */
+.page-body--publications {
+  flex-grow: 1;
+  background-color: var(--color-bg-alt);
+  padding-block: var(--space-2xl) var(--space-3xl);
+  transition: background-color var(--transition-base);
+}
+
+/* Hero modifier — kept as a hook for future page-specific overrides. */
+.page-hero--publications {
+  /* Inherits .page-hero dark navy background and white text */
+}
+
+
+/* --------------------------------------------------------------------------
+   §35  PUBLICATIONS TOOLBAR — Count readout + sort toggle row
+   -------------------------------------------------------------------------- */
+.pub-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--space-md);
+  margin-bottom: var(--space-lg);
+  padding-bottom: var(--space-md);
+  border-bottom: 1px solid var(--color-border);
+  transition: border-color var(--transition-base);
+}
+
+/* Publication count readout — e.g. "5 publications" */
+.pub-count {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin: 0;
+}
+
+/* Sort controls cluster */
+.pub-sort-controls {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.pub-sort-label {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  white-space: nowrap;
+}
+
+/* Individual sort toggle buttons */
+.btn-sort {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: var(--space-xs) var(--space-md);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-muted);
+  background-color: var(--color-card-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  font-family: inherit;
+  transition: background-color var(--transition-fast),
+              color var(--transition-fast),
+              border-color var(--transition-fast);
+}
+
+.btn-sort:hover {
+  color: var(--color-primary);
+  border-color: var(--color-primary);
+}
+
+[data-theme="dark"] .btn-sort:hover {
+  color: var(--color-accent);
+  border-color: var(--color-accent);
+}
+
+/* Active sort state */
+.btn-sort.is-active {
+  background-color: var(--color-primary);
+  color: #FFFFFF;
+  border-color: var(--color-primary);
+}
+
+[data-theme="dark"] .btn-sort.is-active {
+  background-color: var(--color-accent);
+  color: #01080E;
+  border-color: var(--color-accent);
+}
+
+
+/* --------------------------------------------------------------------------
+   §36  TABLE WRAPPER — Horizontal scroll safety on mid-size viewports.
+   The table itself never forces a horizontal scroll because columns
+   word-wrap. This wrapper is an additional belt-and-suspenders guard.
+   -------------------------------------------------------------------------- */
+.pub-table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+
+/* --------------------------------------------------------------------------
+   §37  PUBLICATIONS TABLE — Fixed-layout academic grid matrix
+   table-layout: fixed + explicit colgroup widths enforce the column budget.
+   border-collapse: separate + border-spacing give each row a "floating card"
+   appearance without needing wrapper divs around table rows.
+   -------------------------------------------------------------------------- */
+.pub-table {
+  width: 100%;
+  table-layout: fixed;            /* Columns obey colgroup widths strictly      */
+  border-collapse: separate;      /* Required for border-radius on tr cells      */
+  border-spacing: 0 var(--space-sm);  /* Vertical gap between floating rows     */
+}
+
+/* Column width budget — must sum to 100%.
+   Title + Authors are the flex columns that absorb narrow windows. */
+.col--title     { width: 45%; }
+.col--authors   { width: 25%; }
+.col--year      { width: 8%;  }
+.col--publisher { width: 12%; }
+.col--links     { width: 10%; }
+
+
+/* --------------------------------------------------------------------------
+   §38  TABLE HEADER ROW
+   -------------------------------------------------------------------------- */
+.pub-th {
+  padding: var(--space-xs) var(--space-md);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--color-text-muted);
+  text-align: left;
+  border: none;
+  background: transparent;
+  white-space: nowrap;
+}
+
+.pub-th--year,
+.pub-th--publisher,
+.pub-th--links {
+  text-align: center;
+}
+
+
+/* --------------------------------------------------------------------------
+   §39  PUBLICATION ROW — Floating card treatment
+   Light mode: pure white (#FFFFFF) over #F4F4F4 body surface.
+   Dark mode:  Deep Navy (#001A33) over #01080E Deep Void body surface.
+   border-radius applied to first and last cells because CSS cannot apply
+   border-radius directly to <tr> elements.
+   -------------------------------------------------------------------------- */
+.pub-row {
+  background-color: #FFFFFF;
+  transition: background-color var(--transition-base),
+              box-shadow var(--transition-base),
+              transform var(--transition-fast);
+}
+
+[data-theme="dark"] .pub-row {
+  background-color: var(--color-card-bg); /* #001A33 Deep Navy */
+}
+
+/* Hover lift effect */
+.pub-row:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-1px);
+}
+
+/* Individual cells inside each publication row */
+.pub-cell {
+  padding: var(--space-md) var(--space-md);
+  vertical-align: top;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  hyphens: auto;
+  border-top: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--color-border);
+  transition: border-color var(--transition-base);
+}
+
+/* Left-cap: border-left + rounded left corners */
+.pub-cell:first-child {
+  border-left: 1px solid var(--color-border);
+  border-radius: var(--border-radius-lg) 0 0 var(--border-radius-lg);
+}
+
+/* Right-cap: border-right + rounded right corners */
+.pub-cell:last-child {
+  border-right: 1px solid var(--color-border);
+  border-radius: 0 var(--border-radius-lg) var(--border-radius-lg) 0;
+}
+
+.pub-cell--year,
+.pub-cell--publisher,
+.pub-cell--links {
+  text-align: center;
+  vertical-align: middle;
+}
+
+
+/* --------------------------------------------------------------------------
+   §40  CELL CONTENT TYPOGRAPHY
+   Title: bold, --color-primary light / --color-accent dark (per spec)
+   Authors: #000000 solid light / var(--color-text-inverse) #E8EDF3 dark
+   -------------------------------------------------------------------------- */
+
+/* Article title */
+.pub-title {
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-primary);
+  line-height: 1.4;
+  margin: 0;
+}
+
+[data-theme="dark"] .pub-title {
+  color: var(--color-accent);
+}
+
+/* Author string */
+.pub-authors {
+  font-size: var(--font-size-sm);
+  color: #000000;                       /* Solid black in light mode (per spec)   */
+  line-height: 1.5;
+  margin: 0;
+}
+
+[data-theme="dark"] .pub-authors {
+  color: var(--color-text-inverse);     /* #E8EDF3 solid off-white in dark mode   */
+}
+
+/* Year badge */
+.pub-year {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-muted);
+}
+
+/* Publisher name */
+.pub-publisher {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  font-style: italic;
+  line-height: 1.4;
+}
+
+
+/* --------------------------------------------------------------------------
+   §41  LINKS CLUSTER — Multi-resource link container
+   Holds multiple concurrent links (e.g. [arXiv] + [Journal]) stacked
+   vertically. Each .pub-link is a distinct pill anchor with an icon.
+   -------------------------------------------------------------------------- */
+.links-cluster {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-xs);
+}
+
+/* Individual resource link pill */
+.pub-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px var(--space-sm);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-primary);
+  background-color: transparent;
+  border: 1px solid var(--color-primary);
+  border-radius: 100px;       /* Pill shape */
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background-color var(--transition-fast),
+              color var(--transition-fast),
+              border-color var(--transition-fast);
+}
+
+.pub-link:hover {
+  opacity: 1;
+  background-color: var(--color-primary);
+  color: #FFFFFF;
+}
+
+[data-theme="dark"] .pub-link {
+  color: var(--color-accent);
+  border-color: var(--color-accent);
+}
+
+[data-theme="dark"] .pub-link:hover {
+  background-color: var(--color-accent);
+  color: #01080E;
+}
+
+/* FontAwesome icon inside each link pill */
+.pub-link .fa-solid,
+.pub-link .fa-regular {
+  font-size: 0.7rem;
+}
+
+/* Distinct colour treatment for arXiv links (rust red) vs journal links.
+   JS sets [data-link-type="arxiv"] on the anchor element. */
+.pub-link[data-link-type="arxiv"] {
+  color: #B7410E;             /* Rust red — arXiv brand colour in light mode    */
+  border-color: #B7410E;
+}
+
+.pub-link[data-link-type="arxiv"]:hover {
+  background-color: #B7410E;
+  color: #FFFFFF;
+}
+
+[data-theme="dark"] .pub-link[data-link-type="arxiv"] {
+  color: #FF8C69;             /* Lighter rust for dark surface legibility       */
+  border-color: #FF8C69;
+}
+
+[data-theme="dark"] .pub-link[data-link-type="arxiv"]:hover {
+  background-color: #FF8C69;
+  color: #01080E;
+}
+
+
+/* --------------------------------------------------------------------------
+   §42  STATE REGION — Loading / empty / error feedback
+   JS adds .is-visible to show the relevant state panel.
+   -------------------------------------------------------------------------- */
+.pub-state {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-md);
+  padding: var(--space-3xl) var(--space-xl);
+  text-align: center;
+  color: var(--color-text-muted);
+}
+
+.pub-state.is-visible {
+  display: flex;
+}
+
+.pub-state__loading {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  font-size: var(--font-size-lg);
+  color: var(--color-text-muted);
+}
+
+.pub-state__loading .fa-spin {
+  color: var(--color-accent);
+}
+
+.pub-state__error {
+  font-size: var(--font-size-lg);
+  color: #FF6B6B;
+}
+
+.pub-state__empty {
+  font-size: var(--font-size-lg);
+}
+
+
+/* --------------------------------------------------------------------------
+   §43  MOBILE LABEL — Hidden on desktop; shown inside mobile cards
+   Provides field headers (Title, Authors, Year…) when the table is
+   deconstructed to block layout on narrow viewports.
+   -------------------------------------------------------------------------- */
+.mobile-label {
+  display: none;    /* Switched to flex on mobile — see §44 */
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--color-text-muted);
+  min-width: 110px;
+  flex-shrink: 0;
+}
+
+
+/* --------------------------------------------------------------------------
+   §44  MOBILE RESPONSIVE — Table deconstruction → floating card blocks
+   At < 768px the semantic <table> reflows into stacked block cards.
+   Each <tr> becomes a self-contained floating card.
+   Each <td> becomes a label-value flex row inside the card.
+   -------------------------------------------------------------------------- */
+@media (max-width: 767px) {
+
+  /* Hide the thead — mobile-label spans replace column headers */
+  .pub-thead {
+    display: none;
+  }
+
+  /* Dissolve table structure — browser treats all elements as blocks */
+  .pub-table,
+  .pub-table tbody,
+  .pub-row,
+  .pub-cell {
+    display: block;
+    width: 100%;
+  }
+
+  /* Each row becomes a detached floating card */
+  .pub-row {
+    background-color: #FFFFFF;
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow-sm);
+    margin-bottom: var(--space-md);
+    overflow: hidden;
+    transform: none; /* Disable desktop hover translate on mobile */
+  }
+
+  [data-theme="dark"] .pub-row {
+    background-color: var(--color-card-bg);
+  }
+
+  /* Reset cell borders — the card border handles containment */
+  .pub-cell {
+    border: none;
+    border-bottom: 1px solid var(--color-border);
+    border-radius: 0;
+    padding: var(--space-sm) var(--space-md);
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-sm);
+    text-align: left;
+  }
+
+  .pub-cell:first-child { border-radius: 0; border-left: none; }
+  .pub-cell:last-child  { border-radius: 0; border-right: none; border-bottom: none; }
+
+  /* Centre-aligned cells reset to left on mobile */
+  .pub-cell--year,
+  .pub-cell--publisher,
+  .pub-cell--links {
+    text-align: left;
+    vertical-align: top;
+  }
+
+  /* Mobile labels become visible */
+  .mobile-label {
+    display: flex;
+    align-items: flex-start;
+    padding-top: 2px; /* Optical alignment with first line of adjacent text */
+  }
+
+  /* Links cluster resets to horizontal row on mobile cards */
+  .links-cluster {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    justify-content: flex-start;
+  }
+
+  /* Toolbar stacks on mobile */
+  .pub-toolbar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+/* Extra-small screens — tighten mobile label width */
+@media (max-width: 480px) {
+  .mobile-label {
+    min-width: 90px;
+  }
+}

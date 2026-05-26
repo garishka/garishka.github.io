@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<!--
+  ASTRO RESEARCH PROJECT — Research Page
+  File: research.html
+
+  Layout architecture:
+    .site-wrapper                  — CSS Grid skeleton (auto auto 1fr auto), min-height 100vh
+    <header.site-header>           — Persistent branding bar         (injected by app.js)
+    <nav.site-nav>                 — Sticky horizontal nav           (injected by app.js)
+    <main.site-main>
+      <header.page-hero>           — Full-width dark navy banner
+      <div.research-canvas>        — Outer #F4F4F4 grey wrapper; flex-grow fills viewport
+        <div.container>
+          <div.research-workspace> — Pure white #FFFFFF box; houses all interactive chrome
+            .workspace-toolbar     — Article count readout + Sort-by-Date toggle
+            .research-layout       — CSS Grid: 62fr (viewer) | 38fr (sidebar)
+              <section.article-panel>
+                .article-state     — Welcome / Loading / Error feedback region
+                <article#article-viewer> — EMPTY at build time; JS injects snippet HTML
+              <aside.research-sidebar>
+                .sidebar-search    — Live-filter search input
+                <nav>
+                  <ol.sidebar-nav#sidebar-nav-list> — Article entry list (see data-* attrs)
+    <footer.site-footer>           — Standard 4-column block        (injected by app.js)
+
+  Sidebar article entries — attributes consumed by app.js §15:
+    data-file  : relative path to the article HTML snippet (e.g. "articles/black-holes-accretion.html")
+    data-date  : ISO 8601 string (YYYY-MM-DD) used by sortSidebarArticles()
+    data-title : plain-text title duplicate used by filterSidebarArticles()
+
+  Data flow:
+    initResearchPage()  [app.js §15]
+      1. updateArticleCount()        → reads sidebar item count → #research-article-count
+      2. sortSidebarArticles('desc') → initial sort, newest first
+      3. showArticleState('welcome') → shows the welcome prompt on first load
+      4. Sort button click           → toggles 'asc'/'desc', re-sorts list, updates icon
+      5. Search input (keyup)        → filterSidebarArticles(query), toggle clear btn
+      6. Sidebar click (delegated)   → loadArticle(data-file) → fetch → inject → reveal
+-->
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description"
+        content="Research areas of the BeyondGR Astro Research Project — gravitational
+                 astrophysics, black holes, naked singularities, wormholes, and compact objects." />
+
+  <title>Research | BeyondGR Project</title>
+
+  <!-- FontAwesome 6 — icons for sort controls, sidebar metadata, article states -->
+  <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+        integrity="sha512-Avb2QiuDEEvB4bZJYdft2mNjVShBftLdPG8FJ0V7irTLQ8Uo0qcPxh4Plq7G5tGm0rU+1SPhVotteLpBERwTkw=="
+        crossorigin="anonymous"
+        referrerpolicy="no-referrer" />
+  
+  <!-- KaTeX CSS — must load before the JS libraries -->
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css"
+        crossorigin="anonymous" />
+  
+  <!-- KaTeX core -->
+  <script defer
+          src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"
+          crossorigin="anonymous"></script>
+  
+  <!-- KaTeX Auto-Render extension -->
+  <script defer
+          src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"
+          crossorigin="anonymous"></script>
+
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/research.css" />
+</head>
+
+<body>
+<div class="site-wrapper">
+
+
+  <!-- ====================================================================
+       HEADER + NAV — Injected by app.js § injectGlobalComponents()
+       ==================================================================== -->
+  <div id="global-header-target" aria-live="polite"></div>
+
+
+  <!-- ====================================================================
+       MAIN CONTENT
+       ==================================================================== -->
+  <main class="site-main" id="main-content" tabindex="-1">
+
+
+    <!-- ------------------------------------------------------------------
+         PAGE HERO — Dark navy banner, mirroring the Publications page pattern
+         ------------------------------------------------------------------ -->
+    <header class="page-hero page-hero--research" aria-labelledby="research-page-title">
+      <div class="container">
+        <div class="page-hero__inner">
+
+          <div>
+            <h1 class="page-hero__title" id="research-page-title">Research</h1>
+            <p class="page-hero__desc">
+              Exploring the theoretical frontiers of gravitational astrophysics -
+              black holes, compact objects, naked singularities, and physics beyond
+              general relativity.
+            </p>
+          </div>
+
+          <nav class="breadcrumb" aria-label="Breadcrumb">
+            <ol class="breadcrumb__list" role="list">
+              <li class="breadcrumb__item">
+                <a href="index.html" class="breadcrumb__link">Home</a>
+              </li>
+              <li class="breadcrumb__item breadcrumb__item--current" aria-current="page">
+                Research
+              </li>
+            </ol>
+          </nav>
+
+        </div>
+      </div>
+    </header>
+    <!-- /page-hero -->
+
+
+    <!-- ------------------------------------------------------------------
+         RESEARCH CANVAS — Outer #F4F4F4 grey surface; flex-grow: 1 ensures
+         it fills the remaining viewport height even on sparse datasets.
+         ------------------------------------------------------------------ -->
+    <div class="research-canvas">
+      <div class="container">
+
+
+        <!-- ----------------------------------------------------------------
+             RESEARCH WORKSPACE — Pure white (#FFFFFF) content box.
+             All interactive chrome lives inside this container.
+             -------------------------------------------------------------- -->
+        <div class="research-workspace">
+
+
+          <!-- ----------------------------------------------------------
+               WORKSPACE TOOLBAR — Count readout + Sort toggle
+               ---------------------------------------------------------- -->
+          <div class="workspace-toolbar"
+               role="toolbar"
+               aria-label="Research article list controls">
+
+            <!-- Populated immediately by JS after DOM scan -->
+            <p class="workspace-article-count"
+               id="research-article-count"
+               aria-live="polite"
+               aria-atomic="true">
+              <!-- e.g. "5 articles" -->
+            </p>
+
+            <div class="workspace-controls"
+                 role="group"
+                 aria-label="Sort research articles">
+
+              <!--
+                data-order tracks current direction ('desc' | 'asc').
+                JS reads and flips this on each click.
+              -->
+              <button class="btn-research-sort"
+                      id="btn-research-sort"
+                      type="button"
+                      data-order="desc"
+                      aria-label="Sort articles by date, newest first">
+                <i class="fa-solid fa-calendar-days" aria-hidden="true"></i>
+                Sort by Date
+                <!-- Direction arrow — class is swapped by JS on each click -->
+                <i class="fa-solid fa-arrow-down-short-wide"
+                   aria-hidden="true"
+                   id="sort-icon"></i>
+              </button>
+
+            </div>
+          </div>
+          <!-- /workspace-toolbar -->
+
+
+          <!-- ----------------------------------------------------------
+               TWO-COLUMN RESEARCH LAYOUT
+               CSS Grid: 62fr (article viewer) | 38fr (sticky sidebar)
+               Collapses to a single column on viewports < 768px.
+               ---------------------------------------------------------- -->
+          <div class="research-layout">
+
+
+            <!-- ========================================================
+                 LEFT COLUMN — ARTICLE PANEL
+                 The injection target (#article-viewer) sits inside here.
+                 State region (welcome / loading / error) shares the space.
+                 ======================================================== -->
+            <section class="article-panel" aria-label="Article viewer">
+
+
+              <!-- STATE REGION — JS toggles child visibility.
+                   Uses role="status" + aria-live="assertive" so screen
+                   readers announce transitions without user focus shift. -->
+              <div class="article-state"
+                   id="article-state"
+                   role="status"
+                   aria-live="assertive">
+
+                <!-- Welcome prompt — shown before any article is selected -->
+                <div class="article-state__welcome" id="article-welcome">
+                  <i class="fa-solid fa-book-open-reader article-state__icon"
+                     aria-hidden="true"></i>
+                  <h2 class="article-state__heading">Select a research topic</h2>
+                  <p class="article-state__body">
+                    Use the navigation panel to browse available articles.
+                    Click any title to load its full content here.
+                  </p>
+                </div>
+
+                <!-- Loading spinner — shown during active fetch -->
+                <div class="article-state__loading is-hidden"
+                     id="article-loading"
+                     aria-hidden="true">
+                  <i class="fa-solid fa-circle-notch fa-spin article-state__spinner"
+                     aria-hidden="true"></i>
+                  <span>Fetching research data&hellip;</span>
+                </div>
+
+                <!-- Error fallback — shown on fetch failure -->
+                <div class="article-state__error is-hidden"
+                     id="article-error"
+                     role="alert">
+                  <i class="fa-solid fa-triangle-exclamation article-state__icon article-state__icon--error"
+                     aria-hidden="true"></i>
+                  <h2 class="article-state__heading">Failed to load article</h2>
+                  <!-- Error detail text is populated by JS -->
+                  <p class="article-state__body" id="article-error-msg">
+                    The requested research article could not be retrieved.
+                    Please verify the file exists or select a different topic.
+                  </p>
+                  <button class="btn-article-retry"
+                          id="btn-article-retry"
+                          type="button">
+                    <i class="fa-solid fa-rotate-right" aria-hidden="true"></i>
+                    Retry
+                  </button>
+                </div>
+
+              </div>
+              <!-- /article-state -->
+
+
+              <!--
+                ARTICLE VIEWER — EMPTY at build time.
+                app.js §15 loadArticle() injects the fetched HTML snippet here.
+                is-hidden is removed once content is ready.
+                aria-live="polite" announces content changes to screen readers.
+              -->
+              <article class="article-viewer is-hidden"
+                       id="article-viewer"
+                       aria-label="Selected research article"
+                       aria-live="polite">
+                <!-- Injected snippet content lands here -->
+              </article>
+
+
+            </section>
+            <!-- /article-panel -->
+
+
+            <!-- ========================================================
+                 RIGHT COLUMN — STICKY SIDEBAR
+                 Scrolls independently of the article viewer.
+                 Contains: Search bar → No-results notice → Article nav list
+                 ======================================================== -->
+            <aside class="research-sidebar"
+                   aria-label="Research article navigation panel">
+
+
+              <!-- SEARCH BAR -->
+              <div class="sidebar-search">
+
+                <!-- Visible label — also serves as an icon row header -->
+                <label for="sidebar-search-input"
+                       class="sidebar-search__label">
+                  <i class="fa-solid fa-filter" aria-hidden="true"></i>
+                  Filter articles
+                </label>
+
+                <!-- Input wrapper — positions the icon and clear button -->
+                <div class="sidebar-search__input-wrap">
+                  <i class="fa-solid fa-magnifying-glass sidebar-search__icon"
+                     aria-hidden="true"></i>
+
+                  <input type="search"
+                         id="sidebar-search-input"
+                         class="sidebar-search__input"
+                         placeholder="Search by title&hellip;"
+                         autocomplete="off"
+                         spellcheck="false"
+                         aria-controls="sidebar-nav-list"
+                         aria-label="Filter research articles by title" />
+
+                  <!-- Clear (×) button — hidden until user types -->
+                  <button class="sidebar-search__clear is-hidden"
+                          id="sidebar-search-clear"
+                          type="button"
+                          aria-label="Clear search input">
+                    <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+                  </button>
+                </div>
+              </div>
+              <!-- /sidebar-search -->
+
+
+              <!-- No-results notice — aria-live so empty-state is announced -->
+              <p class="sidebar-no-results is-hidden"
+                 id="sidebar-no-results"
+                 role="status"
+                 aria-live="polite">
+                No articles match your search.
+              </p>
+
+
+              <!-- ARTICLE NAVIGATION LIST
+                   Each <li> carries three data-* attributes used by app.js §15:
+                     data-file  — relative path of the snippet to fetch
+                     data-date  — ISO 8601 date (YYYY-MM-DD) for sort engine
+                     data-title — plain-text title for live search filter
+                   Add or remove <li> items here to manage the research index. -->
+              <nav aria-label="Research articles">
+                <ol class="sidebar-nav" id="sidebar-nav-list" role="list">
+
+
+                  <!-- ── Article 1 ─────────────────────────────────────────── -->
+                  <li class="sidebar-nav__item"
+                      data-file="articles/orbiting-hotspots.html"
+                      data-date="2025-01-08"
+                      data-title="Orbiting Hotspots">
+                    <button class="sidebar-nav__btn"
+                            type="button"
+                            aria-pressed="false"
+                            aria-label="Load article: Orbiting Hotspots">
+                      <span class="sidebar-nav__meta">
+                        <time class="sidebar-nav__date" datetime="2025-01-08">Jan 2025</time>
+                      </span>
+                      <span class="sidebar-nav__title">
+                        Orbiting Hotspots
+                      </span>
+                    </button>
+                  </li>
+
+                  <!-- ── Article 2 ─────────────────────────────────────────── -->
+                  <li class="sidebar-nav__item"
+                      data-file="articles/linear-polarization-dm.html"
+                      data-date="2024-09-22"
+                      data-title="Linear Polarization for Black Holes with a Dark Matter Halo">
+                    <button class="sidebar-nav__btn"
+                            type="button"
+                            aria-pressed="false"
+                            aria-label="Load article: Linear Polarization for Black Holes with a Dark Matter Halo">
+                      <span class="sidebar-nav__meta">
+                        <time class="sidebar-nav__date" datetime="2024-09-22">Sep 2024</time>
+                      </span>
+                      <span class="sidebar-nav__title">
+                        Linear Polarization for Black Holes with a Dark Matter Halo
+                      </span>
+                    </button>
+                  </li>
+
+                  <!-- ── Article 3 ─────────────────────────────────────────── -->
+                  <li class="sidebar-nav__item"
+                      data-file="articles/polarized-ring.html"
+                      data-date="2024-07-15"
+                      data-title="Polarized Image of an Equatorial Emitting Ring">
+                    <button class="sidebar-nav__btn"
+                            type="button"
+                            aria-pressed="false"
+                            aria-label="Load article: Polarized Image of an Equatorial Emitting Ring">
+                      <span class="sidebar-nav__meta">
+                        <time class="sidebar-nav__date" datetime="2024-07-15">Jul 2024</time>
+                      </span>
+                      <span class="sidebar-nav__title">
+                        Polarized Image of an Equatorial Emitting Ring
+                      </span>
+                    </button>
+                  </li>
+
+                  <!-- ── Article 4 ─────────────────────────────────────────── -->
+                  <li class="sidebar-nav__item"
+                      data-file="articles/black-holes-dark-matter.html"
+                      data-date="2024-03-10"
+                      data-title="Black Holes Surrounded by a Dark Matter Halo">
+                    <button class="sidebar-nav__btn"
+                            type="button"
+                            aria-pressed="false"
+                            aria-label="Load article: Black Holes Surrounded by a Dark Matter Halo">
+                      <span class="sidebar-nav__meta">
+                        <time class="sidebar-nav__date" datetime="2024-03-10">Mar 2024</time>
+                      </span>
+                      <span class="sidebar-nav__title">
+                        Black Holes Surrounded by a Dark Matter Halo
+                      </span>
+                    </button>
+                  </li>
+
+
+                </ol>
+              </nav>
+              <!-- /sidebar nav -->
+
+
+            </aside>
+            <!-- /research-sidebar -->
+
+
+          </div>
+          <!-- /research-layout -->
+
+        </div>
+        <!-- /research-workspace -->
+
+      </div>
+    </div>
+    <!-- /research-canvas -->
+
+
+  </main>
+
+
+  <!-- ====================================================================
+       FOOTER — Injected by app.js § injectGlobalComponents()
+       ==================================================================== -->
+  <div id="global-footer-target" aria-live="polite"></div>
+
+
+</div>
+<!-- /site-wrapper -->
+
+<script src="js/app.js" defer></script>
+</body>
+</html>
