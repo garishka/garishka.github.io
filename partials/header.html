@@ -9,20 +9,6 @@
            hx-trigger="load"
            hx-swap="innerHTML"></div>
 
-  Active-page mapping
-  -------------------
-  This fragment is static, so no page baked in an "is-active" class. Each link
-  carries a `data-nav` token; js/app.js → setActiveNav() runs on htmx:afterSwap
-  and stamps `.is-active` + `aria-current="page"` on the link matching the
-  current URL (reuses the existing CSS selectors, no markup duplication).
-
-  Interactions (all wired through htmx `hx-on:click`, not a JS bind step)
-  ----------------------------------------------------------------------
-    .btn-theme-toggle  → toggleTheme()   flips <html data-theme> + persists
-    .btn-hamburger     → toggleDrawer()  opens / closes the drawer
-    .nav-overlay       → closeDrawer()   backdrop tap closes
-    .drawer-close-btn  → closeDrawer()   explicit close
-
   The two theme SVGs are both present; CSS shows exactly one based on
   [data-theme] (light → moon, dark → sun), so there is no icon flash.
 -->
@@ -121,7 +107,7 @@
     <button class="drawer-close-btn" type="button"
             aria-label="Close navigation menu"
             hx-on:click="closeDrawer()">
-      <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+      <span class="drawer-close-btn__x" aria-hidden="true">&times;</span>
     </button>
     <ul class="drawer-links" role="list">
       <li class="nav-links__item"><a href="index.html"        class="drawer-link" data-nav="index.html"        hx-on:click="closeDrawer()">Home</a></li>

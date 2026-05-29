@@ -509,7 +509,9 @@ p:last-child {
 .mobile-nav-drawer {
   position: fixed;
   inset: 0;
-  z-index: 99;
+  /* Above the sticky nav (z-index:100) so the open panel fully covers the
+     header controls — otherwise the hamburger-as-X would show through on top. */
+  z-index: 200;
   pointer-events: none;
 }
 
@@ -527,9 +529,14 @@ p:last-child {
   position: absolute;
   top: 0;
   right: 0;
-  width: min(320px, 85vw);
+  /* Full width on phones so the panel fully covers the header controls
+     (hamburger-as-X + theme toggle) — no leftover strip, no double close button. */
+  width: 100%;
   height: 100%;
   background-color: var(--color-nav-bg);
+  /* Generous, static padding that behaves identically on every device/browser.
+     (No safe-area/env() — that only resolves on certain devices and was making
+     the top spacing collapse elsewhere.) */
   padding: var(--space-2xl) var(--space-xl);
   display: flex;
   flex-direction: column;
@@ -537,6 +544,34 @@ p:last-child {
   transform: translateX(100%);
   transition: transform var(--transition-slow);
   overflow-y: auto;
+}
+
+/* Close button — without this it falls back to the tiny default browser button
+   (small, often a blue system tint). Sits in the top-right as its own row;
+   the links start cleanly below it. */
+.drawer-close-btn {
+  align-self: flex-end;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;          /* comfortable tap target (WCAG 2.5.5) */
+  height: 44px;
+  margin-bottom: var(--space-sm);
+  border-radius: var(--border-radius);
+  color: var(--color-nav-text);          /* light — overrides any default system tint */
+  background-color: rgba(255, 255, 255, 0.12);
+  line-height: 1;
+  transition: background-color var(--transition-fast);
+}
+
+.drawer-close-btn:hover,
+.drawer-close-btn:focus-visible {
+  background-color: rgba(255, 255, 255, 0.25);
+}
+
+.drawer-close-btn__x {
+  font-size: 2rem;      /* large, legible "×" */
+  font-weight: 400;
 }
 
 /* Open state — JS adds .is-open to .mobile-nav-drawer */
