@@ -452,6 +452,17 @@ p:last-child {
   fill: currentColor;
 }
 
+/* Theme-icon swap — both SVGs ship in partials/header.html; CSS reveals one.
+   Convention: light mode shows the moon (click → dark);
+               dark  mode shows the sun  (click → light).
+   This replaces the old JS that rewrote the button's innerHTML on toggle. */
+.btn-theme-toggle .theme-icon { display: none; }
+.btn-theme-toggle .theme-icon--moon { display: block; }
+.btn-theme-toggle .theme-icon--sun  { display: none; }
+
+[data-theme="dark"] .btn-theme-toggle .theme-icon--moon { display: none; }
+[data-theme="dark"] .btn-theme-toggle .theme-icon--sun  { display: block; }
+
 /* Hamburger — only visible on mobile */
 .btn-hamburger {
   display: none;

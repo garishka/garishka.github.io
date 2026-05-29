@@ -1,8 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="light">
 <!--
-  ASTRO RESEARCH PROJECT — Home Page
-  File: index.html
+  BeyondGR Project — Home Page
 
   Structure:
     <header>   — Branding bar: site logo + institutional partner logos
@@ -17,17 +16,12 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description"
-        content="Astro Research Project — Gravitational astrophysics research group
-                 exploring black holes, compact objects, and the geometry of spacetime." />
-  <meta name="keywords"
-        content="astrophysics, gravitational waves, black holes, wormholes,
-                 naked singularities, accretion disks, theoretical physics" />
+
+  <script src="js/theme-init.js"></script>
 
   <!-- Open Graph for sharing -->
-  <meta property="og:title"       content="Astro Research Project" />
-  <meta property="og:description" content="Promoting gravitational astrophysics research and
-                                           finding new collaborators worldwide." />
+  <meta property="og:title"       content="BeyondGR Project" />
+  <meta property="og:description" content="Insights about the nature of strong gravitational interaction with electromagnetic observations." />
   <meta property="og:type"        content="website" />
 
   <title>Home | BeyondGR Project</title>
@@ -39,6 +33,10 @@
         crossorigin="anonymous"
         referrerpolicy="no-referrer" />
 
+  <!-- htmx — fetches & swaps the shared header (partials/header.html) -->
+  <script src="https://unpkg.com/htmx.org@2.0.10/dist/htmx.min.js"
+          crossorigin="anonymous"></script>
+
   <!-- Global stylesheet -->
   <link rel="stylesheet" href="css/style.css" />
   <link rel="stylesheet" href="css/index.css" />
@@ -48,9 +46,16 @@
 <div class="site-wrapper">
 
   <!-- ====================================================================
-       HEADER — Injected by app.js injectGlobalComponents()
+       HEADER — fetched & rendered by htmx from partials/header.html.
+       hx-trigger="load" fires once on page load; hx-swap="innerHTML"
+       fills this container. js/app.js → setActiveNav() then marks the
+       active link on the htmx:afterSwap event.
        ==================================================================== -->
-  <div id="global-header-target" aria-live="polite"></div>
+  <div id="global-header-target"
+       hx-get="partials/header.html"
+       hx-trigger="load"
+       hx-swap="innerHTML"
+       aria-live="polite"></div>
 
 
   <!-- ====================================================================
@@ -253,7 +258,8 @@
 
 
   <!-- ====================================================================
-       FOOTER — Injected by app.js injectGlobalComponents()
+       FOOTER — static markup lives directly in this page (below).
+       (#global-footer-target is an unused legacy hook kept for compatibility.)
        ==================================================================== -->
   <div id="global-footer-target" aria-live="polite"></div>
 
@@ -263,6 +269,136 @@
 
 <!-- Global script — deferred so it runs after DOM is parsed -->
 <script src="js/app.js" defer></script>
+
+<footer class="site-footer" role="contentinfo">
+  <div class="container">
+    <div class="footer-grid">
+
+
+      <div class="footer-col footer-col--info">
+
+        <p class="footer-col__heading">BeyondGR Project</p>
+        <p class="footer-col__desc">
+          Insights about the nature of strong
+          gravitational interaction with
+          electromagnetic observations
+        </p>
+
+        <nav class="footer-sitenav" aria-label="Footer site navigation">
+          <div class="footer-nav-2col">
+            <p class="footer-col__subheading footer-nav-site-label">Site</p>
+
+            <ul class="footer-links" role="list">
+              <li><a href="index.html">Home</a></li>
+              <li><a href="members.html">Members</a></li>
+            </ul>
+
+            <ul class="footer-links footer-nav-col2" role="list">
+              <li><a href="research.html">Research</a></li>
+              <li><a href="publications.html">Publications</a></li>
+              <li><a href="contacts.html">Contacts</a></li>
+            </ul>
+          </div>
+        </nav>
+
+      </div>
+
+
+      <div class="footer-col footer-col--center">
+
+        <section class="footer-block" aria-label="Research group contact details">
+          <p class="footer-col__heading">Contacts</p>
+
+          <address class="footer-contacts">
+
+            <p class="footer-contacts__item">
+              <i class="fa-solid fa-location-dot" aria-hidden="true"></i>
+              <span>
+                Faculty of Physics,<br>
+                Sofia University "St. Kliment Ohridski"<br>
+                5 James Bourchier Blvd, 1164 Sofia, Bulgaria
+              </span>
+            </p>
+
+            <p class="footer-contacts__item">
+              <i class="fa-solid fa-envelope" aria-hidden="true"></i>
+              <a href="mailto:secretary@phys.uni-sofia.bg">secretary@phys.uni-sofia.bg</a>
+            </p>
+
+          </address>
+
+          <div class="footer-affil-logos"
+               role="list"
+               aria-label="Affiliated institution logos">
+
+            <a href="https://www.phys.uni-sofia.bg/"
+               class="footer-logo-link"
+               role="listitem"
+               target="_blank"
+               rel="noopener noreferrer"
+               aria-label="Faculty of Physics — opens in a new tab">
+              <img src="assets/logos/faculty_logo.svg"
+                   alt="Faculty of Physics Logo"
+                   class="footer-logo-img" />
+            </a>
+
+            <a href="https://www.uni-sofia.bg/"
+               class="footer-logo-link"
+               role="listitem"
+               target="_blank"
+               rel="noopener noreferrer"
+               aria-label="Sofia University — opens in a new tab">
+              <img src="assets/logos/uni_logo.svg"
+                   alt="Sofia University Logo"
+                   class="footer-logo-img" />
+            </a>
+
+          </div>
+        </section>
+
+      </div>
+
+
+      <div class="footer-col footer-col--funding">
+
+        <section class="footer-block" aria-label="Funding information">
+          <p class="footer-col__heading">Funding</p>
+
+          <div class="footer-institutional__row footer-institutional__row--funding">
+
+            <p class="footer-institutional__grant-text">
+              Project No. 123456780-meow<br>
+              Bulgarian National<br>
+              Science Fund
+            </p>
+
+            <a href="https://www.fni.bg/"
+               class="footer-logo-link"
+               target="_blank"
+               rel="noopener noreferrer"
+               aria-label="Bulgarian National Science Fund — opens in a new tab">
+              <img src="assets/logos/logo_FNI.png"
+                   alt="Bulgarian National Science Fund logo"
+                   class="footer-logo-img footer-logo-img--fni" />
+            </a>
+
+          </div>
+        </section>
+
+      </div>
+
+    </div>
+
+
+    <!-- ── Sub-footer: copyright line ───────────────────────── -->
+    <div class="footer-bottom">
+      <p class="footer-bottom__copy">
+        &copy; 2026 BeyondGR Research Group. All rights reserved.
+      </p>
+    </div>
+
+  </div>
+</footer>
 
 </body>
 </html>

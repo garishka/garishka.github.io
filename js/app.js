@@ -11,7 +11,7 @@
  *  §4  Global Templates (header / nav / drawer / footer factories)
  *  §5  Mobile Drawer State
  *  §6  Event Binding
- *  §7  Main Orchestrator — injectGlobalComponents()
+ *  §7  Global Chrome Init — setActiveNav() / initGlobalChrome() (htmx lifecycle)
  *  §8  Homepage — Publications Preview Strip
  *  §9  Homepage — Collaboration Form
  *  §10 Contacts  — Map Activation
@@ -30,21 +30,16 @@
    §1 — CONSTANTS & CONFIGURATION
    ============================================================================= */
 
-/** Navigation registry — single source for all nav loops (desktop, drawer, footer). */
-const NAV_ITEMS = [
-  { href: 'index.html',        label: 'Home'         },
-  { href: 'members.html',      label: 'Members'      },
-  { href: 'research.html',     label: 'Research'     },
-  { href: 'publications.html', label: 'Publications' },
-  { href: 'contacts.html',     label: 'Contacts'     },
-];
+/* Navigation markup now lives in partials/header.html (fetched via htmx).
+   The old NAV_ITEMS registry and the GlobalTemplates string factories that
+   built the header/nav/drawer in JS have been removed. */
 
-const THEME_KEY          = 'astro-theme';       // localStorage key
-const DARK_THEME         = 'dark';
-const LIGHT_THEME        = 'light';
-const SCROLL_THRESHOLD   = 50;                  // px before nav shrinks
-const PUBLICATIONS_JSON  = 'assets/publications.json';
-const PUB_PREVIEW_COUNT  = 3;                   // entries shown on homepage
+const THEME_KEY         = 'astro-theme';            // localStorage key
+const DARK_THEME        = 'dark';
+const LIGHT_THEME       = 'light';
+const SCROLL_THRESHOLD  = 50;                        // px before nav shrinks
+const PUBLICATIONS_JSON = 'assets/publications.json';
+const PUB_PREVIEW_COUNT = 3;                         // entries shown on homepage
 
 
 /* =============================================================================
@@ -59,501 +54,134 @@ const PUB_PREVIEW_COUNT  = 3;                   // entries shown on homepage
  */
 function resolveActivePage() {
   const segments = window.location.pathname.split('/').filter(Boolean);
-  const filename  = segments[segments.length - 1] || 'index.html';
+  const filename = segments[segments.length - 1] || 'index.html';
   return filename.includes('.html') ? filename : 'index.html';
 }
 
 
 /* =============================================================================
-   §3 — THEME UTILITIES
+   §3 — THEME UTILITIES (htmx era)
+   resolveInitialTheme() now lives in the inline <head> bootstrap script of each
+   page, so the theme is stamped on <html> BEFORE first paint (zero flash).
+   The toggle button is wired declaratively via hx-on:click="toggleTheme()" in
+   partials/header.html — there is no JS "bind" step. The sun/moon icon swap is
+   pure CSS, driven by the [data-theme] attribute (see css/style.css).
    ============================================================================= */
 
 /**
- * resolveInitialTheme()
- * Priority cascade: existing attribute → localStorage → OS preference → "light".
- * @returns {"light"|"dark"}
+ * toggleTheme()
+ * Flips <html data-theme> between light/dark, persists to localStorage, and
+ * refreshes the toggle button's aria-label. Called from the header's
+ * hx-on:click handler.
  */
-function resolveInitialTheme() {
-  const existing = document.documentElement.getAttribute('data-theme');
-  if (existing === LIGHT_THEME || existing === DARK_THEME) return existing;
-
-  const stored = localStorage.getItem(THEME_KEY);
-  if (stored === LIGHT_THEME || stored === DARK_THEME) return stored;
-
-  if (window.matchMedia?.('(prefers-color-scheme: dark)').matches) return DARK_THEME;
-
-  return LIGHT_THEME;
-}
-
-/**
- * applyTheme()
- * Stamps data-theme on <html>, persists to localStorage, syncs the toggle button.
- * @param {"light"|"dark"} theme
- */
-function applyTheme(theme) {
-  document.documentElement.setAttribute('data-theme', theme);
-  localStorage.setItem(THEME_KEY, theme);
-  const btn = document.querySelector('.btn-theme-toggle');
-  if (btn) syncThemeButton(btn, theme);
+function toggleTheme() {
+  const isDark = document.documentElement.getAttribute('data-theme') === DARK_THEME;
+  const next   = isDark ? LIGHT_THEME : DARK_THEME;
+  document.documentElement.setAttribute('data-theme', next);
+  try { localStorage.setItem(THEME_KEY, next); } catch (e) { /* storage blocked */ }
+  syncThemeButton();
 }
 
 /**
  * syncThemeButton()
- * Updates icon + aria-label on the theme toggle button.
- * Uses inline SVGs — no Font Awesome dependency for this specific element.
- *
- * Convention:  light mode → show moon  (click goes dark)
- *              dark mode  → show sun   (click goes light)
- *
- * @param {HTMLElement}      btn
- * @param {"light"|"dark"}   theme
+ * Keeps the toggle button's aria-label in sync with the current theme.
+ * (The visible icon is handled entirely in CSS, so no innerHTML work here.)
+ * Convention: light → "Switch to dark mode"; dark → "Switch to light mode".
  */
-function syncThemeButton(btn, theme) {
-  const isDark = theme === DARK_THEME;
-
-  const sunSVG = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-      aria-hidden="true" focusable="false" fill="currentColor">
-    <circle cx="12" cy="12" r="5"/>
-    <line x1="12" y1="1"  x2="12" y2="3"  stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-    <line x1="12" y1="21" x2="12" y2="23" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-    <line x1="4.22"  y1="4.22"  x2="5.64"  y2="5.64"  stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-    <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-    <line x1="1"  y1="12" x2="3"  y2="12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-    <line x1="21" y1="12" x2="23" y2="12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-    <line x1="4.22"  y1="19.78" x2="5.64"  y2="18.36" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-    <line x1="18.36" y1="5.64"  x2="19.78" y2="4.22"  stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-  </svg>`;
-
-  const moonSVG = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-      aria-hidden="true" focusable="false" fill="currentColor">
-    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
-  </svg>`;
-
-  btn.innerHTML = isDark ? sunSVG : moonSVG;
+function syncThemeButton() {
+  const btn = document.querySelector('.btn-theme-toggle');
+  if (!btn) return;
+  const isDark = document.documentElement.getAttribute('data-theme') === DARK_THEME;
   btn.setAttribute('aria-label', isDark ? 'Switch to light mode' : 'Switch to dark mode');
 }
 
 
 /* =============================================================================
-   §4 — GLOBAL TEMPLATES
-   Factory methods receive runtime state and return HTML strings.
-   No structural markup lives in any individual .html page file.
+   §4 — (removed) GLOBAL TEMPLATES
+   The header / nav / mobile-drawer markup is now the static fragment
+   partials/header.html, fetched and swapped into #global-header-target by htmx
+   (hx-get + hx-trigger="load"). No HTML is built in JavaScript any more.
    ============================================================================= */
-
-const GlobalTemplates = {
-
-  /**
-   * buildNavItems()
-   * Generates <li> elements for a nav list.
-   * Active state and aria-current are set dynamically — never hardcoded.
-   * @param {string} activePage
-   * @param {string} linkClass   CSS class applied to each <a>
-   * @returns {string}
-   */
-  buildNavItems(activePage, linkClass) {
-    return NAV_ITEMS.map(({ href, label }) => {
-      const isActive    = href === activePage;
-      // Use a standalone 'is-active' sentinel class so both the desktop
-      // nav rule (.nav-links__link.is-active) and the drawer rule
-      // (.drawer-link.is-active) can share the same selector suffix without
-      // relying on BEM --modifier notation in their respective CSS blocks.
-      const activeClass = isActive ? ' is-active' : '';
-      const ariaCurrent = isActive ? ' aria-current="page"' : '';
-      return `<li class="nav-links__item">
-          <a href="${href}" class="${linkClass}${activeClass}"${ariaCurrent}>${label}</a>
-        </li>`;
-    }).join('\n        ');
-  },
-
-  /**
-   * getHeader()
-   * Produces the combined <header> + <nav> block.
-   * Theme icon is pre-seeded so there is zero flash on load.
-   * @param {string}            activePage
-   * @param {"light"|"dark"}    theme
-   * @returns {string}
-   */
-  getHeader(activePage, theme) {
-    const navItems   = this.buildNavItems(activePage, 'nav-links__link');
-    const isDark     = theme === DARK_THEME;
-
-    // Inline SVGs for zero Font-Awesome dependency on the toggle button
-    const themeIcon  = isDark
-      ? `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="currentColor">
-           <circle cx="12" cy="12" r="5"/>
-           <line x1="12" y1="1"  x2="12" y2="3"  stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-           <line x1="12" y1="21" x2="12" y2="23" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-           <line x1="4.22"  y1="4.22"  x2="5.64"  y2="5.64"  stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-           <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-           <line x1="1"  y1="12" x2="3"  y2="12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-           <line x1="21" y1="12" x2="23" y2="12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-           <line x1="4.22"  y1="19.78" x2="5.64"  y2="18.36" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-           <line x1="18.36" y1="5.64"  x2="19.78" y2="4.22"  stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-         </svg>`
-      : `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="currentColor">
-           <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
-         </svg>`;
-    const themeLabel = isDark ? 'Switch to light mode' : 'Switch to dark mode';
-
-    return `
-<header class="site-header" role="banner">
-  <div class="container">
-    <a href="index.html" class="site-logo" aria-label="BeyondGR Project — Home">
-      <svg class="logo-icon" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"
-           aria-hidden="true" focusable="false">
-        <circle cx="16" cy="16" r="2.5" fill="currentColor"/>
-        <rect x="14.5" y="1"  width="3" height="9" rx="1.5" fill="currentColor"/>
-        <rect x="14.5" y="22" width="3" height="9" rx="1.5" fill="currentColor"/>
-        <rect x="1"  y="14.5" width="9" height="3" rx="1.5" fill="currentColor"/>
-        <rect x="22" y="14.5" width="9" height="3" rx="1.5" fill="currentColor"/>
-        <rect x="15.2" y="5" width="1.8" height="6" rx="0.9" fill="currentColor" transform="rotate(45  16 16)"/>
-        <rect x="15.2" y="5" width="1.8" height="6" rx="0.9" fill="currentColor" transform="rotate(135 16 16)"/>
-        <rect x="15.2" y="5" width="1.8" height="6" rx="0.9" fill="currentColor" transform="rotate(225 16 16)"/>
-        <rect x="15.2" y="5" width="1.8" height="6" rx="0.9" fill="currentColor" transform="rotate(315 16 16)"/>
-      </svg>
-      <span class="site-header__logo-text">Beyond<strong>GR</strong></span>
-    </a>
-    <div class="header-institutions" aria-label="Partner institutions">
-            <a href="https://www.fni.bg/"
-               class="footer-logo-link"
-               target="_blank"
-               rel="noopener noreferrer"
-               aria-label="Bulgarian National Science Fund — opens in a new tab">
-              <img src="assets/logos/logo_FNI.png" alt="FNI Logo" style="height: 80px; width: auto; object-fit: contain;">
-            </a>
-
-    </div>
-  </div>
-</header>
-
-<nav class="site-nav" role="navigation" aria-label="Primary site navigation">
-  <div class="container">
-    <ul class="nav-links" role="list">
-      ${navItems}
-    </ul>
-    <div class="nav-controls">
-      <button class="btn-theme-toggle" aria-label="${themeLabel}" type="button">
-        ${themeIcon}
-      </button>
-      <button class="btn-hamburger" type="button"
-              aria-label="Open navigation menu"
-              aria-expanded="false"
-              aria-controls="mobile-nav-drawer">
-        <span class="hamburger-line" aria-hidden="true"></span>
-        <span class="hamburger-line" aria-hidden="true"></span>
-        <span class="hamburger-line" aria-hidden="true"></span>
-      </button>
-    </div>
-  </div>
-</nav>`;
-  },
-
-  /**
-   * getMobileDrawer()
-   * Off-canvas slide-out panel + backdrop overlay.
-   * Active state is set independently from the desktop nav.
-   * @param {string} activePage
-   * @returns {string}
-   */
-  getMobileDrawer(activePage) {
-    const drawerItems = this.buildNavItems(activePage, 'drawer-link');
-    // STRUCTURE REQUIREMENT:
-    //   .mobile-nav-drawer          ← outer fixed wrapper (pointer-events: none)
-    //     .nav-overlay              ← full-screen backdrop (position: absolute, child)
-    //     .mobile-nav-drawer__panel ← sliding side panel  (position: absolute, child)
-    //
-    // Both children MUST be descendants of .mobile-nav-drawer so that the CSS
-    // selectors   .mobile-nav-drawer.is-open .nav-overlay   and
-    //             .mobile-nav-drawer.is-open .mobile-nav-drawer__panel
-    // fire correctly when JS toggles .is-open on the wrapper.
-    return `
-<div class="mobile-nav-drawer" id="mobile-nav-drawer" aria-hidden="true">
-
-  <!-- Full-screen semi-transparent backdrop — click closes the drawer -->
-  <div class="nav-overlay" id="nav-overlay" aria-hidden="true"></div>
-
-  <!-- Slide-in navigation panel -->
-  <nav class="mobile-nav-drawer__panel" aria-label="Mobile navigation">
-    <button class="drawer-close-btn" type="button" aria-label="Close navigation menu">
-      <i class="fa-solid fa-xmark" aria-hidden="true"></i>
-    </button>
-    <ul class="drawer-links" role="list">
-      ${drawerItems}
-    </ul>
-  </nav>
-
-</div>`;
-  },
-
-/**
-   * getFooter()
-   *
-   * 3-column footer layout:
-   *
-   *  Col 1 (Left — narrow)     │ Col 2 (Centre — wide)         │ Col 3 (Right — narrow)
-   *  ──────────────────────────────────────────────────────────────────────────────────
-   *  Project title + desc      │ ┌─ Contacts ────────────────┐  │ ┌─ Funding ─────────┐
-   *  ─────────────────────     │ │ address, email            │  │ │ grant metadata    │
-   *  Site nav (2-col grid)     │ └───────────────────────────┘  │ │ + BNSF logo       │
-   *                            │ ┌─ Affiliations ─────────────┐ │ └───────────────────┘
-   *                            │ │ text (padded) + FPHYS / SU │ │
-   *                            │ └───────────────────────────┘  │
-   *  ──────────────────────────────────────────────────────────────────────────────────
-   *  Sub-footer: "© 2026 BeyondGR Research Group. All rights reserved." — centered.
-   *
-   * NAV_ITEMS drives the Site link list automatically — no manual duplication.
-   * The 2-column nav layout is handled purely via the CSS class footer-links--2col.
-   *
-   * @returns {string}  Complete <footer> HTML string.
-   */
-  getFooter() {
-    // Build nav <li> items from the single NAV_ITEMS registry
-    // Split the 5 nav items into a fixed 2-column layout:
-    //   Col 1 → Home, Members        (rows 1–2)
-    //   Col 2 → Research, Publications, Contacts  (rows 1–3)
-    const footerNavCol1 = NAV_ITEMS.slice(0, 2).map(({ href, label }) =>
-      `<li><a href="${href}">${label}</a></li>`
-    ).join('\n              ');
-
-    const footerNavCol2 = NAV_ITEMS.slice(2).map(({ href, label }) =>
-      `<li><a href="${href}">${label}</a></li>`
-    ).join('\n              ');
-
-    return `
-<footer class="site-footer" role="contentinfo">
-  <div class="container">
-    <div class="footer-grid">
-
-
-      <!-- ══════════════════════════════════════════════════════════════
-           COLUMN 1 — Project identity  +  Site navigation (2-col list)
-           ══════════════════════════════════════════════════════════════ -->
-      <div class="footer-col footer-col--info">
-
-        <p class="footer-col__heading">BeyondGR Project</p>
-        <p class="footer-col__desc">
-          Insights about the nature of strong
-          gravitational interaction with
-          electromagnetic observations
-        </p>
-
-        <!-- SITE label is now inside the grid (col 1, row 1) so the col 2
-             list can start at the exact same vertical position as "SITE". -->
-        <nav class="footer-sitenav" aria-label="Footer site navigation">
-          <div class="footer-nav-2col">
-            <p class="footer-col__subheading footer-nav-site-label">Site</p>
-            <ul class="footer-links" role="list">
-              ${footerNavCol1}
-            </ul>
-            <ul class="footer-links footer-nav-col2" role="list">
-              ${footerNavCol2}
-            </ul>
-          </div>
-        </nav>
-
-      </div><!-- /footer-col--info -->
-
-
-      <!-- ══════════════════════════════════════════════════════════════
-           COLUMN 2 — Contacts  +  institutional logos below
-           ══════════════════════════════════════════════════════════════ -->
-      <div class="footer-col footer-col--center">
-
-        <!-- ── Contacts block ──────────────────────────────────────── -->
-        <section class="footer-block" aria-label="Research group contact details">
-          <p class="footer-col__heading">Contacts</p>
-
-          <address class="footer-contacts">
-
-            <p class="footer-contacts__item">
-              <i class="fa-solid fa-location-dot" aria-hidden="true"></i>
-              <span>
-                Faculty of Physics,<br>
-                Sofia University "St. Kliment Ohridski"<br>
-                5 James Bourchier Blvd, 1164 Sofia, Bulgaria
-              </span>
-            </p>
-
-            <p class="footer-contacts__item">
-              <i class="fa-solid fa-envelope" aria-hidden="true"></i>
-              <a href="mailto:secretary@phys.uni-sofia.bg">secretary@phys.uni-sofia.bg</a>
-            </p>
-
-          </address>
-
-          <!-- Faculty and University logos sit below the contacts,
-               separated by whitespace — no Affiliations heading needed. -->
-          <div class="footer-affil-logos"
-               role="list"
-               aria-label="Affiliated institution logos">
-
-            <a href="https://www.phys.uni-sofia.bg/"
-               class="footer-logo-link"
-               role="listitem"
-               target="_blank"
-               rel="noopener noreferrer"
-               aria-label="Faculty of Physics logo — opens in a new tab">
-              <img src="assets/logos/faculty_logo.svg" 
-                alt="Faculty of Physics Logo" 
-                class="footer-logo-img" />
-            </a>
-
-            <a href="https://www.uni-sofia.bg/"
-               class="footer-logo-link"
-               role="listitem"
-               target="_blank"
-               rel="noopener noreferrer"
-               aria-label="Sofia University logo — opens in a new tab">
-              <img src="assets/logos/uni_logo.svg" 
-                alt="Sofia University Logo" 
-                class="footer-logo-img" />
-            </a>
-
-          </div><!-- /footer-affil-logos -->
-        </section><!-- /Contacts -->
-
-      </div><!-- /footer-col--center -->
-
-
-      <!-- ══════════════════════════════════════════════════════════════
-           COLUMN 3 — Funding (standalone, right column)
-           ══════════════════════════════════════════════════════════════ -->
-      <div class="footer-col footer-col--funding">
-
-        <section class="footer-block" aria-label="Funding information">
-          <p class="footer-col__heading">Funding</p>
-
-          <div class="footer-institutional__row footer-institutional__row--funding">
-
-            <!-- Grant metadata text -->
-            <p class="footer-institutional__grant-text">
-              Project No. 123456780-meow<br>
-              Bulgarian National<br>
-              Science Fund
-            </p>
-
-            <!-- Clickable BNSF logo placeholder -->
-            <a href="https://www.fni.bg/"
-               class="footer-logo-link"
-               target="_blank"
-               rel="noopener noreferrer"
-               aria-label="Bulgarian National Science Fund — opens in a new tab">
-              <img src="assets/logos/logo_FNI.png" alt="FNI Logo" style="height: 80px; width: auto; object-fit: contain;">
-            </a>
-
-          </div><!-- /footer-institutional__row -->
-        </section><!-- /Funding -->
-
-      </div><!-- /footer-col--funding -->
-
-
-    </div><!-- /footer-grid -->
-
-
-    <!-- ── Sub-footer: single centered copyright line ───────────────── -->
-    <div class="footer-bottom">
-      <p class="footer-bottom__copy">
-        &copy; 2026 BeyondGR Research Group. All rights reserved.
-      </p>
-    </div>
-
-  </div><!-- /container -->
-</footer>`;
-  }
-
-}; // end GlobalTemplates
 
 
 /* =============================================================================
-   §5 — MOBILE DRAWER STATE
+   §5 — MOBILE DRAWER (htmx-driven)
+   The drawer is opened/closed through htmx hx-on:click handlers declared in
+   partials/header.html:
+       .btn-hamburger     → toggleDrawer()
+       .nav-overlay       → closeDrawer()
+       .drawer-close-btn  → closeDrawer()
+       .drawer-link       → closeDrawer()   (collapse after a tap)
+   These functions are declared at top level (global) so the inline hx-on
+   handlers can reach them. They only toggle existing stylesheet classes.
    ============================================================================= */
 
 /**
- * toggleMobileMenu()
- * Opens or closes the mobile drawer by toggling CSS classes only.
- * Also manages ARIA attributes and focus for keyboard / screen-reader users.
- *
- * @param {boolean} [forceClose=false]  Pass true to guarantee closure.
+ * setDrawer(open)
+ * Single source of truth for drawer state. Toggles the CSS classes the
+ * stylesheet already expects (.is-open on the drawer + hamburger, .is-visible
+ * on the overlay) and keeps ARIA + focus correct.
+ * @param {boolean} open  true → open, false → close
  */
-function toggleMobileMenu(forceClose = false) {
-  const hamburger = document.querySelector('.btn-hamburger');
+function setDrawer(open) {
   const drawer    = document.getElementById('mobile-nav-drawer');
   const overlay   = document.getElementById('nav-overlay');
-  if (!hamburger || !drawer || !overlay) return;
+  const hamburger = document.querySelector('.btn-hamburger');
+  if (!drawer || !overlay || !hamburger) return;
 
-  const willOpen = forceClose ? false : !drawer.classList.contains('is-open');
+  drawer.classList.toggle('is-open', open);
+  overlay.classList.toggle('is-visible', open);
+  // CSS hamburger animation targets .btn-hamburger.is-open
+  hamburger.classList.toggle('is-open', open);
 
-  drawer.classList.toggle('is-open',     willOpen);
-  overlay.classList.toggle('is-visible', willOpen);
-  // CSS hamburger animation targets .btn-hamburger.is-open (NOT .is-active).
-  // Using the wrong class meant the three-bar → X crossfade never triggered,
-  // and the stale .is-active class could interfere with sibling click regions.
-  hamburger.classList.toggle('is-open', willOpen);
+  hamburger.setAttribute('aria-expanded', String(open));
+  hamburger.setAttribute('aria-label', open ? 'Close navigation menu' : 'Open navigation menu');
+  drawer.setAttribute('aria-hidden',  String(!open));
+  overlay.setAttribute('aria-hidden', String(!open));
 
-  hamburger.setAttribute('aria-expanded', String(willOpen));
-  hamburger.setAttribute('aria-label', willOpen ? 'Close navigation menu' : 'Open navigation menu');
-  // aria-hidden on the outer .mobile-nav-drawer wrapper (the div, not the inner nav panel)
-  drawer.setAttribute('aria-hidden',  String(!willOpen));
-  overlay.setAttribute('aria-hidden', String(!willOpen));
+  // Move focus into / out of the drawer for keyboard + screen-reader users
+  if (open) drawer.querySelector('button, a')?.focus();
+  else      hamburger.focus();
+}
 
-  // Move focus into/out of the drawer for keyboard users
-  if (willOpen) {
-    drawer.querySelector('button, a')?.focus();
-  } else {
-    hamburger.focus();
-  }
+/** toggleDrawer() — flip the drawer open/closed (hamburger handler). */
+function toggleDrawer() {
+  const drawer = document.getElementById('mobile-nav-drawer');
+  setDrawer(!drawer?.classList.contains('is-open'));
+}
+
+/** closeDrawer() — force the drawer closed (overlay / close-btn / link handler). */
+function closeDrawer() {
+  setDrawer(false);
 }
 
 
 /* =============================================================================
-   §6 — EVENT BINDING
-   All bind* functions are called after DOM injection so freshly-inserted
-   nodes are guaranteed to be queryable. Each guards against missing elements.
+   §6 — EVENT BINDING (document-level + post-swap)
+   Header click handlers are now declarative (hx-on in partials/header.html).
+   What remains here are listeners that are NOT tied to a single header node:
+   a global ESC key handler and the sticky-nav scroll behaviour.
    ============================================================================= */
-
-function bindHamburger() {
-  document.querySelector('.btn-hamburger')
-    ?.addEventListener('click', () => toggleMobileMenu());
-}
-
-function bindOverlay() {
-  document.getElementById('nav-overlay')
-    ?.addEventListener('click', () => toggleMobileMenu(true));
-}
-
-function bindDrawerClose() {
-  document.querySelector('.drawer-close-btn')
-    ?.addEventListener('click', () => toggleMobileMenu(true));
-}
 
 /**
  * bindEscapeKey()
- * Global ESC listener — closes the drawer if open (WCAG 2.1 SC 2.1.2).
- * Attached to document once; guards against firing when drawer is already closed.
+ * Global ESC listener — closes the drawer when open (WCAG 2.1 SC 2.1.2).
+ * Attached to document once; safe before the header exists.
  */
 function bindEscapeKey() {
   document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && document.getElementById('mobile-nav-drawer')?.classList.contains('is-open')) {
-      toggleMobileMenu(true);
+    if (e.key === 'Escape' &&
+        document.getElementById('mobile-nav-drawer')?.classList.contains('is-open')) {
+      closeDrawer();
     }
-  });
-}
-
-/**
- * bindThemeToggle()
- * Reads current theme from <html>, flips it, delegates to applyTheme().
- */
-function bindThemeToggle() {
-  document.querySelector('.btn-theme-toggle')?.addEventListener('click', () => {
-    const current = document.documentElement.getAttribute('data-theme') || LIGHT_THEME;
-    applyTheme(current === LIGHT_THEME ? DARK_THEME : LIGHT_THEME);
   });
 }
 
 /**
  * initScrollBehavior()
  * Passive scroll listener: adds/removes .is-scrolled on the sticky <nav>.
- * Uses a boolean flag to skip classList calls when state has not changed.
+ * Must run AFTER the htmx header swap, because .site-nav does not exist until
+ * then. Guards against a missing nav and against re-querying on every scroll.
  */
 function initScrollBehavior() {
   const nav = document.querySelector('.site-nav');
@@ -571,55 +199,48 @@ function initScrollBehavior() {
 
 
 /* =============================================================================
-   §7 — MAIN ORCHESTRATOR
+   §7 — GLOBAL CHROME INIT (htmx lifecycle)
+   There is no JS header injection any more. setActiveNav() marks the link for
+   the current page; together with the scroll + theme-label sync it runs on the
+   htmx:afterSwap event — i.e. the moment the fetched header lands in the DOM.
    ============================================================================= */
 
 /**
- * injectGlobalComponents()
- *
- * Pipeline (in strict order):
- *   1. Resolve active page filename from pathname.
- *   2. Resolve & stamp theme on <html> before building templates
- *      (eliminates flash of wrong theme icon).
- *   3. Build HTML strings via GlobalTemplates factories.
- *   4. Write to #global-header-target and #global-footer-target.
- *   5. Bind all interactive listeners to freshly-injected nodes.
- *   6. Initialise scroll behaviour.
+ * setActiveNav()
+ * Stamps .is-active + aria-current="page" on the desktop and drawer links whose
+ * data-nav token matches the current page. Reuses the existing CSS selectors
+ * (.nav-links__link.is-active / .drawer-link.is-active) — no markup duplication.
  */
-function injectGlobalComponents() {
-  const activePage = resolveActivePage();
-
-  // Stamp theme before building templates — zero icon-flash guarantee
-  const theme = resolveInitialTheme();
-  document.documentElement.setAttribute('data-theme', theme);
-  localStorage.setItem(THEME_KEY, theme);
-
-  const headerTarget = document.getElementById('global-header-target');
-  const footerTarget = document.getElementById('global-footer-target');
-
-  if (!headerTarget) {
-    console.error('[ARP] #global-header-target not found. Add <div id="global-header-target"></div> as the first child of <body>.');
-    return;
-  }
-  if (!footerTarget) {
-    console.error('[ARP] #global-footer-target not found. Add <div id="global-footer-target"></div> before the closing </body>.');
-    return;
-  }
-
-  // Single innerHTML write per target to minimise reflows
-  headerTarget.innerHTML = GlobalTemplates.getHeader(activePage, theme)
-                         + GlobalTemplates.getMobileDrawer(activePage);
-  footerTarget.innerHTML = GlobalTemplates.getFooter();
-
-  // Bind all chrome interactions — must happen after innerHTML above
-  bindHamburger();
-  bindOverlay();
-  bindDrawerClose();
-  bindEscapeKey();
-  bindThemeToggle();
-  initScrollBehavior();
+function setActiveNav() {
+  const active = resolveActivePage();
+  document.querySelectorAll('.nav-links__link, .drawer-link').forEach((link) => {
+    const isActive = link.getAttribute('data-nav') === active;
+    link.classList.toggle('is-active', isActive);
+    if (isActive) link.setAttribute('aria-current', 'page');
+    else          link.removeAttribute('aria-current');
+  });
 }
 
+/**
+ * initGlobalChrome()
+ * Registers the htmx lifecycle hook + the document-level ESC handler.
+ * When htmx finishes swapping the header into #global-header-target, we:
+ *   1. mark the active nav link (setActiveNav)
+ *   2. sync the theme button aria-label (syncThemeButton)
+ *   3. start the sticky-nav scroll watcher (initScrollBehavior)
+ */
+function initGlobalChrome() {
+  bindEscapeKey();
+
+  document.body.addEventListener('htmx:afterSwap', (event) => {
+    // Only react to the header target — ignore any other future htmx swaps.
+    if (event.target && event.target.id === 'global-header-target') {
+      setActiveNav();
+      syncThemeButton();
+      initScrollBehavior();
+    }
+  });
+}
 
 /* =============================================================================
    §8 — HOMEPAGE: PUBLICATIONS PREVIEW STRIP
@@ -1475,8 +1096,11 @@ function bindContactForm() {
 
 document.addEventListener('DOMContentLoaded', () => {
 
-  // Must be first: injects header/nav/drawer/footer and binds all chrome events
-  injectGlobalComponents();
+  // Register the htmx:afterSwap hook + ESC handler. The header itself is fetched
+  // and rendered by htmx (partials/header.html); setActiveNav() then runs the
+  // moment that swap completes. Registered here so the listener exists before
+  // the async header fetch resolves.
+  initGlobalChrome();
 
   // Page-specific initializers — each self-selects via its own guard
   loadPublicationsPreview(); // index.html       → #publications-preview

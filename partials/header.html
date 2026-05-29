@@ -1,0 +1,135 @@
+<!--
+  BeyondGR Project — partials/header.html
+  ==========================================================================
+  Shared site chrome (header + primary nav + mobile drawer) for EVERY page.
+
+  Loaded once per page by htmx:
+      <div id="global-header-target"
+           hx-get="partials/header.html"
+           hx-trigger="load"
+           hx-swap="innerHTML"></div>
+
+  Active-page mapping
+  -------------------
+  This fragment is static, so no page baked in an "is-active" class. Each link
+  carries a `data-nav` token; js/app.js → setActiveNav() runs on htmx:afterSwap
+  and stamps `.is-active` + `aria-current="page"` on the link matching the
+  current URL (reuses the existing CSS selectors, no markup duplication).
+
+  Interactions (all wired through htmx `hx-on:click`, not a JS bind step)
+  ----------------------------------------------------------------------
+    .btn-theme-toggle  → toggleTheme()   flips <html data-theme> + persists
+    .btn-hamburger     → toggleDrawer()  opens / closes the drawer
+    .nav-overlay       → closeDrawer()   backdrop tap closes
+    .drawer-close-btn  → closeDrawer()   explicit close
+
+  The two theme SVGs are both present; CSS shows exactly one based on
+  [data-theme] (light → moon, dark → sun), so there is no icon flash.
+-->
+
+<header class="site-header" role="banner">
+  <div class="container">
+    <a href="index.html" class="site-logo" aria-label="BeyondGR Project — Home">
+      <svg class="logo-icon" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"
+           aria-hidden="true" focusable="false">
+        <circle cx="16" cy="16" r="2.5" fill="currentColor"/>
+        <rect x="14.5" y="1"  width="3" height="9" rx="1.5" fill="currentColor"/>
+        <rect x="14.5" y="22" width="3" height="9" rx="1.5" fill="currentColor"/>
+        <rect x="1"  y="14.5" width="9" height="3" rx="1.5" fill="currentColor"/>
+        <rect x="22" y="14.5" width="9" height="3" rx="1.5" fill="currentColor"/>
+        <rect x="15.2" y="5" width="1.8" height="6" rx="0.9" fill="currentColor" transform="rotate(45  16 16)"/>
+        <rect x="15.2" y="5" width="1.8" height="6" rx="0.9" fill="currentColor" transform="rotate(135 16 16)"/>
+        <rect x="15.2" y="5" width="1.8" height="6" rx="0.9" fill="currentColor" transform="rotate(225 16 16)"/>
+        <rect x="15.2" y="5" width="1.8" height="6" rx="0.9" fill="currentColor" transform="rotate(315 16 16)"/>
+      </svg>
+      <span class="site-header__logo-text">Beyond<strong>GR</strong></span>
+    </a>
+
+    <div class="header-institutions" aria-label="Partner institutions">
+      <a href="https://www.fni.bg/"
+         class="footer-logo-link"
+         target="_blank"
+         rel="noopener noreferrer"
+         aria-label="Bulgarian National Science Fund — opens in a new tab">
+        <img src="assets/logos/logo_FNI.png" alt="FNI Logo"
+             style="height: 80px; width: auto; object-fit: contain;">
+      </a>
+    </div>
+  </div>
+</header>
+
+<nav class="site-nav" role="navigation" aria-label="Primary site navigation">
+  <div class="container">
+    <ul class="nav-links" role="list">
+      <li class="nav-links__item"><a href="index.html"        class="nav-links__link" data-nav="index.html">Home</a></li>
+      <li class="nav-links__item"><a href="members.html"      class="nav-links__link" data-nav="members.html">Members</a></li>
+      <li class="nav-links__item"><a href="research.html"     class="nav-links__link" data-nav="research.html">Research</a></li>
+      <li class="nav-links__item"><a href="publications.html" class="nav-links__link" data-nav="publications.html">Publications</a></li>
+      <li class="nav-links__item"><a href="contacts.html"     class="nav-links__link" data-nav="contacts.html">Contacts</a></li>
+    </ul>
+
+    <div class="nav-controls">
+      <!-- Theme toggle: htmx-wired click flips the theme; CSS swaps the icon. -->
+      <button class="btn-theme-toggle" type="button"
+              aria-label="Toggle colour theme"
+              hx-on:click="toggleTheme()">
+        <!-- Shown in LIGHT mode (click → dark) -->
+        <svg class="theme-icon theme-icon--moon" xmlns="http://www.w3.org/2000/svg"
+             viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="currentColor">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+        </svg>
+        <!-- Shown in DARK mode (click → light) -->
+        <svg class="theme-icon theme-icon--sun" xmlns="http://www.w3.org/2000/svg"
+             viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="currentColor">
+          <circle cx="12" cy="12" r="5"/>
+          <line x1="12" y1="1"  x2="12" y2="3"  stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          <line x1="12" y1="21" x2="12" y2="23" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          <line x1="4.22"  y1="4.22"  x2="5.64"  y2="5.64"  stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          <line x1="1"  y1="12" x2="3"  y2="12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          <line x1="21" y1="12" x2="23" y2="12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          <line x1="4.22"  y1="19.78" x2="5.64"  y2="18.36" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          <line x1="18.36" y1="5.64"  x2="19.78" y2="4.22"  stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </button>
+
+      <button class="btn-hamburger" type="button"
+              aria-label="Open navigation menu"
+              aria-expanded="false"
+              aria-controls="mobile-nav-drawer"
+              hx-on:click="toggleDrawer()">
+        <span class="hamburger-line" aria-hidden="true"></span>
+        <span class="hamburger-line" aria-hidden="true"></span>
+        <span class="hamburger-line" aria-hidden="true"></span>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<!--
+  Mobile drawer. Structure requirement (matches existing CSS):
+    .mobile-nav-drawer            outer fixed wrapper (pointer-events: none)
+      .nav-overlay                full-screen backdrop  (child)
+      .mobile-nav-drawer__panel   sliding side panel     (child)
+-->
+<div class="mobile-nav-drawer" id="mobile-nav-drawer" aria-hidden="true">
+
+  <div class="nav-overlay" id="nav-overlay" aria-hidden="true"
+       hx-on:click="closeDrawer()"></div>
+
+  <nav class="mobile-nav-drawer__panel" aria-label="Mobile navigation">
+    <button class="drawer-close-btn" type="button"
+            aria-label="Close navigation menu"
+            hx-on:click="closeDrawer()">
+      <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+    </button>
+    <ul class="drawer-links" role="list">
+      <li class="nav-links__item"><a href="index.html"        class="drawer-link" data-nav="index.html"        hx-on:click="closeDrawer()">Home</a></li>
+      <li class="nav-links__item"><a href="members.html"      class="drawer-link" data-nav="members.html"      hx-on:click="closeDrawer()">Members</a></li>
+      <li class="nav-links__item"><a href="research.html"     class="drawer-link" data-nav="research.html"     hx-on:click="closeDrawer()">Research</a></li>
+      <li class="nav-links__item"><a href="publications.html" class="drawer-link" data-nav="publications.html" hx-on:click="closeDrawer()">Publications</a></li>
+      <li class="nav-links__item"><a href="contacts.html"     class="drawer-link" data-nav="contacts.html"     hx-on:click="closeDrawer()">Contacts</a></li>
+    </ul>
+  </nav>
+
+</div>
