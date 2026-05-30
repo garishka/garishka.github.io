@@ -1353,6 +1353,13 @@ p:last-child {
   .footer-institutional__row--funding {
     gap: var(--space-lg);
     align-items: center;
+    justify-content: flex-start;
+  }
+
+  /* Stop the grant text from flex-growing into the now-wide row; without this it
+     expands to fill the space and pushes the logo away from the text. */
+  .footer-institutional__row--funding .footer-institutional__grant-text {
+    flex: 0 0 auto;
   }
 }
 
