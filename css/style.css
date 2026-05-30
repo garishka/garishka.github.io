@@ -106,6 +106,9 @@
 
   /* Dark mode: logo becomes white so it pops on Deep Navy / Midnight Slate */
   --color-logo: #ffffff;
+
+  /* Subtle hover wash on dark nav/drawer surfaces */
+  --color-hover-overlay: rgba(255, 255, 255, 0.12);
 }
 
 
@@ -409,7 +412,7 @@ p:last-child {
 .nav-links__link:hover {
   opacity: 1;
   color: var(--color-accent);
-  background-color: rgba(255, 255, 255, 0.12);
+  background-color: --color-hover-overlay;
 }
 
 /* Active page indicator: gold background pill.
@@ -485,7 +488,7 @@ p:last-child {
 .nav-dropdown__link:hover,
 .nav-dropdown__link:focus-visible {
   color: var(--color-accent);
-  background-color: rgba(255, 255, 255, 0.12);
+  background-color: --color-hover-overlay;
   outline: none;
 }
 
@@ -508,9 +511,9 @@ p:last-child {
 
 /* Neutral hover/tap.
    Higher specificity than `.drawer-link:hover` so it wins where :hover sticks after a tap. */
-.drawer-has-submenu .drawer-submenu-toggle:hover,
-.drawer-has-submenu .drawer-submenu-toggle:focus-visible {
-  background-color: rgba(255, 255, 255, 0.12);
+.drawer-has-submenu .drawer-submenu-toggle:not(.is-active):hover,
+.drawer-has-submenu .drawer-submenu-toggle:not(.is-active):focus-visible {
+  background-color: --color-hover-overlay;
   color: var(--color-nav-text);
 }
 
@@ -546,14 +549,16 @@ p:last-child {
   font-size: var(--font-size-base);
   border-radius: var(--border-radius);
   text-decoration: none;
+  -webkit-tap-highlight-color: transparent;   /* no gray OS overlay on tap */
   transition: background-color var(--transition-fast), color var(--transition-fast);
 }
 
 .drawer-sublink:hover,
-.drawer-sublink:focus-visible {
+.drawer-sublink:focus-visible,
+.drawer-sublink:active {
   background-color: var(--color-accent);
   color: var(--color-primary);
-  outline: none;
+  opacity: 1;           
 }
 
 /* Nav right cluster: theme toggle + hamburger */
@@ -693,7 +698,7 @@ p:last-child {
   margin-bottom: var(--space-sm);
   border-radius: var(--border-radius);
   color: var(--color-nav-text);          /* light — overrides any default system tint */
-  background-color: rgba(255, 255, 255, 0.12);
+  background-color: --color-hover-overlay;
   line-height: 1;
   transition: background-color var(--transition-fast);
 }
@@ -843,7 +848,7 @@ p:last-child {
 
 .btn--secondary:hover {
   opacity: 1;
-  background-color: rgba(255, 255, 255, 0.12);
+  background-color: --color-hover-overlay;
   border-color: #FFFFFF;
 }
 
@@ -1137,7 +1142,7 @@ p:last-child {
 
 /* Footer bottom bar — single centred copyright line */
 .footer-bottom {
-  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  border-top: 1px solid --color-hover-overlay;
   padding-top: var(--space-lg);
   display: flex;
   align-items: center;
