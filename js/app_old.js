@@ -155,23 +155,6 @@ function closeDrawer() {
   setDrawer(false);
 }
 
-/**
- * toggleResearchSubmenu(toggleBtn)
- * Mobile drawer accordion: expands/collapses the Research sub-menu.
- * Called from the toggle button's hx-on:click in partials/header.html.
- * Flips aria-expanded (CSS rotates the arrow) and toggles the [hidden]
- * attribute on the sub-list referenced by aria-controls.
- * @param {HTMLElement} toggleBtn - the .drawer-submenu-toggle button (passed as `this`)
- */
-function toggleResearchSubmenu(toggleBtn) {
-  if (!toggleBtn) return;
-  const isExpanded = toggleBtn.getAttribute('aria-expanded') === 'true';
-  toggleBtn.setAttribute('aria-expanded', String(!isExpanded));
-
-  const submenu = document.getElementById(toggleBtn.getAttribute('aria-controls'));
-  if (submenu) submenu.hidden = isExpanded;   // was expanded → now hide, and vice-versa
-}
-
 
 /* =============================================================================
    §6 — EVENT BINDING (document-level + post-swap)
@@ -370,7 +353,7 @@ const loadPublicationsPreview = async () => {
     container.appendChild(fragment);
 
   } catch (err) {
-    console.error('[BeyondGR] loadPublicationsPreview failed:', err);
+    console.error('[ARP] loadPublicationsPreview failed:', err);
     const section = document.getElementById('publications-preview-section');
     if (section) section.hidden = true;
   }
@@ -680,7 +663,7 @@ const initPublicationsPage = async () => {
     publicationsData = await response.json();
     renderPublications(publicationsData);
   } catch (err) {
-    console.error('[BeyondGR] initPublicationsPage fetch failed:', err);
+    console.error('[ARP] initPublicationsPage fetch failed:', err);
     showState('error');
     if (countEl) countEl.textContent = '—';
   }
@@ -1026,7 +1009,7 @@ const loadMembers = async () => {
     showMembersState(null);
 
   } catch (err) {
-    console.error('[BeyondGR] loadMembers fetch failed:', err);
+    console.error('[ARP] loadMembers fetch failed:', err);
     showMembersState('error');
   }
 };
@@ -1254,7 +1237,7 @@ const loadArticle = async (filePath) => {
     viewer.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
   } catch (err) {
-    console.error('[BeyondGR] loadArticle failed:', err);
+    console.error('[ARP] loadArticle failed:', err);
     const errorMsg = document.getElementById('article-error-msg');
     if (errorMsg) {
       errorMsg.textContent =
@@ -1285,7 +1268,7 @@ function renderArticleMath(container) {
   // Guard: renderMathInElement is injected by the KaTeX auto-render CDN script.
   // If that script has not executed yet (CDN failure, slow network), exit cleanly.
   if (typeof renderMathInElement !== 'function') {
-    console.warn('[BeyondGR] KaTeX auto-render not available — math will not be typeset.');
+    console.warn('[ARP] KaTeX auto-render not available — math will not be typeset.');
     return;
   }
 
@@ -1546,7 +1529,7 @@ function initResearchPage() {
 
       if (!filePath) {
         // Authoring error: data-file attribute is missing on a sidebar item
-        console.warn('[BeyondGR] Sidebar item is missing a data-file attribute:', item);
+        console.warn('[ARP] Sidebar item is missing a data-file attribute:', item);
         return;
       }
 
@@ -1568,27 +1551,6 @@ function initResearchPage() {
         loadArticle(_researchState.lastFilePath);
       }
     });
-  }
-
-
-  // ── DEEP LINK ─────────────────────────────────────────────────────────────
-  // The header's Research dropdown links here as research.html?article=<slug>,
-  // where <slug> is the article filename without the "articles/" prefix or the
-  // ".html" suffix. If present, auto-select + load that article on arrival.
-  if (navList) {
-    const slug = new URLSearchParams(window.location.search).get('article');
-    if (slug) {
-      const target = [...navList.querySelectorAll('.sidebar-nav__item')].find((li) => {
-        const file = li.dataset.file || '';
-        return file.replace(/^.*\//, '').replace(/\.html$/, '') === slug;
-      });
-      const btn = target?.querySelector('.sidebar-nav__btn');
-      if (btn && target.dataset.file) {
-        updateActiveNavBtn(btn);
-        loadArticle(target.dataset.file);
-        target.scrollIntoView({ block: 'nearest' });
-      }
-    }
   }
 
 } // end initResearchPage()
@@ -2182,7 +2144,7 @@ const loadHomeResearchPreviews = async () => {
   fetchResults.forEach((result) => {
     if (result.status === 'rejected') {
       // Log the failure but continue rendering all successfully fetched cards
-      console.warn('[BeyondGR] loadHomeResearchPreviews: fetch failed —', result.reason);
+      console.warn('[ARP] loadHomeResearchPreviews: fetch failed —', result.reason);
       return;
     }
 

@@ -9,20 +9,6 @@
            hx-trigger="load"
            hx-swap="innerHTML"></div>
 
-  Active-page mapping
-  -------------------
-  This fragment is static, so no page baked in an "is-active" class. Each link
-  carries a `data-nav` token; js/app.js → setActiveNav() runs on htmx:afterSwap
-  and stamps `.is-active` + `aria-current="page"` on the link matching the
-  current URL (reuses the existing CSS selectors, no markup duplication).
-
-  Interactions (all wired through htmx `hx-on:click`, not a JS bind step)
-  ----------------------------------------------------------------------
-    .btn-theme-toggle  → toggleTheme()   flips <html data-theme> + persists
-    .btn-hamburger     → toggleDrawer()  opens / closes the drawer
-    .nav-overlay       → closeDrawer()   backdrop tap closes
-    .drawer-close-btn  → closeDrawer()   explicit close
-
   The two theme SVGs are both present; CSS shows exactly one based on
   [data-theme] (light → moon, dark → sun), so there is no icon flash.
 -->
@@ -63,24 +49,7 @@
     <ul class="nav-links" role="list">
       <li class="nav-links__item"><a href="index.html"        class="nav-links__link" data-nav="index.html">Home</a></li>
       <li class="nav-links__item"><a href="members.html"      class="nav-links__link" data-nav="members.html">Members</a></li>
-
-      <!-- Research: hover/focus reveals a dropdown of articles (desktop only). -->
-      <li class="nav-links__item nav-has-dropdown">
-        <a href="research.html" class="nav-links__link" data-nav="research.html">
-          Research
-          <svg class="nav-dropdown__arrow" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-            <path d="M6 9l6 6 6-6" fill="none" stroke="currentColor"
-                  stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        </a>
-        <ul class="nav-dropdown" role="menu" aria-label="Research articles">
-          <li role="none"><a role="menuitem" class="nav-dropdown__link" href="research.html?article=orbiting-hotspots">Orbiting Hotspots</a></li>
-          <li role="none"><a role="menuitem" class="nav-dropdown__link" href="research.html?article=linear-polarization-dm">Linear Polarization for Black Holes with a Dark Matter Halo</a></li>
-          <li role="none"><a role="menuitem" class="nav-dropdown__link" href="research.html?article=polarized-ring">Polarized Image of an Equatorial Emitting Ring</a></li>
-          <li role="none"><a role="menuitem" class="nav-dropdown__link" href="research.html?article=black-holes-dark-matter">Black Holes Surrounded by a Dark Matter Halo</a></li>
-        </ul>
-      </li>
-
+      <li class="nav-links__item"><a href="research.html"     class="nav-links__link" data-nav="research.html">Research</a></li>
       <li class="nav-links__item"><a href="publications.html" class="nav-links__link" data-nav="publications.html">Publications</a></li>
       <li class="nav-links__item"><a href="contacts.html"     class="nav-links__link" data-nav="contacts.html">Contacts</a></li>
     </ul>
@@ -143,26 +112,7 @@
     <ul class="drawer-links" role="list">
       <li class="nav-links__item"><a href="index.html"        class="drawer-link" data-nav="index.html"        hx-on:click="closeDrawer()">Home</a></li>
       <li class="nav-links__item"><a href="members.html"      class="drawer-link" data-nav="members.html"      hx-on:click="closeDrawer()">Members</a></li>
-
-      <!-- Research: tapping toggles the sub-menu open/closed (does not navigate). -->
-      <li class="nav-links__item drawer-has-submenu">
-        <button type="button" class="drawer-link drawer-submenu-toggle"
-                aria-expanded="false" aria-controls="drawer-research-submenu"
-                hx-on:click="toggleResearchSubmenu(this)">
-          Research
-          <svg class="drawer-submenu__arrow" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-            <path d="M6 9l6 6 6-6" fill="none" stroke="currentColor"
-                  stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        </button>
-        <ul class="drawer-submenu" id="drawer-research-submenu" role="list" hidden>
-          <li><a href="research.html?article=orbiting-hotspots"     class="drawer-sublink" hx-on:click="closeDrawer()">Orbiting Hotspots</a></li>
-          <li><a href="research.html?article=linear-polarization-dm" class="drawer-sublink" hx-on:click="closeDrawer()">Linear Polarization for Black Holes with a Dark Matter Halo</a></li>
-          <li><a href="research.html?article=polarized-ring"        class="drawer-sublink" hx-on:click="closeDrawer()">Polarized Image of an Equatorial Emitting Ring</a></li>
-          <li><a href="research.html?article=black-holes-dark-matter" class="drawer-sublink" hx-on:click="closeDrawer()">Black Holes Surrounded by a Dark Matter Halo</a></li>
-        </ul>
-      </li>
-
+      <li class="nav-links__item"><a href="research.html"     class="drawer-link" data-nav="research.html"     hx-on:click="closeDrawer()">Research</a></li>
       <li class="nav-links__item"><a href="publications.html" class="drawer-link" data-nav="publications.html" hx-on:click="closeDrawer()">Publications</a></li>
       <li class="nav-links__item"><a href="contacts.html"     class="drawer-link" data-nav="contacts.html"     hx-on:click="closeDrawer()">Contacts</a></li>
     </ul>
