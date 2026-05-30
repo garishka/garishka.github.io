@@ -491,25 +491,34 @@ p:last-child {
 
 /* ---- Mobile drawer sub-menu (accordion) ---- */
 
-/* The Research toggle reuses .drawer-link styling but needs row layout + a
-   button reset so the label and arrow sit on opposite ends. */
-.drawer-submenu-toggle {
+/* Scoped under .drawer-has-submenu so it outranks `.drawer-link` (defined later,
+   which otherwise forced display:block → arrow wrapped below + amber hover). */
+.drawer-has-submenu .drawer-submenu-toggle {
   width: 100%;
-  display: inline-block;
+  display: flex;                
   align-items: center;
   justify-content: space-between;
   gap: var(--space-sm);
   background: none;
   border: none;
   cursor: pointer;
-  font: inherit;
+  font-family: inherit;          
   text-align: left;
 }
 
+/* Neutral hover/tap.
+   Higher specificity than `.drawer-link:hover` so it wins where :hover sticks after a tap. */
+.drawer-has-submenu .drawer-submenu-toggle:hover,
+.drawer-has-submenu .drawer-submenu-toggle:focus-visible {
+  background-color: rgba(255, 255, 255, 0.12);
+  color: var(--color-nav-text);
+}
+
 .drawer-submenu__arrow {
-  width: 1em;
-  height: 1em;
-  flex-shrink: 0;
+  display: block;        /* flex item, sits beside the label */
+  width: 1rem;
+  height: 1rem;
+  flex: 0 0 auto;        
   transition: transform var(--transition-fast);
 }
 

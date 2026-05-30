@@ -9,20 +9,6 @@
            hx-trigger="load"
            hx-swap="innerHTML"></div>
 
-  Active-page mapping
-  -------------------
-  This fragment is static, so no page baked in an "is-active" class. Each link
-  carries a `data-nav` token; js/app.js → setActiveNav() runs on htmx:afterSwap
-  and stamps `.is-active` + `aria-current="page"` on the link matching the
-  current URL (reuses the existing CSS selectors, no markup duplication).
-
-  Interactions (all wired through htmx `hx-on:click`, not a JS bind step)
-  ----------------------------------------------------------------------
-    .btn-theme-toggle  → toggleTheme()   flips <html data-theme> + persists
-    .btn-hamburger     → toggleDrawer()  opens / closes the drawer
-    .nav-overlay       → closeDrawer()   backdrop tap closes
-    .drawer-close-btn  → closeDrawer()   explicit close
-
   The two theme SVGs are both present; CSS shows exactly one based on
   [data-theme] (light → moon, dark → sun), so there is no icon flash.
 -->
@@ -150,7 +136,7 @@
                 aria-expanded="false" aria-controls="drawer-research-submenu"
                 hx-on:click="toggleResearchSubmenu(this)">
           Research
-          <svg class="drawer-submenu__arrow" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <svg class="drawer-submenu__arrow" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false">
             <path d="M6 9l6 6 6-6" fill="none" stroke="currentColor"
                   stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
