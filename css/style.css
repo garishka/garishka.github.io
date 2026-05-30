@@ -495,7 +495,7 @@ p:last-child {
    button reset so the label and arrow sit on opposite ends. */
 .drawer-submenu-toggle {
   width: 100%;
-  display: flex;
+  display: inline-block;
   align-items: center;
   justify-content: space-between;
   gap: var(--space-sm);
