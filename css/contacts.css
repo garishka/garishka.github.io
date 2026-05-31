@@ -12,12 +12,13 @@
      §21   .accent-rule (defined globally in style.css — no override needed)
      §22   Address card scoped overrides inside dashboard
      §23   .inquiries-section — full-width white card
-     §24   .inquiries-grid — responsive PI card grid
+     §24   .inquiries-grid — single-column directory list
+     §24b  .inquiries-body / .inquiries-figure — directory + decorative SVG
      §25   Map wrapper, iframe, anti-trapping states
      §26   Map overlay & prompt badge
      §27   Map external link
      §28   .address-card — base standalone card rules
-     §29   .directory-list / item / link
+     §SH   .section-title — shared section heading (defined near top)
      §30   .btn-contact-cta
      §31   .pi-card — individual researcher contact cards
      §32   .hours-grid — office hours definition list
@@ -32,6 +33,28 @@
    -------------------------------------------------------------------------- */
 .contacts-section {
   padding-block: var(--space-3xl);
+}
+
+
+/* --------------------------------------------------------------------------
+   §SH  SECTION TITLE — Shared heading style (single source of truth)
+   One rule for every section heading. "Our Location" and "Project
+   Inquiries" both carry class="section-title"; add the class to any new
+   section's <h2>/<h3> and it matches automatically. Sized at --font-size-h2.
+   -------------------------------------------------------------------------- */
+.section-title {
+  font-size: var(--font-size-h2);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-primary);
+  line-height: 1.2;
+  margin: 0;
+  transition: color var(--transition-base);
+}
+
+/* Dark mode: --color-primary (#001A33) disappears on the navy card surface,
+   so section titles switch to accent gold. */
+[data-theme="dark"] .section-title {
+  color: var(--color-accent);
 }
 
 
@@ -141,12 +164,6 @@
   margin-bottom: 0;
 }
 
-/* Dark mode: --color-primary = #001A33 is invisible on Deep Navy card surface.
-   Override heading to accent gold. */
-[data-theme="dark"] .location-dashboard__address .address-card__heading {
-  color: var(--color-accent);
-}
-
 /* Centre the "Get Directions" button inside the flex-column address panel */
 .location-dashboard__address .address-card__directions-btn {
   align-self: center;
@@ -195,47 +212,80 @@
   color: var(--color-accent);
 }
 
-.inquiries-section__title {
-  font-size: var(--font-size-h2);
-  font-weight: var(--font-weight-bold);
-  color: var(--color-primary);
-  line-height: 1.2;
-  margin: 0;
-  transition: color var(--transition-base);
-}
+/* Heading text "Project Inquiries" is styled by the shared .section-title
+   rule near the top of this file — no per-title rule needed here. */
 
-[data-theme="dark"] .inquiries-section__title {
-  color: var(--color-accent);
+
+/* --------------------------------------------------------------------------
+   §24  INQUIRIES LIST
+   Always one column at every breakpoint. Vertical rhythm between
+   contacts is whitespace only, matching the monochromatic,
+   content-first brief. The .accent-rule above supplies the top spacing.
+   -------------------------------------------------------------------------- */
+.inquiries-grid {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);   /* 24px breathing room between contacts */
+  margin-top: 0;
+  flex: 0 1 auto;         /* size to content; don't stretch across the row */
+  min-width: 0;           /* let long emails shrink rather than overflow */
 }
 
 
 /* --------------------------------------------------------------------------
-   §24  INQUIRIES GRID — Responsive PI card grid
-
-   Mobile-first: 1 column.
-   Tablet  (768px–991px): 2 equal columns.
-   Desktop (≥992px):      3 equal columns.
-
-   Gap locked to --grid-gap (24px) per project specification.
+   §24b INQUIRIES BODY — directory + decorative figure, side by side
+   Mobile-first: single column (the figure is hidden on mobile anyway).
+   ≥768px: row — the directory sizes to its content; the figure fills the
+   remaining whitespace with the art centred inside it.
    -------------------------------------------------------------------------- */
-.inquiries-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: var(--grid-gap);
-  align-items: start;
-  margin-top: 0;
+.inquiries-body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xl);
 }
 
 @media (min-width: 768px) {
-  .inquiries-grid {
-    grid-template-columns: repeat(2, 1fr);
+  .inquiries-body {
+    flex-direction: row;
+    align-items: center;          /* centre the figure against the list */
+    gap: var(--space-2xl);
   }
 }
 
-@media (min-width: 992px) {
-  .inquiries-grid {
-    grid-template-columns: repeat(3, 1fr);
-  }
+/* DECORATIVE FIGURE — unDraw illustration filling the right-hand whitespace.
+   `color` drives currentColor inside the SVG: primary blue in light mode,
+   accent gold in dark mode (same idiom as the section icon and title). */
+.inquiries-figure {
+  flex: 1 1 auto;                 /* fill the whitespace to the right of the list */
+  display: flex;
+  justify-content: center;        /* centre the art horizontally in that space */
+  align-items: center;
+  color: var(--color-primary);
+}
+
+[data-theme="dark"] .inquiries-figure {
+  color: var(--color-accent);
+}
+
+.inquiries-figure svg {
+  display: block;
+  width: clamp(150px, 15vw, 200px);   /* fixed visual size; centred by the flex parent */
+  height: auto;                       /* viewBox preserves the aspect ratio */
+}
+
+/* Recolour unDraw's baked-in palette to theme tokens. A CSS `fill` wins over
+   the SVG's own fill attribute, so the markup stays pristine. If you swap in
+   a different unDraw illustration later, update these hex selectors to match
+   its palette: send its accent hex to currentColor, keep the rest mapped. */
+.inquiries-figure [fill="#6c63ff"] { fill: currentColor; }          /* accent: plane + badge   */
+.inquiries-figure [fill="#3f3d56"] { fill: var(--color-text); }     /* ink / line work          */
+.inquiries-figure [fill="#090814"] { fill: var(--color-text); }     /* dark detail (envelope)   */
+.inquiries-figure [fill="#d6d6e3"] { fill: var(--color-border); }   /* faint background swoosh  */
+.inquiries-figure [fill="#fff"]    { fill: var(--color-card-bg); }  /* checkmark = card surface */
+
+/* Hide the portrait figure on mobile so it never crowds the single column. */
+@media (max-width: 767px) {
+  .inquiries-figure { display: none; }
 }
 
 
@@ -411,15 +461,7 @@
   fill: var(--color-accent);
 }
 
-.address-card__heading {
-  font-size: var(--font-size-h3);
-  color: var(--color-primary);
-  margin: 0;
-}
-
-[data-theme="dark"] .address-card__heading {
-  color: var(--color-accent);
-}
+/* "Our Location" heading is styled by the shared .section-title rule. */
 
 .address-card__body {
   display: grid;
@@ -453,75 +495,6 @@
 .address-card__directions-btn {
   align-self: flex-start;
   margin-top: var(--space-xs);
-}
-
-
-/* --------------------------------------------------------------------------
-   §29  DIRECTORY LIST — Label / value rows inside directory blocks
-   -------------------------------------------------------------------------- */
-.directory-list {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-sm);
-}
-
-.directory-list--compact {
-  gap: var(--space-xs);
-}
-
-.directory-item {
-  display: flex;
-  align-items: baseline;
-  gap: var(--space-sm);
-  flex-wrap: wrap;
-  font-size: var(--font-size-sm);
-  line-height: 1.5;
-}
-
-.directory-item__label {
-  font-weight: var(--font-weight-bold);
-  color: var(--color-text-muted);
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  flex-shrink: 0;
-  min-width: 80px;
-}
-
-.directory-item__value {
-  color: var(--color-text);
-  transition: color var(--transition-base);
-}
-
-.directory-item__value--link {
-  color: var(--color-primary);
-  text-decoration: none;
-  font-weight: var(--font-weight-bold);
-  border-bottom: 1px solid transparent;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  max-width: 100%;
-  transition: color var(--transition-fast),
-              border-color var(--transition-fast),
-              opacity var(--transition-fast);
-}
-
-.directory-item__value--link:hover,
-.directory-item__value--link:focus-visible {
-  opacity: 1;
-  color: var(--color-accent);
-  border-bottom-color: var(--color-accent);
-  outline: none;
-}
-
-[data-theme="dark"] .directory-item__value--link {
-  color: var(--color-accent);
-}
-
-[data-theme="dark"] .directory-item__value--link:hover,
-[data-theme="dark"] .directory-item__value--link:focus-visible {
-  color: #FFFFFF;
-  border-bottom-color: var(--color-accent);
 }
 
 
@@ -570,81 +543,52 @@
 
 
 /* --------------------------------------------------------------------------
-   §31  PI CARDS — Individual researcher contact cards
-   Background uses --color-bg-alt so cards contrast against the white
-   .inquiries-section surface. In dark mode they use Midnight Slate (#0A2540),
-   one step lighter than the Deep Navy card background.
+   §31  PI CONTACTS
+    A single tight stack of name → title → email, separated from neighbours 
+    by the grid gap.
    -------------------------------------------------------------------------- */
 .pi-card {
   display: flex;
   flex-direction: column;
-  gap: var(--space-sm);
-  padding: var(--space-md);
-  background-color: var(--color-bg-alt);
-  border: 1px solid var(--color-border);
-  border-radius: var(--border-radius);
-  transition: background-color var(--transition-base),
-              border-color var(--transition-base),
-              box-shadow var(--transition-base);
-}
-
-[data-theme="dark"] .pi-card {
-  background-color: #0A2540;
-  border-color: #1E3A5F;
-}
-
-.pi-card:hover {
-  box-shadow: var(--shadow-sm);
-  border-color: var(--color-accent);
-}
-
-.pi-card__identity {
-  display: flex;
-  align-items: center;
-  gap: var(--space-md);
-}
-
-.pi-card__avatar {
-  width: 44px;
-  height: 44px;
-  flex-shrink: 0;
-  border-radius: 50%;
-  background-color: var(--color-border);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-  color: var(--color-text-muted);
-  transition: background-color var(--transition-base);
-}
-
-.pi-card__avatar svg {
-  width: 100%;
-  height: 100%;
-}
-
-.pi-card__info {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
+  gap: 2px;               
 }
 
 .pi-card__name {
   font-size: var(--font-size-base);
   font-weight: var(--font-weight-bold);
-  color: var(--color-primary);
+  color: var(--color-text);
   margin: 0;
-  transition: color var(--transition-base);
-}
-
-[data-theme="dark"] .pi-card__name {
-  color: var(--color-accent);
 }
 
 .pi-card__role {
   font-size: var(--font-size-sm);
   color: var(--color-text-muted);
   margin: 0;
+}
+
+.pi-card__email {
+  align-self: flex-start;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  text-decoration: underline;
+  text-decoration-color: transparent;   /* hidden until hover */
+  text-underline-offset: 3px;
+  transition: text-decoration-color var(--transition-base);
+}
+
+/* Row hover: ONLY the underline appears, in accent gold.
+   The email text — and the name + title — stay exactly as they are. */
+.pi-card:hover .pi-card__email {
+  text-decoration-color: var(--color-accent);
+}
+
+/* Keyboard parity — focusing the link reveals the same accent underline,
+   plus a visible focus ring. Text colour stays muted. */
+.pi-card__email:focus-visible {
+  text-decoration-color: var(--color-accent);
+  outline: 2px solid var(--color-accent);
+  outline-offset: 3px;
+  border-radius: 2px;
 }
 
 
@@ -763,10 +707,6 @@
 
   .hours-row__note {
     display: none;
-  }
-
-  .directory-item__label {
-    min-width: 64px;
   }
 
   .contacts-section {

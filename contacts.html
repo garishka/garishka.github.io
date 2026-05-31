@@ -11,13 +11,11 @@
             Desktop  (≥992px):  row   → map 60% | address 40%
             Tablet  (<992px):   column → map (full width) → address stacked below
             Mobile  (<768px):   column → map 16:9 AR → address below
-      [2] .inquiries-section   — full-width white card, responsive pi-card grid
-            Desktop  (≥992px):  3 columns
-            Tablet   (768–991): 2 columns
-            Mobile   (<768px):  1 column
-          Gergana Daskalova (.pi-card--admin) is the 7th card in a 3-col grid;
-          auto-flow naturally places her at column 1 (leftmost) of row 3.
-          No explicit grid-column override needed.
+      [2] .inquiries-section   — full-width white card (--color-card-bg / #FFFFFF)
+            Holds a single-column directory of seamless .pi-card rows
+            (name → title → email) at every breakpoint. The white surface
+            lives on .inquiries-section itself — keep that class on the
+            section element or the grey .page-body shows through.
 -->
 <head>
   <meta charset="UTF-8" />
@@ -190,7 +188,7 @@
                              c0-3.866-3.134-7-7-7z"/>
                     <circle cx="12" cy="9" r="2.5" fill="var(--color-bg)"/>
                   </svg>
-                  <h3 class="address-card__heading">Our Location</h3>
+                  <h3 class="section-title">Our Location</h3>
                 </div>
 
                 <!--
@@ -250,10 +248,10 @@
 
           <!-- ============================================================
                BLOCK 2 — PROJECT INQUIRIES
-               Same white-card treatment as the location dashboard above.
-               Responsive grid: 3 col (≥992px) → 2 col (768–991px) → 1 col.
-               Gergana Daskalova is card 7 in a 3-col grid: auto-flow
-               places her at column 1 (leftmost) of row 3 — no override needed.
+               Same white-card treatment as the dashboard above: the
+               .inquiries-section element carries the --color-card-bg
+               (#FFFFFF) surface. Contents are a single-column directory
+               of seamless contact rows.
                ============================================================ -->
           <section class="inquiries-section" aria-labelledby="inquiries-heading">
 
@@ -267,7 +265,7 @@
                       fill="none" stroke="currentColor" stroke-width="1.8"
                       stroke-linecap="round"/>
               </svg>
-              <h2 class="inquiries-section__title" id="inquiries-heading">
+              <h2 class="section-title" id="inquiries-heading">
                 Project Inquiries
               </h2>
             </header>
@@ -278,259 +276,89 @@
             -->
             <hr class="accent-rule" aria-hidden="true" />
 
-            <div class="inquiries-grid">
+          <!-- PROJECT INQUIRIES — directory rows (left) + decorative figure (right, desktop). -->
+          <div class="inquiries-body">
 
-              <!-- --------------------------------------------------------
-                   CARD 1 — Project Secretary
-                   -------------------------------------------------------- -->
-              <article class="pi-card" aria-label="Project secretary contact card">
-                <div class="pi-card__identity">
-                  <div class="pi-card__avatar" role="img"
-                       aria-label="Photo placeholder for the Project Secretary">
-                    <svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg"
-                         aria-hidden="true" focusable="false">
-                      <circle cx="20" cy="15" r="7" fill="currentColor" opacity="0.35"/>
-                      <path d="M5 36c0-8 6.7-13 15-13s15 5 15 13"
-                            fill="currentColor" opacity="0.25"/>
-                    </svg>
-                  </div>
-                  <div class="pi-card__info">
-                    <p class="pi-card__name">Secretary Name</p>
-                    <p class="pi-card__role">Project Secretary</p>
-                  </div>
-                </div>
-                <ul class="directory-list directory-list--compact" role="list">
-                  <li class="directory-item">
-                    <span class="directory-item__label">Email</span>
-                    <a class="directory-item__value directory-item__value--link"
-                       href="mailto:secretary@uni-sofia.bg"
-                       aria-label="Send email to the Project Secretary">
-                      secretary@uni-sofia.bg
-                    </a>
-                  </li>
-                  <li class="directory-item">
-                    <span class="directory-item__label">Office</span>
-                    <span class="directory-item__value">Room 123, Main Bldg.</span>
-                  </li>
-                </ul>
-              </article>
+          <div class="inquiries-grid">
+          
+            <!-- Project Secretary -->
+            <article class="pi-card" aria-label="Project Secretary contact">
+              <p class="pi-card__name">Secretary Name</p>
+              <p class="pi-card__role">Project Secretary</p>
+              <a class="pi-card__email"
+                 href="mailto:secretary@uni-sofia.bg"
+                 aria-label="Email the Project Secretary">secretary@uni-sofia.bg</a>
+            </article>
+          
+            <!-- Group Leader -->
+            <article class="pi-card" aria-label="Group Leader: Dr. Petya G. Nedkova">
+              <p class="pi-card__name">Dr. Petya Nedkova</p>
+              <p class="pi-card__role">Group Leader</p>
+              <a class="pi-card__email"
+                 href="mailto:pnedkova@phys.uni-sofia.bg"
+                 aria-label="Email Dr. Petya Nedkova">pnedkova@phys.uni-sofia.bg</a>
+            </article>
+          
+            <!-- Researcher -->
+            <article class="pi-card" aria-label="Associate Professor: Dr. Galin N. Gyulchev">
+              <p class="pi-card__name">Dr. Galin Gyulchev</p>
+              <p class="pi-card__role">Researcher</p>
+              <a class="pi-card__email"
+                 href="mailto:gyulchev@phys.uni-sofia.bg"
+                 aria-label="Email Dr. Galin Gyulchev">gyulchev@phys.uni-sofia.bg</a>
+            </article>
+          
+            <!-- Researcher -->
+            <article class="pi-card" aria-label="Professor: Stoytcho Yazadjiev">
+              <p class="pi-card__name">Prof. Stoytcho Yazadjiev</p>
+              <p class="pi-card__role">Senior Researcher</p>
+              <a class="pi-card__email"
+                 href="mailto:yazad@phys.uni-sofia.bg"
+                 aria-label="Email Prof. Stoytcho Yazadjiev">yazad@phys.uni-sofia.bg</a>
+            </article>
 
-              <!-- --------------------------------------------------------
-                   CARD 2 — Group Leader
-                   -------------------------------------------------------- -->
-              <article class="pi-card" aria-label="Group leader contact card">
-                <div class="pi-card__identity">
-                  <div class="pi-card__avatar" role="img"
-                       aria-label="Photo placeholder for Dr. Petya Nedkova">
-                    <svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg"
-                         aria-hidden="true" focusable="false">
-                      <circle cx="20" cy="15" r="7" fill="currentColor" opacity="0.35"/>
-                      <path d="M5 36c0-8 6.7-13 15-13s15 5 15 13"
-                            fill="currentColor" opacity="0.25"/>
-                    </svg>
-                  </div>
-                  <div class="pi-card__info">
-                    <p class="pi-card__name">Dr. Petya G. Nedkova</p>
-                    <p class="pi-card__role">Group Leader</p>
-                  </div>
-                </div>
-                <ul class="directory-list directory-list--compact" role="list">
-                  <li class="directory-item">
-                    <span class="directory-item__label">Email</span>
-                    <a class="directory-item__value directory-item__value--link"
-                       href="mailto:pnedkova@phys.uni-sofia.bg"
-                       aria-label="Send email to Dr. Nedkova">
-                      pnedkova@phys.uni-sofia.bg
-                    </a>
-                  </li>
-                  <li class="directory-item">
-                    <span class="directory-item__label">Office</span>
-                    <span class="directory-item__value">Room 4(?), Physics Bldg. "B"</span>
-                  </li>
-                </ul>
-              </article>
+            <!-- Researcher -->
+            <article class="pi-card" aria-label="Assistant Professor: Valentin Deliyski">
+              <p class="pi-card__name">Dr. Valentin Deliyski</p>
+              <p class="pi-card__role">Junior Researcher</p>
+              <a class="pi-card__email"
+                 href="mailto:valentin.deliyski@phys.uni-sofia.bg"
+                 aria-label="Email Valentin Deliyski">valentin.deliyski@phys.uni-sofia.bg</a>
+            </article>
 
-              <!-- --------------------------------------------------------
-                   CARD 3 — Assoc. Prof. Gyulchev
-                   -------------------------------------------------------- -->
-              <article class="pi-card" aria-label="Researcher contact card">
-                <div class="pi-card__identity">
-                  <div class="pi-card__avatar" role="img"
-                       aria-label="Photo placeholder for Dr. Galin Gyulchev">
-                    <svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg"
-                         aria-hidden="true" focusable="false">
-                      <circle cx="20" cy="15" r="7" fill="currentColor" opacity="0.35"/>
-                      <path d="M5 36c0-8 6.7-13 15-13s15 5 15 13"
-                            fill="currentColor" opacity="0.25"/>
-                    </svg>
-                  </div>
-                  <div class="pi-card__info">
-                    <p class="pi-card__name">Dr. Galin N. Gyulchev</p>
-                    <p class="pi-card__role">Assoc. Prof.</p>
-                  </div>
-                </div>
-                <ul class="directory-list directory-list--compact" role="list">
-                  <li class="directory-item">
-                    <span class="directory-item__label">Email</span>
-                    <a class="directory-item__value directory-item__value--link"
-                       href="mailto:gyulchev@phys.uni-sofia.bg"
-                       aria-label="Send email to Dr. Gyulchev">
-                      gyulchev@phys.uni-sofia.bg
-                    </a>
-                  </li>
-                  <li class="directory-item">
-                    <span class="directory-item__label">Office</span>
-                    <span class="directory-item__value">Room 4(?), Physics Bldg. "B"</span>
-                  </li>
-                </ul>
-              </article>
+            <!-- Researcher -->
+            <article class="pi-card" aria-label="Associate Professor: Dr. Kalin V. Staykov">
+              <p class="pi-card__name">Dr. Kalin Staykov</p>
+              <p class="pi-card__role">Researcher</p>
+              <a class="pi-card__email"
+                 href="mailto:kstaykov@phys.uni-sofia.bg"
+                 aria-label="Email Dr. Kalin Staykov">kstaykov@phys.uni-sofia.bg</a>
+            </article>
+          
+            <!-- PhD Candidate & Site Admin -->
+            <article class="pi-card" aria-label="PhD Candidate and Site Admin: Gergana Daskalova">
+              <p class="pi-card__name">Gergana Daskalova</p>
+              <p class="pi-card__role">PhD Candidate &amp; Site Admin</p>
+              <a class="pi-card__email"
+                 href="mailto:gidaskalov@phys.uni-sofia.bg"
+                 aria-label="Email Gergana Daskalova">gidaskalov@phys.uni-sofia.bg</a>
+            </article>
+          
+          </div>
+          <!-- /inquiries-grid -->
 
-              <!-- --------------------------------------------------------
-                   CARD 4 — Assoc. Prof. Staykov
-                   -------------------------------------------------------- -->
-              <article class="pi-card" aria-label="Researcher contact card">
-                <div class="pi-card__identity">
-                  <div class="pi-card__avatar" role="img"
-                       aria-label="Photo placeholder for Dr. Kalin Staykov">
-                    <svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg"
-                         aria-hidden="true" focusable="false">
-                      <circle cx="20" cy="15" r="7" fill="currentColor" opacity="0.35"/>
-                      <path d="M5 36c0-8 6.7-13 15-13s15 5 15 13"
-                            fill="currentColor" opacity="0.25"/>
-                    </svg>
-                  </div>
-                  <div class="pi-card__info">
-                    <p class="pi-card__name">Dr. Kalin V. Staykov</p>
-                    <p class="pi-card__role">Assoc. Prof.</p>
-                  </div>
-                </div>
-                <ul class="directory-list directory-list--compact" role="list">
-                  <li class="directory-item">
-                    <span class="directory-item__label">Email</span>
-                    <a class="directory-item__value directory-item__value--link"
-                       href="mailto:kstaykov@phys.uni-sofia.bg"
-                       aria-label="Send email to Dr. Staykov">
-                      kstaykov@phys.uni-sofia.bg
-                    </a>
-                  </li>
-                  <li class="directory-item">
-                    <span class="directory-item__label">Office</span>
-                    <span class="directory-item__value">Room 4(?), Physics Bldg. "B"</span>
-                  </li>
-                </ul>
-              </article>
-
-              <!-- --------------------------------------------------------
-                   CARD 5 — Prof. Yazadjiev
-                   -------------------------------------------------------- -->
-              <article class="pi-card" aria-label="Researcher contact card">
-                <div class="pi-card__identity">
-                  <div class="pi-card__avatar" role="img"
-                       aria-label="Photo placeholder for Prof. Stoytcho Yazadjiev">
-                    <svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg"
-                         aria-hidden="true" focusable="false">
-                      <circle cx="20" cy="15" r="7" fill="currentColor" opacity="0.35"/>
-                      <path d="M5 36c0-8 6.7-13 15-13s15 5 15 13"
-                            fill="currentColor" opacity="0.25"/>
-                    </svg>
-                  </div>
-                  <div class="pi-card__info">
-                    <p class="pi-card__name">Stoytcho Yazadjiev</p>
-                    <p class="pi-card__role">Prof.</p>
-                  </div>
-                </div>
-                <ul class="directory-list directory-list--compact" role="list">
-                  <li class="directory-item">
-                    <span class="directory-item__label">Email</span>
-                    <a class="directory-item__value directory-item__value--link"
-                       href="mailto:yazad@phys.uni-sofia.bg"
-                       aria-label="Send email to Prof. Yazadjiev">
-                      yazad@phys.uni-sofia.bg
-                    </a>
-                  </li>
-                  <li class="directory-item">
-                    <span class="directory-item__label">Office</span>
-                    <span class="directory-item__value">Room 4(?), Physics Bldg. "B"</span>
-                  </li>
-                </ul>
-              </article>
-
-              <!-- --------------------------------------------------------
-                   CARD 6 — Asst. Prof. Deliyski
-                   -------------------------------------------------------- -->
-              <article class="pi-card" aria-label="Researcher contact card">
-                <div class="pi-card__identity">
-                  <div class="pi-card__avatar" role="img"
-                       aria-label="Photo placeholder for Dr. Valentin Deliyski">
-                    <svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg"
-                         aria-hidden="true" focusable="false">
-                      <circle cx="20" cy="15" r="7" fill="currentColor" opacity="0.35"/>
-                      <path d="M5 36c0-8 6.7-13 15-13s15 5 15 13"
-                            fill="currentColor" opacity="0.25"/>
-                    </svg>
-                  </div>
-                  <div class="pi-card__info">
-                    <p class="pi-card__name">Valentin Deliyski</p>
-                    <p class="pi-card__role">Asst. Prof.</p>
-                  </div>
-                </div>
-                <ul class="directory-list directory-list--compact" role="list">
-                  <li class="directory-item">
-                    <span class="directory-item__label">Email</span>
-                    <a class="directory-item__value directory-item__value--link"
-                       href="mailto:valentin.deliyski@phys.uni-sofia.bg"
-                       aria-label="Send email to Dr. Deliyski">
-                      valentin.deliyski@phys.uni-sofia.bg
-                    </a>
-                  </li>
-                  <li class="directory-item">
-                    <span class="directory-item__label">Office</span>
-                    <span class="directory-item__value">Room 4(?), Physics Bldg. "B"</span>
-                  </li>
-                </ul>
-              </article>
-
-              <!-- --------------------------------------------------------
-                   CARD 7 — PhD Candidate & Site Admin  (LAST IN SOURCE)
-                   With 7 cards in a 3-col grid, auto-flow places this card
-                   at column 1 (leftmost) of row 3 — exactly as required.
-                   No explicit grid-column override is needed.
-                   -------------------------------------------------------- -->
-              <article class="pi-card pi-card--admin"
-                       aria-label="PhD candidate and site administrator contact card">
-                <div class="pi-card__identity">
-                  <div class="pi-card__avatar" role="img"
-                       aria-label="Photo placeholder for Gergana Daskalova">
-                    <svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg"
-                         aria-hidden="true" focusable="false">
-                      <circle cx="20" cy="15" r="7" fill="currentColor" opacity="0.35"/>
-                      <path d="M5 36c0-8 6.7-13 15-13s15 5 15 13"
-                            fill="currentColor" opacity="0.25"/>
-                    </svg>
-                  </div>
-                  <div class="pi-card__info">
-                    <p class="pi-card__name">Gergana Daskalova</p>
-                    <p class="pi-card__role">PhD Candidate &amp; Site Admin</p>
-                  </div>
-                </div>
-                <ul class="directory-list directory-list--compact" role="list">
-                  <li class="directory-item">
-                    <span class="directory-item__label">Email</span>
-                    <a class="directory-item__value directory-item__value--link"
-                       href="mailto:gidaskalov@phys.uni-sofia.bg"
-                       aria-label="Send email to G. Daskalova">
-                      gidaskalov@phys.uni-sofia.bg
-                    </a>
-                  </li>
-                  <li class="directory-item">
-                    <span class="directory-item__label">Office</span>
-                    <span class="directory-item__value">Room 4(?), Physics Bldg. "B"</span>
-                  </li>
-                </ul>
-              </article>
-
+            <!-- Decorative unDraw "message sent" figure. Purely ornamental, so
+                 it carries aria-hidden and is removed from the accessibility
+                 tree. It is recoloured to the active theme by the
+                 .inquiries-figure rules in contacts.css (the SVG's own fill
+                 attributes are left untouched and overridden by CSS). Hidden
+                 on mobile so it never crowds the single-column list. -->
+            <div class="inquiries-figure" aria-hidden="true">
+              <svg xmlns="http://www.w3.org/2000/svg" width="669.968" height="800" viewBox="0 0 669.968 800" xmlns:xlink="http://www.w3.org/1999/xlink" role="img" artist="Katerina Limpitsouni" source="https://undraw.co/"><g transform="translate(-812.59 -478.945)"><g transform="translate(1066.401 478.945)"><path d="M361.828,423.025l383.567-82.742,4.985-1.073a13.8,13.8,0,0,1,15.3,19.6L613.387,668.083a13.845,13.845,0,0,1-10.284,7.53,13.707,13.707,0,0,1-12.081-4.143L485.245,559.936a8.029,8.029,0,0,0-5.9-2.577,8.306,8.306,0,0,0-7.393,4.3l-21.666,40.075a13.48,13.48,0,0,1-15.094,6.917l-.108-.024a13.5,13.5,0,0,1-10.7-12.821l-4.34-92.508a8.432,8.432,0,0,0-.847-3.324,8.976,8.976,0,0,0-2.175-2.685L356,447.194a13.81,13.81,0,0,1,5.828-24.169Zm-2.343,19.91,61.024,50.094a13.61,13.61,0,0,1,2.148,2.17L746.088,348.517a4.8,4.8,0,0,1,.888-.312,5.525,5.525,0,0,1,4.605,9.835L485.649,553.386a13.231,13.231,0,0,1,3.6,2.746L595.028,667.666a8.278,8.278,0,0,0,13.42-2.032L760.739,356.365a8.3,8.3,0,0,0-9.182-11.752l-5.1,1.1L363.007,428.428a8.295,8.295,0,0,0-3.522,14.507Z" transform="translate(-350.952 -338.896)" fill="#6c63ff"/><path d="M361.828,423.025l383.567-82.742,4.985-1.073a13.8,13.8,0,0,1,15.3,19.6L613.387,668.083a13.845,13.845,0,0,1-10.284,7.53,13.707,13.707,0,0,1-12.081-4.143L485.245,559.936a8.029,8.029,0,0,0-5.9-2.577,8.306,8.306,0,0,0-7.393,4.3l-21.666,40.075a13.48,13.48,0,0,1-15.094,6.917l-.108-.024a13.5,13.5,0,0,1-10.7-12.821l-4.34-92.508a8.432,8.432,0,0,0-.847-3.324,8.976,8.976,0,0,0-2.175-2.685L356,447.194a13.81,13.81,0,0,1,5.828-24.169Zm-2.343,19.91,61.024,50.094a13.61,13.61,0,0,1,2.148,2.17,12.818,12.818,0,0,1,1.469,2.3,13.236,13.236,0,0,1,1,2.623l-.006.027a13.058,13.058,0,0,1,.434,2.893l4.339,92.508a8.013,8.013,0,0,0,6.408,7.691l.054.012a8.031,8.031,0,0,0,9.079-4.123l21.672-40.1a13.765,13.765,0,0,1,11.31-7.189l.026.006c.315-.015.629-.03.937-.019a13.425,13.425,0,0,1,6.268,1.557,13.231,13.231,0,0,1,3.6,2.746L595.028,667.666a8.278,8.278,0,0,0,13.42-2.032L760.739,356.365a8.3,8.3,0,0,0-9.182-11.752l-5.1,1.1L363.007,428.428a8.295,8.295,0,0,0-3.522,14.507Z" transform="translate(-350.952 -338.896)" fill="#3f3d56"/><path d="M355.747,489.924l2.279,5.025,1.408-.621.006-.027,323.174-146.54L412.758,546.024l-.026-.006-.715.548,3.254,4.45,4.692-3.454L685.895,352.217a5.525,5.525,0,0,0-4.6-9.835,4.813,4.813,0,0,0-.888.312L356.971,489.375Z" transform="translate(-285.265 -333.072)" fill="#3f3d56"/></g><path d="M568.463,619.432c23.7-26.969,57.228-37.9,87.53-43.632,37.646-7.116,75.838-7.079,113.51-13.951,30.417-5.548,62.918-16.259,87.655-41.359a78.4,78.4,0,0,0,21.369-37.334,73.376,73.376,0,0,0-4.394-44.3c-6.7-16.006-17.39-28.756-28.63-39.2a171.783,171.783,0,0,0-43.423-29.01c-33.411-15.921-68.544-24.211-102.767-36.429-16.784-5.992-33.738-12.563-49.323-22.855-13.2-8.72-27.587-20.473-34.933-37.951-15.156-36.062,21-57.554,41.49-65.695a266.758,266.758,0,0,1,42.88-12.276c3.09-.663,1.779-6.83-1.3-6.17a256.553,256.553,0,0,0-45.03,13.148c-12.355,5.133-25.1,11.879-34.808,23.488a48.893,48.893,0,0,0-11.047,38.228c2.571,17.3,13.744,30.635,24.239,40.292,13.877,12.77,29.7,21.11,45.742,27.908,16.9,7.16,34.15,12.74,51.4,18.213,34.466,10.937,70.479,20.683,101.592,43.955,21.765,16.28,51.332,46.8,44.092,84.639-3.214,16.8-12.973,29.926-23.505,39.584a136.856,136.856,0,0,1-42.095,25.6c-68.948,27.748-144.83,7.9-212,45.592-11.9,6.676-30.925,24.135-30.925,24.135S563.878,624.65,568.463,619.432Z" transform="translate(416.223 542.154)" fill="#d6d6e3"/><path d="M783.507,128.289,682.452,172.22a18.386,18.386,0,0,0-9.521,24.164l31.379,72.182a18.386,18.386,0,0,0,24.164,9.521l101.055-43.931a18.386,18.386,0,0,0,9.521-24.164L807.671,137.81A18.386,18.386,0,0,0,783.507,128.289Zm4.184,9.624a7.832,7.832,0,0,1,1.889-.544l-34.165,64.46-70.172-19.2a7.882,7.882,0,0,1,1.394-.782Zm37.655,86.618L724.291,268.462a7.879,7.879,0,0,1-10.356-4.08l-31.1-71.533,73.86,20.213a5.247,5.247,0,0,0,6.021-2.6l35.76-67.469,30.947,71.187a7.88,7.88,0,0,1-4.08,10.356Z" transform="translate(141.179 999.338)" fill="#090814"/><circle cx="84.447" cy="84.447" r="84.447" transform="translate(1296.352 731.378)" fill="#6c63ff"/><path d="M646.2,260.9a9.391,9.391,0,0,1-7.514-3.758l-23.038-30.718a9.393,9.393,0,1,1,15.03-11.272l15.073,20.1,38.712-58.067A9.394,9.394,0,1,1,700.1,187.606l-46.077,69.115a9.4,9.4,0,0,1-7.555,4.18Z" transform="translate(723.074 598.87)" fill="#fff"/></g></svg>
             </div>
-            <!-- /inquiries-grid -->
+
+          </div>
+          <!-- /inquiries-body -->
 
           </section>
           <!-- /inquiries-section -->
