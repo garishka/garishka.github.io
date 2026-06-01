@@ -561,14 +561,14 @@
 }
 
 .pi-card__role {
-  font-size: var(--font-size-sm);
+  font-size: var(--font-size-base);   /* match .address-block__value (location body) */
   color: var(--color-text-muted);
   margin: 0;
 }
 
 .pi-card__email {
   align-self: flex-start;
-  font-size: var(--font-size-sm);
+  font-size: var(--font-size-base);   /* match .address-block__value (location body) */
   color: var(--color-text-muted);
   text-decoration: underline;
   text-decoration-color: transparent;   /* hidden until hover */

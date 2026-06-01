@@ -126,6 +126,8 @@
 html {
   scroll-behavior: smooth;
   font-size: 16px; /* rem anchor */
+  -webkit-text-size-adjust: 100%;   /* stop iOS Safari from auto-inflating text */
+  text-size-adjust: 100%;
 }
 
 body {
