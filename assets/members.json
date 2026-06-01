@@ -1,20 +1,19 @@
 [
   {
-    "name": "Petya Nedkova",
-    "title": "Group Leader, Assoc. Prof.",
+    "name": "Dr. Petya Nedkova",
+    "title": "Group Leader",
     "interests": [
       "Gravitational Lensing",
       "Black Hole Thermodynamics"
       
     ],
     "email": "pnedkova@phys.uni-sofia.bg",
-    "arxiv": "https://arxiv.org/search/?searchtype=author&query=Nedkova+P",
-    "researchgate": "https://www.researchgate.net/profile/Petya-Nedkova",
+    "inspirehep": "https://inspirehep.net/authors/1063101",
     "photo": "assets/photos/nedkova.jpg"
   },
   {
-    "name": "Stoytcho Yazadjiev",
-    "title": "Prof.",
+    "name": "Prof. Dr. Stoytcho Yazadjiev",
+    "title": "Senior Researcher",
     "interests": [
       "Modified Gravity",
       "Mathematical Relativity",
@@ -22,44 +21,51 @@
       "Neutron Stars"
     ],
     "email": "yazad@phys.uni-sofia.bg",
-    "arxiv": "https://arxiv.org/search/?searchtype=author&query=Yazadjiev+S",
-    "researchgate": "https://www.researchgate.net/profile/Stoytcho-Yazadjiev",
+    "inspirehep": "https://inspirehep.net/authors/1024142",
     "photo": "assets/photos/yazadjiev.jpg"
   },
   {
-    "name": "Galin Gyulchev",
-    "title": "Assoc. Prof.",
+    "name": "Dr. Galin Gyulchev",
+    "title": "Researcher",
     "interests": [
       "Gravitational Lensing",
       "Accretion Disks"
     ],
     "email": "gyulchev@phys.uni-sofia.bg",
-    "arxiv": "https://arxiv.org/search/?searchtype=author&query=Gyulchev+G",
-    "researchgate": null,
+    "researchgate": "https://www.researchgate.net/profile/Galin-Gyulchev",
     "photo": "assets/photos/gyulchev.jpg"
   },
   {
-    "name": "Kalin Staykov",
-    "title": "Assoc. Prof.",
+    "name": "Dr. Kalin Staykov",
+    "title": "Researcher",
     "interests": [
       "Alternative Gravity",
       "Neutron Stars"
     ],
     "email": "kstaykov@phys.uni-sofia.bg",
-    "arxiv": "https://arxiv.org/search/?searchtype=author&query=Staykov+K",
+    "inspirehep": "https://inspirehep.net/authors/1924394",
     "researchgate": null,
-    "photo": "assets/photos/staykov.png"
+    "photo": "assets/photos/staykov.jpg"
   },
   {
-    "name": "Valentin Deliyski",
-    "title": "Asst. Prof.",
+    "name": "Dr. Valentin Deliyski",
+    "title": "Junior Researcher",
     "interests": [
       "Numerical Relativity",
       "Radiative Transfer"
     ],
     "email": "valentin.deliyski@phys.uni-sofia.bg",
-    "arxiv": "https://arxiv.org/search/?searchtype=author&query=Deliyski+V",
-    "researchgate": null,
+    "arxiv": null,
+    "researchgate": "https://www.researchgate.net/profile/Valentin-Deliyski",
     "photo": "assets/photos/deliyski.jpg"
+  },
+  {
+    "name": "Gergana Daskalova",
+    "title": "Junior Researcher & Site Admin",
+    "interests": [
+      "Numerical Relativity"
+    ],
+    "email": "gidaskalov@uni-sofia.bg",
+    "photo": "assets/photos/daskalova.jpg"
   }
 ]

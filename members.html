@@ -38,7 +38,6 @@
 <body>
 <div class="site-wrapper">
 
-
   <!-- ====================================================================
        HEADER + NAV 
        ==================================================================== -->
@@ -48,12 +47,10 @@
        hx-swap="innerHTML"
        aria-live="polite"></div>
 
-
   <!-- ====================================================================
        MAIN CONTENT
        ==================================================================== -->
   <main class="site-main" id="main-content" tabindex="-1">
-
 
     <!-- ------------------------------------------------------------------
          PAGE HERO — Full-width dark navy banner, shared by all inner pages.
@@ -65,8 +62,7 @@
           <div>
             <h1 class="page-hero__title" id="members-page-title">Our Team</h1>
             <p class="page-hero__desc">
-              Principal investigators, postdoctoral researchers, and PhD candidates
-              advancing the frontiers of gravitational astrophysics.
+              We are a small team of researchers from the Faculty of Physics at Sofia University, Bulgaria.
             </p>
           </div>
 
@@ -75,14 +71,12 @@
     </header>
     <!-- /page-hero -->
 
-
     <!-- ------------------------------------------------------------------
          PAGE BODY — Off-white academic canvas; flex-grow:1 keeps the footer
          pinned to the bottom even with only one or two cards present.
          ------------------------------------------------------------------ -->
     <div class="page-body page-body--members">
       <div class="container">
-
 
         <!-- ------------------------------------------------------------
              MEMBERS GRID — VERTICAL FLEX LIST, EMPTY AT BUILD TIME.
@@ -100,50 +94,177 @@
           id="members-grid"
           aria-label="Research group members"
           aria-live="polite"
-          aria-relevant="additions"
-          hidden>
+          aria-relevant="additions">
+          <article class="member-card">
+            <div class="member-card__photo-col">
+              <img class="member-photo" src="assets/photos/nedkova.jpg" alt="Portrait photograph of Dr. Petya Nedkova" loading="lazy" />
+            </div>
+            <div class="member-card__info-col">
+              <header class="member-card__header">
+                <h3 class="member-name">Dr. Petya Nedkova</h3>
+                <p class="member-title">Group Leader</p>
+              </header>
+              <dl class="member-details">
+                <div class="member-detail">
+                  <dt class="member-detail__label">Email</dt>
+                  <dd class="member-detail__value"><a href="mailto:pnedkova@phys.uni-sofia.bg" aria-label="Send email to Dr. Petya Nedkova">pnedkova@phys.uni-sofia.bg</a></dd>
+                </div>
+                <div class="member-detail">
+                  <dt class="member-detail__label">Focus</dt>
+                  <dd class="member-detail__value">Gravitational Lensing, Black Hole Thermodynamics</dd>
+                </div>
+              </dl>
+              <div class="member-profiles" aria-label="External profile links for Dr. Petya Nedkova">
+                <ul class="member-profiles__list" role="list">
+                  <li><a class="member-profile-link" href="https://inspirehep.net/authors/1063101" target="_blank" rel="noopener noreferrer" aria-label="InspireHEP profile of Dr. Petya Nedkova — opens in new tab">InspireHEP</a></li>
+                </ul>
+              </div>
+            </div>
+          </article>
+
+          <article class="member-card">
+            <div class="member-card__photo-col">
+              <img class="member-photo" src="assets/photos/yazadjiev.jpg" alt="Portrait photograph of Prof. Dr. Stoytcho Yazadjiev" loading="lazy" />
+            </div>
+            <div class="member-card__info-col">
+              <header class="member-card__header">
+                <h3 class="member-name">Prof. Dr. Stoytcho Yazadjiev</h3>
+                <p class="member-title">Senior Researcher</p>
+              </header>
+              <dl class="member-details">
+                <div class="member-detail">
+                  <dt class="member-detail__label">Email</dt>
+                  <dd class="member-detail__value"><a href="mailto:yazad@phys.uni-sofia.bg" aria-label="Send email to Prof. Dr. Stoytcho Yazadjiev">yazad@phys.uni-sofia.bg</a></dd>
+                </div>
+                <div class="member-detail">
+                  <dt class="member-detail__label">Focus</dt>
+                  <dd class="member-detail__value">Modified Gravity, Mathematical Relativity, Black Hole Physics, Neutron Stars</dd>
+                </div>
+              </dl>
+              <div class="member-profiles" aria-label="External profile links for Prof. Dr. Stoytcho Yazadjiev">
+                <ul class="member-profiles__list" role="list">
+                  <li><a class="member-profile-link" href="https://inspirehep.net/authors/1024142" target="_blank" rel="noopener noreferrer" aria-label="InspireHEP profile of Prof. Dr. Stoytcho Yazadjiev — opens in new tab">InspireHEP</a></li>
+                </ul>
+              </div>
+            </div>
+          </article>
+
+          <article class="member-card">
+            <div class="member-card__photo-col">
+              <img class="member-photo" src="assets/photos/gyulchev.jpg" alt="Portrait photograph of Dr. Galin Gyulchev" loading="lazy" />
+            </div>
+            <div class="member-card__info-col">
+              <header class="member-card__header">
+                <h3 class="member-name">Dr. Galin Gyulchev</h3>
+                <p class="member-title">Researcher</p>
+              </header>
+              <dl class="member-details">
+                <div class="member-detail">
+                  <dt class="member-detail__label">Email</dt>
+                  <dd class="member-detail__value"><a href="mailto:gyulchev@phys.uni-sofia.bg" aria-label="Send email to Dr. Galin Gyulchev">gyulchev@phys.uni-sofia.bg</a></dd>
+                </div>
+                <div class="member-detail">
+                  <dt class="member-detail__label">Focus</dt>
+                  <dd class="member-detail__value">Gravitational Lensing, Accretion Disks</dd>
+                </div>
+              </dl>
+              <div class="member-profiles" aria-label="External profile links for Dr. Galin Gyulchev">
+                <ul class="member-profiles__list" role="list">
+                  <li><a class="member-profile-link" href="https://www.researchgate.net/profile/Galin-Gyulchev" target="_blank" rel="noopener noreferrer" aria-label="ResearchGate profile of Dr. Galin Gyulchev — opens in new tab">ResearchGate</a></li>
+                </ul>
+              </div>
+            </div>
+          </article>
+
+          <article class="member-card">
+            <div class="member-card__photo-col">
+              <img class="member-photo" src="assets/photos/staykov.jpg" alt="Portrait photograph of Dr. Kalin Staykov" loading="lazy" />
+            </div>
+            <div class="member-card__info-col">
+              <header class="member-card__header">
+                <h3 class="member-name">Dr. Kalin Staykov</h3>
+                <p class="member-title">Researcher</p>
+              </header>
+              <dl class="member-details">
+                <div class="member-detail">
+                  <dt class="member-detail__label">Email</dt>
+                  <dd class="member-detail__value"><a href="mailto:kstaykov@phys.uni-sofia.bg" aria-label="Send email to Dr. Kalin Staykov">kstaykov@phys.uni-sofia.bg</a></dd>
+                </div>
+                <div class="member-detail">
+                  <dt class="member-detail__label">Focus</dt>
+                  <dd class="member-detail__value">Alternative Gravity, Neutron Stars</dd>
+                </div>
+              </dl>
+              <div class="member-profiles" aria-label="External profile links for Dr. Kalin Staykov">
+                <ul class="member-profiles__list" role="list">
+                  <li><a class="member-profile-link" href="https://inspirehep.net/authors/1924394" target="_blank" rel="noopener noreferrer" aria-label="InspireHEP profile of Dr. Kalin Staykov — opens in new tab">InspireHEP</a></li>
+                </ul>
+              </div>
+            </div>
+          </article>
+
+          <article class="member-card">
+            <div class="member-card__photo-col">
+              <img class="member-photo" src="assets/photos/deliyski.jpg" alt="Portrait photograph of Dr. Valentin Deliyski" loading="lazy" />
+            </div>
+            <div class="member-card__info-col">
+              <header class="member-card__header">
+                <h3 class="member-name">Dr. Valentin Deliyski</h3>
+                <p class="member-title">Junior Researcher</p>
+              </header>
+              <dl class="member-details">
+                <div class="member-detail">
+                  <dt class="member-detail__label">Email</dt>
+                  <dd class="member-detail__value"><a href="mailto:valentin.deliyski@phys.uni-sofia.bg" aria-label="Send email to Dr. Valentin Deliyski">valentin.deliyski@phys.uni-sofia.bg</a></dd>
+                </div>
+                <div class="member-detail">
+                  <dt class="member-detail__label">Focus</dt>
+                  <dd class="member-detail__value">Numerical Relativity, Radiative Transfer</dd>
+                </div>
+              </dl>
+              <div class="member-profiles" aria-label="External profile links for Dr. Valentin Deliyski">
+                <ul class="member-profiles__list" role="list">
+                  <li><a class="member-profile-link" href="https://www.researchgate.net/profile/Valentin-Deliyski" target="_blank" rel="noopener noreferrer" aria-label="ResearchGate profile of Dr. Valentin Deliyski — opens in new tab">ResearchGate</a></li>
+                </ul>
+              </div>
+            </div>
+          </article>
+
+          <article class="member-card">
+            <div class="member-card__photo-col">
+              <img class="member-photo" src="assets/photos/daskalova.jpg" alt="Portrait photograph of Gergana Daskalova" loading="lazy" />
+            </div>
+            <div class="member-card__info-col">
+              <header class="member-card__header">
+                <h3 class="member-name">Gergana Daskalova</h3>
+                <p class="member-title">Junior Researcher &amp; Site Admin</p>
+              </header>
+              <dl class="member-details">
+                <div class="member-detail">
+                  <dt class="member-detail__label">Email</dt>
+                  <dd class="member-detail__value"><a href="mailto:gidaskalov@uni-sofia.bg" aria-label="Send email to Gergana Daskalova">gidaskalov@uni-sofia.bg</a></dd>
+                </div>
+                <div class="member-detail">
+                  <dt class="member-detail__label">Focus</dt>
+                  <dd class="member-detail__value">Numerical Relativity</dd>
+                </div>
+              </dl>
+            </div>
+          </article>
         </section>
         <!-- /members-grid -->
-
 
         <!-- ------------------------------------------------------------
              STATE REGION — Loading / empty / error feedback.
              aria-live="assertive" ensures errors are read out immediately.
              JS controls which child is visible via .is-visible class toggling.
              ------------------------------------------------------------ -->
-        <div class="members-state"
-             id="members-state"
-             aria-live="assertive"
-             role="status">
-
-          <!-- Loading spinner — visible during fetch -->
-          <div class="members-state__loading" id="members-loading">
-            <i class="fa-solid fa-circle-notch fa-spin" aria-hidden="true"></i>
-            <span>Loading team members&hellip;</span>
-          </div>
-
-          <!-- Error notice — visible on network or parse failure -->
-          <p class="members-state__error" id="members-error" role="alert">
-            <i class="fa-solid fa-circle-exclamation" aria-hidden="true"></i>
-            The member directory could not be loaded. Please try again later.
-          </p>
-
-          <!-- Empty notice — visible when JSON loads but array is empty -->
-          <p class="members-state__empty" id="members-empty">
-            No team members are listed at this time.
-          </p>
-
-        </div>
-        <!-- /members-state -->
-
 
       </div>
     </div>
     <!-- /page-body -->
 
-
   </main>
-
 
   <!-- ====================================================================
        FOOTER — Injected by injectGlobalComponents() in app.js.
@@ -152,7 +273,6 @@
 
 </div>
 <!-- /site-wrapper -->
-
 
 <!-- Mobile nav drawer is injected by js/app.js into #global-header-target.
      Do NOT add a static drawer here — a duplicate id="mobile-nav-drawer"
@@ -163,7 +283,6 @@
 <footer class="site-footer" role="contentinfo">
   <div class="container">
     <div class="footer-grid">
-
 
       <div class="footer-col footer-col--info">
 
@@ -192,7 +311,6 @@
         </nav>
 
       </div>
-
 
       <div class="footer-col footer-col--center">
 
@@ -248,7 +366,6 @@
 
       </div>
 
-
       <div class="footer-col footer-col--funding">
 
         <section class="footer-block" aria-label="Funding information">
@@ -278,7 +395,6 @@
       </div>
 
     </div>
-
 
     <!-- ── Sub-footer: copyright line ───────────────────────── -->
     <div class="footer-bottom">

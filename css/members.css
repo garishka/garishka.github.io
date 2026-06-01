@@ -44,7 +44,19 @@
   display: flex;
   flex-direction: column;
   gap: var(--space-lg);         /* 24px between row-cards */
-  padding-block: var(--space-lg) 0;
+
+  /* Unified white card enveloping all members (mirrors .inquiries-section).
+     The padding is the white border between the panel edge and the photos. */
+  background-color: var(--color-card-bg);
+  border-radius: 12px;
+  box-shadow: var(--shadow-md);
+  padding: var(--space-xl);     /* 32px white border around the cards */
+  transition: background-color var(--transition-base),
+              box-shadow var(--transition-base);
+}
+
+[data-theme="dark"] .members-grid {
+  box-shadow: var(--shadow-lg);
 }
 
 
@@ -61,35 +73,8 @@
   display: flex;
   flex-direction: row;          /* Horizontal split on desktop */
   align-items: stretch;         /* Both columns fill the card height */
-
-  background-color: #ffffff;
-  border-radius: var(--border-radius-lg);   /* 8px */
-  box-shadow: var(--shadow-sm);
-  border: 1px solid var(--color-border);
-
-  overflow: hidden;             /* Clips photo rounded-left corners cleanly */
-
-  transition:
-    transform var(--transition-base),
-    box-shadow var(--transition-base),
-    border-color var(--transition-base);
-}
-
-[data-theme="dark"] .member-card {
-  background-color: var(--color-card-bg);   /* #001A33 Deep Navy */
-  border-color: var(--color-border);        /* #1E3A5F steel border */
-}
-
-/* Subtle hover: 2px upward lift + deeper shadow */
-.member-card:hover {
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-md);
-  border-color: var(--color-accent);
-}
-
-[data-theme="dark"] .member-card:hover {
-  box-shadow: var(--shadow-lg);
-  border-color: var(--color-accent);
+  /* No border/shadow/background — the .members-grid panel is the elevated
+     white surface; individual cards stay flat to avoid double-boxing. */
 }
 
 
@@ -101,8 +86,11 @@
    -------------------------------------------------------------------------- */
 .member-card__photo-col {
   flex: 0 0 220px;              /* Locked width; never shrinks or grows */
+  aspect-ratio: 3 / 4;         /* Fixed portrait ratio on every device */
+  align-self: flex-start;      /* Hold the 3:4 box; don't stretch to card height */
   position: relative;
   overflow: hidden;
+  border-radius: var(--border-radius-lg);  /* Rounded photo (card no longer clips it) */
   background-color: var(--color-bg-alt);  /* Fill behind placeholder */
 }
 
@@ -151,7 +139,8 @@
   flex: 1 1 auto;
   display: flex;
   flex-direction: column;
-  gap: var(--space-md);         /* 16px between header, details, profiles */
+  justify-content: center;      /* Center the text block against the photo */
+  gap: var(--space-sm);         /* 8px between header, details, profiles (halved) */
   padding: var(--space-xl);     /* 32px all sides */
   min-width: 0;                 /* Prevents flex overflow on narrow viewports */
 }
@@ -162,8 +151,7 @@
   display: flex;
   flex-direction: column;
   gap: var(--space-xs);
-  padding-bottom: var(--space-md);
-  border-bottom: 2px solid var(--color-accent); /* Gold accent underline */
+  padding-bottom: var(--space-sm);
 }
 
 /* Member name — semantic <h3>, bold, midnight blue */
@@ -200,7 +188,6 @@
   display: flex;
   flex-direction: column;
   gap: var(--space-sm);         /* 8px between detail rows */
-  flex-grow: 1;                 /* Pushes .member-profiles to the bottom */
 }
 
 /* Single detail row — dt + dd side by side */
@@ -215,7 +202,6 @@
    Minimum width ensures all labels align at the same horizontal start point. */
 .member-detail__label {
   flex-shrink: 0;
-  min-width: 130px;             /* Alignment anchor across all detail rows */
   font-size: 0.7rem;
   font-weight: var(--font-weight-bold);
   text-transform: uppercase;
@@ -231,6 +217,8 @@
   color: var(--color-text);
   line-height: 1.6;
   margin: 0;                    /* Reset <dd> browser margin / indent */
+  flex: 1 1 0;     
+  min-width: 0;   
 }
 
 /* Email link inside the value */
@@ -263,9 +251,7 @@
   align-items: center;
   gap: var(--space-sm);
   flex-wrap: wrap;
-  padding-top: var(--space-md);
-  border-top: 1px solid var(--color-border);    /* Subtle separator */
-  margin-top: auto;             /* Belt-and-suspenders: flush to bottom */
+  padding-top: var(--space-sm);
 }
 
 /* "PROFILES:" label */
@@ -381,21 +367,15 @@
     flex-direction: column;
   }
 
-  /* Photo column: fixed-height banner across the card top.
-     160px gives a readable headshot without dominating the screen. */
+  /* Photo column: half-width 3:4 portrait, centered above the text. */
   .member-card__photo-col {
-    flex: 0 0 160px;            /* Height in column-direction mode */
-    width: 100%;                /* Full card width */
+    flex: 0 0 auto;
+    width: 50%;                 /* Half the card width */
+    align-self: center;         /* Center horizontally above the text */
   }
 
   /* Info column: standard vertical padding, left-aligned */
   .member-card__info-col {
     padding: var(--space-lg);
-  }
-
-  /* Label column no longer needs a fixed min-width on narrow screens —
-     allow it to shrink so values have more room. */
-  .member-detail__label {
-    min-width: 100px;
   }
 }
