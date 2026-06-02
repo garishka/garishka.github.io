@@ -1,0 +1,26 @@
+[
+  {
+    "id": "black-holes-dark-matter",
+    "file": "articles/black-holes-dark-matter.html",
+    "title": "Black Holes Surrounded by a Dark Matter Halo",
+    "icon": "blackhole"
+  },
+  {
+    "id": "linear-polarization-dm",
+    "file": "articles/linear-polarization-dm.html",
+    "title": "Linear Polarization for Black Holes with a Dark Matter Halo",
+    "icon": "blackhole"
+  },
+  {
+    "id": "orbiting-hotspots",
+    "file": "articles/orbiting-hotspots.html",
+    "title": "Orbiting Hotspots",
+    "icon": "blackhole"
+  },
+  {
+    "id": "polarized-ring",
+    "file": "articles/polarized-ring.html",
+    "title": "Polarized Image of an Equatorial Emitting Ring",
+    "icon": "blackhole"
+  }
+]

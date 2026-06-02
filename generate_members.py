@@ -2,16 +2,8 @@
 """
 BeyondGR Project — Static Members Page Generator
 ================================================
-Reads members.json and bakes the member cards directly into members.html,
-removing the runtime dependency on js/app.js for rendering the roster.
-
-WHY THIS EXISTS
----------------
-The cards used to be built at runtime by buildMemberCard() in js/app.js. On
-some visitors' devices app.js fails to parse/run, so the cards never appear.
-This script produces the SAME markup buildMemberCard() emits, but as plain
-static HTML that lives in the document before any JavaScript runs — so the
-roster is visible even with JS disabled, blocked, or broken.
+Reads members.json and injects the member cards directly into members.html,
+removing the runtime dependency on JS for rendering the roster.
 
 PROFILE LINKS
 -------------
@@ -30,8 +22,8 @@ USAGE
         --template members.html \
         --out      members.html
 
-Re-running is idempotent: the grid's contents are replaced wholesale each time,
-so you can regenerate after every edit to members.json.
+Re-running on changes is required: the grid's contents are replaced wholesale 
+each time.
 """
 
 import argparse
@@ -47,12 +39,13 @@ from pathlib import Path
 # CONFIG
 # -----------------------------------------------------------------------------
 
-# Flat JSON fields → human-readable profile label, in display order.
+# Flat JSON fields -> human-readable profile label, in display order.
 # Only fields with a truthy value (non-null, non-empty) produce a pill-link.
 PROFILE_FIELD_MAP = [
+    ("inspirehep",   "InspireHEP"),
+    ("inspirehep",   "InspireHEP"),
     ("arxiv",        "arXiv"),
     ("researchgate", "ResearchGate"),
-    ("inspirehep",   "InspireHEP"),
     ("orcid",        "ORCID"),
     ("scholar",      "Google Scholar"),
     ("github",       "GitHub"),
@@ -98,14 +91,7 @@ def collect_profiles(member: dict) -> list:
 
 
 def resolve_focus(member: dict):
-    """Research-focus text: prefer the `focus` string, else join `interests`.
-
-    Reproduces buildMemberCard()'s backward-compatible fallback:
-        member.focus ?? interests.join(', ')
-    """
-    focus = member.get("focus")
-    if focus:
-        return focus
+    """Research-focus text. """
     interests = member.get("interests")
     if isinstance(interests, list) and interests:
         return ", ".join(str(i) for i in interests)
@@ -113,7 +99,7 @@ def resolve_focus(member: dict):
 
 
 # -----------------------------------------------------------------------------
-# CARD BUILDER  — faithful mirror of buildMemberCard() (app.js §12)
+# CARD BUILDER
 # -----------------------------------------------------------------------------
 
 def build_member_card(member: dict) -> str:
@@ -121,11 +107,11 @@ def build_member_card(member: dict) -> str:
     name = member.get("name", "")
     out = []
 
-    # ── Root article (optional data-member-id, only when `id` is present) ─────
+    # optional data-member-id, only when `id` is present)
     data_attr = f' data-member-id="{esc(member["id"])}"' if member.get("id") else ""
     out.append(f'<article class="member-card"{data_attr}>')
 
-    # ── LEFT: photo column (real <img>, or placeholder when no photo) ─────────
+    # LEFT: photo column (real <img>, or placeholder when no photo)
     out.append('  <div class="member-card__photo-col">')
     photo = member.get("photo")
     if photo:
@@ -142,7 +128,7 @@ def build_member_card(member: dict) -> str:
         out.append("    </div>")
     out.append("  </div>")
 
-    # ── RIGHT: info column ────────────────────────────────────────────────────
+    # RIGHT: info column
     out.append('  <div class="member-card__info-col">')
 
     # Header: name + academic title (title element is always present, per JS).
@@ -274,42 +260,42 @@ def remove_state_region(markup: str) -> str:
 
 def main() -> None:
     parser = argparse.ArgumentParser(
-        description="Bake member cards from members.json into members.html."
+        description="Inject member cards from members.json into members.html."
     )
-    parser.add_argument("--data", default="members.json",
-                        help="Path to members.json (default: members.json)")
+    parser.add_argument("--data", default="assets/members.json",
+                        help="Path to json file with members data (default: assets/members.json)")
     parser.add_argument("--template", default="members.html",
-                        help="Path to the members.html template (default: members.html)")
+                        help="Path to the html page used for injection (default: members.html)")
     parser.add_argument("--out", default="members.html",
-                        help="Output path (default: members.html — in place, idempotent)")
+                        help="Output path for the resulting html file after injection (default = in-place: members.html)")
     args = parser.parse_args()
 
     data_path = Path(args.data)
     template_path = Path(args.template)
     out_path = Path(args.out)
 
-    # ── Load + validate JSON ──────────────────────────────────────────────────
+    # Load + validate JSON 
     try:
         members = json.loads(data_path.read_text(encoding="utf-8"))
     except FileNotFoundError:
         sys.exit(f"ERROR: data file not found: {data_path}")
     except json.JSONDecodeError as exc:
-        sys.exit(f"ERROR: {data_path} is not valid JSON — {exc}")
+        sys.exit(f"ERROR: {data_path} is not valid JSON - {exc}")
 
     if not isinstance(members, list) or not members:
         sys.exit(f"ERROR: {data_path} must be a non-empty JSON array of members.")
 
-    # ── Build cards (JSON order is preserved — no `tier` field present) ───────
+    # Build cards (JSON order is preserved)
     cards_html = "\n\n".join(build_member_card(m) for m in members)
 
-    # ── Inject into the template ──────────────────────────────────────────────
+    # Inject into the template
     markup = template_path.read_text(encoding="utf-8")
     markup = remove_state_region(markup)
     markup = inject_cards(markup, cards_html)
 
     out_path.write_text(markup, encoding="utf-8")
 
-    # ── Operator feedback ─────────────────────────────────────────────────────
+    # Operator feedback
     print(f"OK  Generated {out_path}")
     print(f"    {len(members)} member card(s) baked into #members-grid")
     for m in members:

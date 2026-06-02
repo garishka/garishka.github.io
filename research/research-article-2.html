@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<!--
+  BeyondGR Project - Article Page
+  Title: Linear Polarization for Black Holes with a Dark Matter Halo
+-->
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description"
+        content="Research areas of the BeyondGR Astro Research Project — gravitational
+                 astrophysics, black holes, naked singularities, wormholes, and compact objects." />
+
+  <title>Linear Polarization for Black Holes with a Dark Matter Halo | BeyondGR Project</title>
+
+  <script src="../../js/theme-init.js"></script>
+
+  <!-- FontAwesome 6 — icons used by the shared footer (address, email, logos) -->
+  <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+        integrity="sha512-Avb2QiuDEEvB4bZJYdft2mNjVShBftLdPG8FJ0V7irTLQ8Uo0qcPxh4Plq7G5tGm0rU+1SPhVotteLpBERwTkw=="
+        crossorigin="anonymous"
+        referrerpolicy="no-referrer" />
+  
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css"
+        crossorigin="anonymous" />
+  <script defer
+          src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"
+          crossorigin="anonymous"></script>
+  <script defer
+          src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"
+          crossorigin="anonymous"
+          onload="renderMathInElement(document.body, {
+            delimiters: [
+              { left: '$$', right: '$$', display: true  },
+              { left: '$',  right: '$',  display: false },
+              { left: '\\(', right: '\\)', display: false },
+              { left: '\\[', right: '\\]', display: true  }
+            ],
+            throwOnError: false
+          });"></script>
+  
+  <link rel="stylesheet" href="../../css/style.css" />
+  <link rel="stylesheet" href="../../css/research.css" />
+  <link rel="stylesheet" href="../../css/articles.css" />
+</head>
+
+<body>
+<div class="site-wrapper">
+
+
+  <!-- ====================================================================
+       HEADER + NAV
+       ==================================================================== -->
+  <!-- @@HEADER@@ -->
+<header class="site-header" role="banner">
+  <div class="container">
+    <a href="../index.html" class="site-logo" aria-label="BeyondGR Project - Home">
+      <svg class="logo-icon" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"
+           aria-hidden="true" focusable="false">
+        <circle cx="16" cy="16" r="2.5" fill="currentColor"/>
+        <rect x="14.5" y="1"  width="3" height="9" rx="1.5" fill="currentColor"/>
+        <rect x="14.5" y="22" width="3" height="9" rx="1.5" fill="currentColor"/>
+        <rect x="1"  y="14.5" width="9" height="3" rx="1.5" fill="currentColor"/>
+        <rect x="22" y="14.5" width="9" height="3" rx="1.5" fill="currentColor"/>
+        <rect x="15.2" y="5" width="1.8" height="6" rx="0.9" fill="currentColor" transform="rotate(45  16 16)"/>
+        <rect x="15.2" y="5" width="1.8" height="6" rx="0.9" fill="currentColor" transform="rotate(135 16 16)"/>
+        <rect x="15.2" y="5" width="1.8" height="6" rx="0.9" fill="currentColor" transform="rotate(225 16 16)"/>
+        <rect x="15.2" y="5" width="1.8" height="6" rx="0.9" fill="currentColor" transform="rotate(315 16 16)"/>
+      </svg>
+      <span class="site-header__logo-text">Beyond<strong>GR</strong></span>
+    </a>
+
+    <div class="header-institutions" aria-label="Partner institutions">
+      <a href="https://www.fni.bg/"
+         class="footer-logo-link"
+         target="_blank"
+         rel="noopener noreferrer"
+         aria-label="Bulgarian National Science Fund - opens in a new tab">
+        <img src="../assets/logos/logo_FNI.png" alt="FNI Logo"
+             style="height: 80px; width: auto; object-fit: contain;">
+      </a>
+    </div>
+  </div>
+</header>
+
+<nav class="site-nav" role="navigation" aria-label="Primary site navigation">
+  <div class="container">
+    <ul class="nav-links" role="list">
+      <li class="nav-links__item"><a href="../index.html"        class="nav-links__link" data-nav="index.html">Home</a></li>
+      <li class="nav-links__item"><a href="../members.html"      class="nav-links__link" data-nav="members.html">Members</a></li>
+
+      <!-- Research: hover/focus reveals a dropdown of articles (desktop only). -->
+      <li class="nav-links__item nav-has-dropdown">
+        <a href="../research.html" class="nav-links__link is-active" data-nav="research.html" aria-current="page">
+          Research
+          <svg class="nav-dropdown__arrow" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <path d="M6 9l6 6 6-6" fill="none" stroke="currentColor"
+                  stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+        <ul class="nav-dropdown" role="menu" aria-label="Research articles">
+          <li role="none"><a role="menuitem" class="nav-dropdown__link" href="../research/research-article-1.html">Black Holes Surrounded by a Dark Matter Halo</a></li>
+          <li role="none"><a role="menuitem" class="nav-dropdown__link" href="../research/research-article-2.html">Linear Polarization for Black Holes with a Dark Matter Halo</a></li>
+          <li role="none"><a role="menuitem" class="nav-dropdown__link" href="../research/research-article-3.html">Orbiting Hotspots</a></li>
+          <li role="none"><a role="menuitem" class="nav-dropdown__link" href="../research/research-article-4.html">Polarized Image of an Equatorial Emitting Ring</a></li>
+        </ul>
+      </li>
+
+      <li class="nav-links__item"><a href="../publications.html" class="nav-links__link" data-nav="publications.html">Publications</a></li>
+      <li class="nav-links__item"><a href="../contacts.html"     class="nav-links__link" data-nav="contacts.html">Contacts</a></li>
+    </ul>
+
+    <div class="nav-controls">
+      <!-- Theme toggle: click flips the theme; CSS swaps the icon. -->
+      <button class="btn-theme-toggle" type="button"
+              aria-label="Toggle colour theme"
+              onclick="toggleTheme()">
+        <!-- Shown in LIGHT mode (click → dark) -->
+        <svg class="theme-icon theme-icon--moon" xmlns="http://www.w3.org/2000/svg"
+             viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="currentColor">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+        </svg>
+        <!-- Shown in DARK mode (click → light) -->
+        <svg class="theme-icon theme-icon--sun" xmlns="http://www.w3.org/2000/svg"
+             viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="currentColor">
+          <circle cx="12" cy="12" r="5"/>
+          <line x1="12" y1="1"  x2="12" y2="3"  stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          <line x1="12" y1="21" x2="12" y2="23" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          <line x1="4.22"  y1="4.22"  x2="5.64"  y2="5.64"  stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          <line x1="1"  y1="12" x2="3"  y2="12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          <line x1="21" y1="12" x2="23" y2="12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          <line x1="4.22"  y1="19.78" x2="5.64"  y2="18.36" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          <line x1="18.36" y1="5.64"  x2="19.78" y2="4.22"  stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </button>
+
+      <button class="btn-hamburger" type="button"
+              aria-label="Open navigation menu"
+              aria-expanded="false"
+              aria-controls="mobile-nav-drawer"
+              onclick="toggleDrawer()">
+        <span class="hamburger-line" aria-hidden="true"></span>
+        <span class="hamburger-line" aria-hidden="true"></span>
+        <span class="hamburger-line" aria-hidden="true"></span>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<!--
+  Mobile drawer. Structure requirement (matches existing CSS):
+    .mobile-nav-drawer            outer fixed wrapper (pointer-events: none)
+      .nav-overlay                full-screen backdrop  (child)
+      .mobile-nav-drawer__panel   sliding side panel     (child)
+-->
+<div class="mobile-nav-drawer" id="mobile-nav-drawer" aria-hidden="true">
+
+  <div class="nav-overlay" id="nav-overlay" aria-hidden="true"
+       onclick="closeDrawer()"></div>
+
+  <nav class="mobile-nav-drawer__panel" aria-label="Mobile navigation">
+    <button class="drawer-close-btn" type="button"
+            aria-label="Close navigation menu"
+            onclick="closeDrawer()">
+      <span class="drawer-close-btn__x" aria-hidden="true">&times;</span>
+    </button>
+    <ul class="drawer-links" role="list">
+      <li class="nav-links__item"><a href="../index.html"        class="drawer-link" data-nav="index.html"        onclick="closeDrawer()">Home</a></li>
+      <li class="nav-links__item"><a href="../members.html"      class="drawer-link" data-nav="members.html"      onclick="closeDrawer()">Members</a></li>
+
+      <!-- Research: tapping toggles the sub-menu open/closed (does not navigate). -->
+      <li class="nav-links__item drawer-has-submenu">
+        <button type="button" class="drawer-link drawer-submenu-toggle is-active" data-nav="research.html"
+                aria-expanded="false" aria-controls="drawer-research-submenu"
+                onclick="toggleResearchSubmenu(this)" aria-current="page">
+          Research
+          <svg class="drawer-submenu__arrow" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false">
+            <path d="M6 9l6 6 6-6" fill="none" stroke="currentColor"
+                  stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+        <ul class="drawer-submenu" id="drawer-research-submenu" role="list" hidden>
+          <li><a href="../research/research-article-1.html"     class="drawer-sublink" onclick="closeDrawer()">Black Holes Surrounded by a Dark Matter Halo</a></li>
+          <li><a href="../research/research-article-2.html"     class="drawer-sublink" onclick="closeDrawer()">Linear Polarization for Black Holes with a Dark Matter Halo</a></li>
+          <li><a href="../research/research-article-3.html"     class="drawer-sublink" onclick="closeDrawer()">Orbiting Hotspots</a></li>
+          <li><a href="../research/research-article-4.html"     class="drawer-sublink" onclick="closeDrawer()">Polarized Image of an Equatorial Emitting Ring</a></li>
+        </ul>
+      </li>
+
+      <li class="nav-links__item"><a href="../publications.html" class="drawer-link" data-nav="publications.html" onclick="closeDrawer()">Publications</a></li>
+      <li class="nav-links__item"><a href="../contacts.html"     class="drawer-link" data-nav="contacts.html"     onclick="closeDrawer()">Contacts</a></li>
+    </ul>
+  </nav>
+
+</div>
+
+<!-- @@/HEADER@@ -->
+
+
+  <!-- ====================================================================
+       MAIN CONTENT
+       ==================================================================== -->
+  <main class="site-main" id="main-content" tabindex="-1">
+
+    <!-- ------------------------------------------------------------------
+         ARTICLE BODY — content of articles/linear-polarization-dm.html, placed inside the
+         shared .container (1200px max-width, centred). Header above and
+         footer below are copied verbatim from research.html.
+         ------------------------------------------------------------------ -->
+    <div class="container">
+      <div class="art-wrap">
+
+        <header class="art-header">
+          <h2 class="art-title">Linear Polarization for Black Holes with a Dark Matter Halo</h2>
+          <div class="art-meta">
+            <time class="art-date" datetime="2024-09-22">September 2024</time>
+            <span class="art-separator" aria-hidden="true">&middot;</span>
+            <span class="art-authors">T. Angelov, R. Bekir, G. Gyulchev, P. Nedkova, S. Yazadjiev</span>
+          </div>
+          <div class="art-divider" role="separator" aria-hidden="true"></div>
+        </header>
+
+        <div class="art-body">
+
+          <section class="art-section" aria-labelledby="lp-goal">
+            <h3 class="art-section-title" id="lp-goal">Scope and Methodology</h3>
+
+            <p>
+              This section presents a systematic analysis of the linear polarization of synchrotron
+              emission in the static spacetime of a black hole surrounded by a dark matter halo. The
+              central objective is to quantify how the dark matter content modifies the observable
+              polarization pattern relative to the Schwarzschild case, across different magnetic field
+              configurations and inclination angles. We examine both the intensity $I$ and orientation
+              (EVPA) of the polarization vector, with particular emphasis on the role of the halo
+              compactness parameter $C = M/a_0$.
+            </p>
+
+            <p>
+              We focus separately on direct images, formed by photon trajectories that reach the observer
+              without completing full loops around the compact object
+              ($\phi \in [0,\pi)$), and on indirect images of order $k = 1$, which involve one additional
+              half-orbit. The deviations in polarization intensity and direction are quantified through
+            </p>
+
+            $$
+              \Delta I = I_{\rm DM} - I_{\rm Sch},
+              \qquad
+              \Delta\mathrm{EVPA} = \mathrm{EVPA}_{\rm DM} - \mathrm{EVPA}_{\rm Sch},
+            $$
+
+            <p>
+              evaluated point-by-point across the image as a function of the azimuthal coordinate
+              $\phi$. To ensure a meaningful comparison, the emission sources in the two spacetimes
+              are placed at radii that produce the same apparent image size, rather than at identical
+              coordinate radii.
+            </p>
+          </section>
+
+          <section class="art-section" aria-labelledby="lp-direct">
+            <h3 class="art-section-title" id="lp-direct">Direct Images</h3>
+
+            <p>
+              For an inclination angle $i = 20^\circ$ and a purely equatorial magnetic field
+              — the configuration that best reproduces the polarization observations of M87* —
+              simulations show that even in the presence of a dark matter halo the polarization vector
+              maintains its characteristic rotation angle, and the intensity distribution closely
+              follows the Schwarzschild profile. The intensity peaks on the right side of the image and
+              decreases gradually toward the poles, a behavior dominated by gravitational redshift
+              effects at the image edges.
+            </p>
+
+            <p>
+              As the halo compactness $M/a_0$ increases, the total polarized flux decreases, but the
+              image symmetry and the positions of all peaks and minima remain in one-to-one
+              correspondence with the Schwarzschild case. Since the dark matter solution reduces to the
+              Schwarzschild geometry in the limit $C \to 0$, the polarization properties become
+              indistinguishably close to those of the isolated black hole at low compactness. The maximum
+              relative deviations for a representative equatorial field configuration
+              $\vec{B} = [0.87, 0.5, 0]$ at $i = 20^\circ$ are
+            </p>
+
+            $$
+              \frac{\max\Delta I}{I_{\rm Sch}} \lesssim 75 \times 10^{-4},
+              \qquad
+              \frac{\max\Delta\mathrm{EVPA}}{\mathrm{EVPA}_{\rm Sch}} \lesssim 28 \times 10^{-5},
+            $$
+
+            <p>
+              for the largest compactness value $M/a_0 = 10^{-3}$, and both deviations scale linearly
+              with $M/a_0$ across the full range studied. At a higher inclination of $i = 70^\circ$
+              the numerical values are comparable, confirming that direct images carry less than $1\%$
+              deviation for all physical compactness values.
+            </p>
+
+            <p>
+              The vertical magnetic field configuration $\vec{B} = [0,0,1]$ produces a qualitatively
+              different polarization pattern. It is well established that vertical fields in the
+              Schwarzschild geometry lead to polarization structures inconsistent with M87*
+              observations, owing to the combined effects of aberration and gravitational lensing.
+              Simulations with the dark matter halo confirm that while the overall image structure and
+              symmetry remain similar to the Schwarzschild case, the resulting polarization is again
+              incompatible with astrophysical sources such as M87*. As the halo compactness grows the
+              polarization signal weakens significantly, though the basic morphology — maximum intensity
+              at the bottom of the ring with a gradual decrease upward — is preserved.
+            </p>
+          </section>
+
+          <section class="art-section" aria-labelledby="lp-indirect">
+            <h3 class="art-section-title" id="lp-indirect">Indirect Images</h3>
+
+            <p>
+              For indirect images of order $k = 1$ the deviations from the Schwarzschild geometry
+              increase by approximately one order of magnitude relative to the direct images, yet
+              remain below $10\%$ for the small inclination angles ($i \lesssim 20^\circ$) relevant to
+              the galactic targets M87* and Sgr A*. At $i = 20^\circ$, for example, a vertical magnetic
+              field yields a maximum EVPA deviation of approximately $4.3\%$ above the Schwarzschild
+              value at compactness $M/a_0 = 10^{-3}$.
+            </p>
+
+            <p>
+              A notable structural change appears in the indirect images under a vertical magnetic field:
+              the frequency of variation of polarization peak values along a full orbit doubles, with
+              two characteristic maxima on the left and right sides of the image and two minima at the
+              top and bottom. This feature distinguishes indirect images from direct ones and suggests
+              that higher-order images formed in vertically aligned magnetic fields may ultimately be
+              used to separate black holes from other compact objects in future high-resolution
+              observations.
+            </p>
+
+            <p>
+              At the larger inclination of $i = 70^\circ$ the deviations grow further. The maximum
+              enhancement in polarized flux due to the dark matter halo reaches approximately $7.1\%$
+              above the Schwarzschild value for the configuration $\vec{B} = [0.5, 0.87, 0]$ at
+              $M/a_0 = 10^{-3}$, while for the configuration with the strongest radial component
+              $\vec{B} = [0.87, 0.5, 0]$ this enhancement is reduced by about $34\%$.
+            </p>
+
+            <p>
+              Across all configurations and inclinations examined, the overall conclusion is consistent:
+              at astrophysically realistic values of halo compactness the polarization signatures of a
+              black hole surrounded by a dark matter halo are almost indistinguishable from those of an
+              isolated Schwarzschild black hole in direct images, while indirect images provide somewhat
+              better — though still limited — sensitivity to the dark matter content. The detection of
+              the dark matter impact through polarimetric observations of the accretion disk therefore
+              remains extremely challenging with near-future instrumentation.
+            </p>
+          </section>
+
+          <section class="art-section" aria-labelledby="lp-compactness">
+            <h3 class="art-section-title" id="lp-compactness">Role of Halo Compactness</h3>
+
+            <p>
+              An exception to the general trend of small deviations arises at high compactness, where
+              the increased dark matter content in the halo produces image sizes noticeably larger than
+              those typical of the Schwarzschild black hole. In this regime the light-bending and
+              focusing effects differ more substantially between the two spacetimes, and the comparison
+              at equal apparent image size — rather than equal emission radius — becomes essential.
+              The deviations in both $\Delta I$ and $\Delta\mathrm{EVPA}$ scale linearly with the
+              compactness parameter $C = M/a_0$, so that reducing the compactness by one decade
+              reduces the deviation by the same factor in all magnetic field configurations tested.
+            </p>
+          </section>
+
+        </div>
+
+        <aside class="art-related" aria-labelledby="lp-related-title">
+          <p class="art-related-title" id="lp-related-title">Related publications</p>
+          <ul class="art-related-list" role="list">
+            <li>
+              <a href="https://doi.org/10.1140/epjc/s10052-025-14537-8"
+                 target="_blank" rel="noopener noreferrer">
+                Angelov et al. &mdash; Polarized equatorial emission and hot spots around black holes
+                with a dark matter halo (Eur. Phys. J. C 85, 1075, 2025)
+              </a>
+            </li>
+            <li>
+              <a href="https://doi.org/10.1103/PhysRevD.106.104024"
+                 target="_blank" rel="noopener noreferrer">
+                Delijski et al. &mdash; Polarized image of equatorial emission in horizonless
+                spacetimes: naked singularities (Phys. Rev. D 106, 104024, 2022)
+              </a>
+            </li>
+          </ul>
+        </aside>
+
+      </div>
+    </div>
+
+  
+  </main>
+
+
+</div>
+<!-- /site-wrapper -->
+
+<script src="../js/app.js" defer></script>
+
+  <!-- @@FOOTER@@ -->
+<footer class="site-footer" role="contentinfo">
+  <div class="container">
+    <div class="footer-grid">
+
+
+      <div class="footer-col footer-col--info">
+
+        <p class="footer-col__heading">BeyondGR Project</p>
+        <p class="footer-col__desc">
+          Insights about the nature of strong
+          gravitational interaction with
+          electromagnetic observations
+        </p>
+
+        <nav class="footer-sitenav" aria-label="Footer site navigation">
+          <div class="footer-nav-2col">
+            <p class="footer-col__subheading footer-nav-site-label">Site</p>
+
+            <ul class="footer-links" role="list">
+              <li><a href="../index.html"        data-nav="index.html">Home</a></li>
+              <li><a href="../members.html"      data-nav="members.html">Members</a></li>
+            </ul>
+
+            <ul class="footer-links footer-nav-col2" role="list">
+              <li><a href="../research.html"     data-nav="research.html">Research</a></li>
+              <li><a href="../publications.html" data-nav="publications.html">Publications</a></li>
+              <li><a href="../contacts.html"     data-nav="contacts.html">Contacts</a></li>
+            </ul>
+          </div>
+        </nav>
+
+      </div>
+
+
+      <div class="footer-col footer-col--center">
+
+        <section class="footer-block" aria-label="Research group contact details">
+          <p class="footer-col__heading">Contacts</p>
+
+          <address class="footer-contacts">
+
+            <p class="footer-contacts__item">
+              <i class="fa-solid fa-location-dot" aria-hidden="true"></i>
+              <span>
+                Faculty of Physics,<br>
+                Sofia University "St. Kliment Ohridski"<br>
+                5 James Bourchier Blvd, 1164 Sofia, Bulgaria
+              </span>
+            </p>
+
+            <p class="footer-contacts__item">
+              <i class="fa-solid fa-envelope" aria-hidden="true"></i>
+              <a href="mailto:secretary@phys.uni-sofia.bg">secretary@phys.uni-sofia.bg</a>
+            </p>
+
+          </address>
+
+          <div class="footer-affil-logos"
+               role="list"
+               aria-label="Affiliated institution logos">
+
+            <a href="https://www.phys.uni-sofia.bg/"
+               class="footer-logo-link"
+               role="listitem"
+               target="_blank"
+               rel="noopener noreferrer"
+               aria-label="Faculty of Physics — opens in a new tab">
+              <img src="../assets/logos/faculty_logo.svg"
+                   alt="Faculty of Physics Logo"
+                   class="footer-logo-img" />
+            </a>
+
+            <a href="https://www.uni-sofia.bg/"
+               class="footer-logo-link"
+               role="listitem"
+               target="_blank"
+               rel="noopener noreferrer"
+               aria-label="Sofia University — opens in a new tab">
+              <img src="../assets/logos/uni_logo.svg"
+                   alt="Sofia University Logo"
+                   class="footer-logo-img" />
+            </a>
+
+          </div>
+        </section>
+
+      </div>
+
+
+      <div class="footer-col footer-col--funding">
+
+        <section class="footer-block" aria-label="Funding information">
+          <p class="footer-col__heading">Funding</p>
+
+          <div class="footer-institutional__row footer-institutional__row--funding">
+
+            <p class="footer-institutional__grant-text">
+              Project No. 123456780-meow<br>
+              Bulgarian National<br>
+              Science Fund
+            </p>
+
+            <a href="https://www.fni.bg/"
+               class="footer-logo-link"
+               target="_blank"
+               rel="noopener noreferrer"
+               aria-label="Bulgarian National Science Fund — opens in a new tab">
+              <img src="../assets/logos/logo_FNI.png"
+                   alt="Bulgarian National Science Fund logo"
+                   class="footer-logo-img footer-logo-img--fni" />
+            </a>
+
+          </div>
+        </section>
+
+      </div>
+
+    </div>
+
+    <div class="footer-bottom">
+      <p class="footer-bottom__copy">
+        &copy; 2026 BeyondGR Research Group. All rights reserved.
+      </p>
+    </div>
+
+  </div>
+</footer>
+
+<!-- @@/FOOTER@@ -->
+
+</body>
+</html>

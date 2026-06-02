@@ -34,10 +34,6 @@
         crossorigin="anonymous"
         referrerpolicy="no-referrer" />
 
-  <!-- htmx — fetches & swaps the shared header (partials/header.html) -->
-  <script src="https://unpkg.com/htmx.org@2.0.10/dist/htmx.min.js"
-          crossorigin="anonymous"></script>
-
   <!-- Global stylesheet -->
   <link rel="stylesheet" href="css/style.css" />
   <link rel="stylesheet" href="css/index.css" />
@@ -47,16 +43,155 @@
 <div class="site-wrapper">
 
   <!-- ====================================================================
-       HEADER — fetched & rendered by htmx from partials/header.html.
-       hx-trigger="load" fires once on page load; hx-swap="innerHTML"
-       fills this container. js/app.js → setActiveNav() then marks the
-       active link on the htmx:afterSwap event.
+       HEADER: inserted from partials/header.html by 
+       generate_pages/include_header_footer.py. Do NOT hand-edit between the
+       markers; re-run the generator to refresh. 
        ==================================================================== -->
-  <div id="global-header-target"
-       hx-get="partials/header.html"
-       hx-trigger="load"
-       hx-swap="innerHTML"
-       aria-live="polite"></div>
+  <!-- @@HEADER@@ -->
+<header class="site-header" role="banner">
+  <div class="container">
+    <a href="index.html" class="site-logo" aria-label="BeyondGR Project - Home">
+      <svg class="logo-icon" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"
+           aria-hidden="true" focusable="false">
+        <circle cx="16" cy="16" r="2.5" fill="currentColor"/>
+        <rect x="14.5" y="1"  width="3" height="9" rx="1.5" fill="currentColor"/>
+        <rect x="14.5" y="22" width="3" height="9" rx="1.5" fill="currentColor"/>
+        <rect x="1"  y="14.5" width="9" height="3" rx="1.5" fill="currentColor"/>
+        <rect x="22" y="14.5" width="9" height="3" rx="1.5" fill="currentColor"/>
+        <rect x="15.2" y="5" width="1.8" height="6" rx="0.9" fill="currentColor" transform="rotate(45  16 16)"/>
+        <rect x="15.2" y="5" width="1.8" height="6" rx="0.9" fill="currentColor" transform="rotate(135 16 16)"/>
+        <rect x="15.2" y="5" width="1.8" height="6" rx="0.9" fill="currentColor" transform="rotate(225 16 16)"/>
+        <rect x="15.2" y="5" width="1.8" height="6" rx="0.9" fill="currentColor" transform="rotate(315 16 16)"/>
+      </svg>
+      <span class="site-header__logo-text">Beyond<strong>GR</strong></span>
+    </a>
+
+    <div class="header-institutions" aria-label="Partner institutions">
+      <a href="https://www.fni.bg/"
+         class="footer-logo-link"
+         target="_blank"
+         rel="noopener noreferrer"
+         aria-label="Bulgarian National Science Fund - opens in a new tab">
+        <img src="assets/logos/logo_FNI.png" alt="FNI Logo"
+             style="height: 80px; width: auto; object-fit: contain;">
+      </a>
+    </div>
+  </div>
+</header>
+
+<nav class="site-nav" role="navigation" aria-label="Primary site navigation">
+  <div class="container">
+    <ul class="nav-links" role="list">
+      <li class="nav-links__item"><a href="index.html"        class="nav-links__link is-active" data-nav="index.html" aria-current="page">Home</a></li>
+      <li class="nav-links__item"><a href="members.html"      class="nav-links__link" data-nav="members.html">Members</a></li>
+
+      <!-- Research: hover/focus reveals a dropdown of articles (desktop only). -->
+      <li class="nav-links__item nav-has-dropdown">
+        <a href="research.html" class="nav-links__link" data-nav="research.html">
+          Research
+          <svg class="nav-dropdown__arrow" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <path d="M6 9l6 6 6-6" fill="none" stroke="currentColor"
+                  stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+        <ul class="nav-dropdown" role="menu" aria-label="Research articles">
+          <li role="none"><a role="menuitem" class="nav-dropdown__link" href="research/research-article-1.html">Black Holes Surrounded by a Dark Matter Halo</a></li>
+          <li role="none"><a role="menuitem" class="nav-dropdown__link" href="research/research-article-2.html">Linear Polarization for Black Holes with a Dark Matter Halo</a></li>
+          <li role="none"><a role="menuitem" class="nav-dropdown__link" href="research/research-article-3.html">Orbiting Hotspots</a></li>
+          <li role="none"><a role="menuitem" class="nav-dropdown__link" href="research/research-article-4.html">Polarized Image of an Equatorial Emitting Ring</a></li>
+        </ul>
+      </li>
+
+      <li class="nav-links__item"><a href="publications.html" class="nav-links__link" data-nav="publications.html">Publications</a></li>
+      <li class="nav-links__item"><a href="contacts.html"     class="nav-links__link" data-nav="contacts.html">Contacts</a></li>
+    </ul>
+
+    <div class="nav-controls">
+      <!-- Theme toggle: click flips the theme; CSS swaps the icon. -->
+      <button class="btn-theme-toggle" type="button"
+              aria-label="Toggle colour theme"
+              onclick="toggleTheme()">
+        <!-- Shown in LIGHT mode (click → dark) -->
+        <svg class="theme-icon theme-icon--moon" xmlns="http://www.w3.org/2000/svg"
+             viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="currentColor">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+        </svg>
+        <!-- Shown in DARK mode (click → light) -->
+        <svg class="theme-icon theme-icon--sun" xmlns="http://www.w3.org/2000/svg"
+             viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="currentColor">
+          <circle cx="12" cy="12" r="5"/>
+          <line x1="12" y1="1"  x2="12" y2="3"  stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          <line x1="12" y1="21" x2="12" y2="23" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          <line x1="4.22"  y1="4.22"  x2="5.64"  y2="5.64"  stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          <line x1="1"  y1="12" x2="3"  y2="12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          <line x1="21" y1="12" x2="23" y2="12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          <line x1="4.22"  y1="19.78" x2="5.64"  y2="18.36" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          <line x1="18.36" y1="5.64"  x2="19.78" y2="4.22"  stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </button>
+
+      <button class="btn-hamburger" type="button"
+              aria-label="Open navigation menu"
+              aria-expanded="false"
+              aria-controls="mobile-nav-drawer"
+              onclick="toggleDrawer()">
+        <span class="hamburger-line" aria-hidden="true"></span>
+        <span class="hamburger-line" aria-hidden="true"></span>
+        <span class="hamburger-line" aria-hidden="true"></span>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<!--
+  Mobile drawer. Structure requirement (matches existing CSS):
+    .mobile-nav-drawer            outer fixed wrapper (pointer-events: none)
+      .nav-overlay                full-screen backdrop  (child)
+      .mobile-nav-drawer__panel   sliding side panel     (child)
+-->
+<div class="mobile-nav-drawer" id="mobile-nav-drawer" aria-hidden="true">
+
+  <div class="nav-overlay" id="nav-overlay" aria-hidden="true"
+       onclick="closeDrawer()"></div>
+
+  <nav class="mobile-nav-drawer__panel" aria-label="Mobile navigation">
+    <button class="drawer-close-btn" type="button"
+            aria-label="Close navigation menu"
+            onclick="closeDrawer()">
+      <span class="drawer-close-btn__x" aria-hidden="true">&times;</span>
+    </button>
+    <ul class="drawer-links" role="list">
+      <li class="nav-links__item"><a href="index.html"        class="drawer-link is-active" data-nav="index.html"        onclick="closeDrawer()" aria-current="page">Home</a></li>
+      <li class="nav-links__item"><a href="members.html"      class="drawer-link" data-nav="members.html"      onclick="closeDrawer()">Members</a></li>
+
+      <!-- Research: tapping toggles the sub-menu open/closed (does not navigate). -->
+      <li class="nav-links__item drawer-has-submenu">
+        <button type="button" class="drawer-link drawer-submenu-toggle" data-nav="research.html"
+                aria-expanded="false" aria-controls="drawer-research-submenu"
+                onclick="toggleResearchSubmenu(this)">
+          Research
+          <svg class="drawer-submenu__arrow" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false">
+            <path d="M6 9l6 6 6-6" fill="none" stroke="currentColor"
+                  stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+        <ul class="drawer-submenu" id="drawer-research-submenu" role="list" hidden>
+          <li><a href="research/research-article-1.html"     class="drawer-sublink" onclick="closeDrawer()">Black Holes Surrounded by a Dark Matter Halo</a></li>
+          <li><a href="research/research-article-2.html"     class="drawer-sublink" onclick="closeDrawer()">Linear Polarization for Black Holes with a Dark Matter Halo</a></li>
+          <li><a href="research/research-article-3.html"     class="drawer-sublink" onclick="closeDrawer()">Orbiting Hotspots</a></li>
+          <li><a href="research/research-article-4.html"     class="drawer-sublink" onclick="closeDrawer()">Polarized Image of an Equatorial Emitting Ring</a></li>
+        </ul>
+      </li>
+
+      <li class="nav-links__item"><a href="publications.html" class="drawer-link" data-nav="publications.html" onclick="closeDrawer()">Publications</a></li>
+      <li class="nav-links__item"><a href="contacts.html"     class="drawer-link" data-nav="contacts.html"     onclick="closeDrawer()">Contacts</a></li>
+    </ul>
+  </nav>
+
+</div>
+
+<!-- @@/HEADER@@ -->
 
 
   <!-- ====================================================================
@@ -120,13 +255,10 @@
     <!-- ------------------------------------------------------------------
          SECTION 2 — RESEARCH HIGHLIGHTS (Dynamic)
          Cards are fetched and built by loadHomeResearchPreviews() in app.js §16.
+         All four research articles are shown at once — no pagination.
 
-         Desktop  (≥1024px)  : CSS 3-col grid; JS prev/next pagination (right)
-                                "View All Articles →" sits flush-left in footer bar.
-         Tablet   (768–1023px): horizontal overflow scroll-snap, 2 cards visible;
-                                pagination buttons hidden (CSS), link only.
-         Mobile   (<768px)   : single-column stack; JS limits to 3 newest cards;
-                                pagination buttons hidden (CSS), link only.
+         Desktop & Tablet (≥768px): 2×2 CSS grid (two cards per row).
+         Mobile           (<768px): single-column 4×1 stack.
          ------------------------------------------------------------------ -->
     <section class="section section--alt" aria-labelledby="research-highlights-title">
       <div class="container">
@@ -142,67 +274,115 @@
           </p>
         </header>
 
-        <!-- Card track wrapper ─────────────────────────────────────────────
-             .features-grid   → desktop 3-col CSS Grid (existing style.css rule)
-             .research-previews-track → tablet scroll-snap + mobile stack overrides
-             JS populates the interior with .feature-card <article> elements.    -->
-        <div class="research-previews-carousel">
-          <div class="features-grid research-previews-track"
-               id="research-previews-track"
-               role="list"
-               aria-label="Research article previews"
-               aria-live="polite">
-            <!-- .feature-card elements injected here by app.js §16 -->
-          </div>
-        </div>
-        <!-- /research-previews-carousel -->
-
-        <!-- Bottom bar ─────────────────────────────────────────────────────
-             Desktop : "View All Articles →" flush-left | prev/next flush-right
-             Tablet  : link only  (pagination hidden via CSS @media rule)
-             Mobile  : link only  (pagination hidden via CSS @media rule)        -->
-        <div class="research-previews-footer">
-
-          <a href="research.html"
-             class="view-all-link research-viewall-link"
-             aria-label="View all research articles on the Research page">
-            View All Articles
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
-                 stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
-                 aria-hidden="true" focusable="false">
-              <line x1="5" y1="12" x2="19" y2="12"/>
-              <polyline points="12 5 19 12 12 19"/>
+        <!-- Card grid ──────────────────────────────────────────────────────
+             .features-grid + .research-previews-track → 2×2 grid (≥768px),
+             collapsing to a single column (4×1) on mobile (<768px).
+             JS populates the interior with .feature-card <article> elements. -->
+        <div class="features-grid research-previews-track"
+             id="research-previews-track"
+             role="list"
+             aria-label="Research article previews"
+             aria-live="polite">
+          <article class="feature-card" role="listitem">
+            <svg class="feature-card__icon" viewBox="0 0 44 44"
+                xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+              <circle cx="22" cy="22" r="8"  fill="currentColor" opacity="0.15"/>
+              <circle cx="22" cy="22" r="5"  fill="currentColor"/>
+              <ellipse cx="22" cy="22" rx="19" ry="6"
+                       fill="none" stroke="currentColor" stroke-width="1.5" opacity="0.5"/>
+              <ellipse cx="22" cy="22" rx="14" ry="4"
+                       fill="none" stroke="currentColor" stroke-width="1.2" opacity="0.7"/>
             </svg>
-          </a>
+            <h3 class="feature-card__title">Black Holes Surrounded by a Dark Matter Halo</h3>
+            <p class="feature-card__desc" data-article-id="black-holes-dark-matter">We consider a spacetime geometry describing a superposition of a black hole and a dark matter halo at large distance. The solution is inspired by the Einstein cluster — a stationary self-gravitating system of many massive particles moving on circular geodesics in the field created by their collective superposition, first described by Einstein and subsequently revisited in the literature. Such a system is spherically symmetric, and the metric takes the general static form where the metric functions and depend only on the radial coordinate .</p>
+            <a href="research.html"
+               class="feature-card__link"
+               aria-label="Read more about Black Holes Surrounded by a Dark Matter Halo on the Research page">
+              Read More
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                   stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+                   aria-hidden="true" focusable="false">
+                <line x1="5" y1="12" x2="19" y2="12"/>
+                <polyline points="12 5 19 12 12 19"/>
+              </svg>
+            </a>
+          </article>
 
-          <nav class="research-previews-pagination"
-               id="research-previews-pagination"
-               aria-label="Research article page controls"
-               hidden>
-            <button class="btn-rp-nav btn-rp-prev"
-                    id="btn-rp-prev"
-                    type="button"
-                    aria-label="Show previous research articles"
-                    disabled>
-              &#8249;
-            </button>
-            <span class="rp-page-indicator"
-                  id="rp-page-indicator"
-                  aria-live="polite"
-                  aria-atomic="true">
-              <!-- e.g. "1 / 2" — injected by renderResearchPage() in app.js §16 -->
-            </span>
-            <button class="btn-rp-nav btn-rp-next"
-                    id="btn-rp-next"
-                    type="button"
-                    aria-label="Show next research articles">
-              &#8250;
-            </button>
-          </nav>
-          <!-- /research-previews-pagination -->
+          <article class="feature-card" role="listitem">
+            <svg class="feature-card__icon" viewBox="0 0 44 44"
+                xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+              <circle cx="22" cy="22" r="8"  fill="currentColor" opacity="0.15"/>
+              <circle cx="22" cy="22" r="5"  fill="currentColor"/>
+              <ellipse cx="22" cy="22" rx="19" ry="6"
+                       fill="none" stroke="currentColor" stroke-width="1.5" opacity="0.5"/>
+              <ellipse cx="22" cy="22" rx="14" ry="4"
+                       fill="none" stroke="currentColor" stroke-width="1.2" opacity="0.7"/>
+            </svg>
+            <h3 class="feature-card__title">Linear Polarization for Black Holes with a Dark Matter Halo</h3>
+            <p class="feature-card__desc" data-article-id="linear-polarization-dm">This section presents a systematic analysis of the linear polarization of synchrotron emission in the static spacetime of a black hole surrounded by a dark matter halo. The central objective is to quantify how the dark matter content modifies the observable polarization pattern relative to the Schwarzschild case, across different magnetic field configurations and inclination angles. We examine both the intensity and orientation (EVPA) of the polarization vector, with particular emphasis on the role of the halo compactness parameter .</p>
+            <a href="research.html"
+               class="feature-card__link"
+               aria-label="Read more about Linear Polarization for Black Holes with a Dark Matter Halo on the Research page">
+              Read More
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                   stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+                   aria-hidden="true" focusable="false">
+                <line x1="5" y1="12" x2="19" y2="12"/>
+                <polyline points="12 5 19 12 12 19"/>
+              </svg>
+            </a>
+          </article>
 
+          <article class="feature-card" role="listitem">
+            <svg class="feature-card__icon" viewBox="0 0 44 44"
+                xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+              <circle cx="22" cy="22" r="8"  fill="currentColor" opacity="0.15"/>
+              <circle cx="22" cy="22" r="5"  fill="currentColor"/>
+              <ellipse cx="22" cy="22" rx="19" ry="6"
+                       fill="none" stroke="currentColor" stroke-width="1.5" opacity="0.5"/>
+              <ellipse cx="22" cy="22" rx="14" ry="4"
+                       fill="none" stroke="currentColor" stroke-width="1.2" opacity="0.7"/>
+            </svg>
+            <h3 class="feature-card__title">Orbiting Hotspots</h3>
+            <p class="feature-card__desc" data-article-id="orbiting-hotspots">Orbiting hot spots are compact, localized regions of enhanced radiation within the accretion disk of a black hole . These features emerge as a result of magnetic reconnection, plasma instabilities, or turbulence in the surrounding environment . In our formulation, the hot spot is treated as a point-like emitter following a circular, counterclockwise, equatorial geodesic orbit.</p>
+            <a href="research.html"
+               class="feature-card__link"
+               aria-label="Read more about Orbiting Hotspots on the Research page">
+              Read More
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                   stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+                   aria-hidden="true" focusable="false">
+                <line x1="5" y1="12" x2="19" y2="12"/>
+                <polyline points="12 5 19 12 12 19"/>
+              </svg>
+            </a>
+          </article>
+
+          <article class="feature-card" role="listitem">
+            <svg class="feature-card__icon" viewBox="0 0 44 44"
+                xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+              <circle cx="22" cy="22" r="8"  fill="currentColor" opacity="0.15"/>
+              <circle cx="22" cy="22" r="5"  fill="currentColor"/>
+              <ellipse cx="22" cy="22" rx="19" ry="6"
+                       fill="none" stroke="currentColor" stroke-width="1.5" opacity="0.5"/>
+              <ellipse cx="22" cy="22" rx="14" ry="4"
+                       fill="none" stroke="currentColor" stroke-width="1.2" opacity="0.7"/>
+            </svg>
+            <h3 class="feature-card__title">Polarized Image of an Equatorial Emitting Ring</h3>
+            <p class="feature-card__desc" data-article-id="polarized-ring">The goal of this analysis is to describe the light reaching a distant observer from a thin fluid ring orbiting at a fixed radial coordinate in the vicinity of a black hole with a dark matter halo. The fluid emits linearly polarized synchrotron radiation in a locally constant magnetic field, and the observable polarization at large distances is obtained by parallel-transporting the polarization four-vector along null geodesics. To carry out this procedure in the static spherically symmetric spacetime described previously, we introduce an orthonormal tetrad adapted to the metric: The orbiting fluid moves only in the equatorial – plane.</p>
+            <a href="research.html"
+               class="feature-card__link"
+               aria-label="Read more about Polarized Image of an Equatorial Emitting Ring on the Research page">
+              Read More
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                   stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+                   aria-hidden="true" focusable="false">
+                <line x1="5" y1="12" x2="19" y2="12"/>
+                <polyline points="12 5 19 12 12 19"/>
+              </svg>
+            </a>
+          </article>
         </div>
-        <!-- /research-previews-footer -->
 
       </div>
       <!-- /container -->
@@ -234,7 +414,74 @@
              role="list"
              aria-live="polite"
              aria-label="Recent publications list">
-          <!-- Publication items injected here by app.js → loadPublicationsPreview() -->
+          <article class="pub-item">
+            <div class="pub-item__info">
+              <p class="pub-item__title">Polarized equatorial emission and hot spots around black holes with a dark matter halo</p>
+              <p class="pub-item__authors">Tsanimir Angelov, Rasim Bekir, Galin Gyulchev, Petya Nedkova, Stoytcho Yazadjiev</p>
+              <div class="pub-item__meta">
+                <span class="pub-item__year">2025</span>
+                <span class="pub-item__journal">Eur. Phys. J. C </span>
+              </div>
+            </div>
+            <div class="pub-item__link-col">
+              <a class="btn-pub-link" href=" https://doi.org/10.1140/epjc/s10052-025-14537-8" target="_blank" rel="noopener noreferrer" aria-label="Read &quot;Polarized equatorial emission and hot spots around black holes with a dark matter halo&quot; on Journal">
+              <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12"
+                  viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                  stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"
+                  aria-hidden="true" focusable="false">
+                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+                <polyline points="15 3 21 3 21 9"/>
+                <line x1="10" y1="14" x2="21" y2="3"/>
+              </svg>Journal
+              </a>
+            </div>
+          </article>
+
+          <article class="pub-item">
+            <div class="pub-item__info">
+              <p class="pub-item__title">Images of the Thin Accretion Disk Around Kerr Black Holes coupled to time periodic scalar fields</p>
+              <p class="pub-item__authors">Galin Gyulchev, Daniela Doneva, Valentin Deliyski, Petya Nedkova, Stoytcho Yazadjiev</p>
+              <div class="pub-item__meta">
+                <span class="pub-item__year">2026</span>
+                <span class="pub-item__journal">arXiv Preprint</span>
+              </div>
+            </div>
+            <div class="pub-item__link-col">
+              <a class="btn-pub-link" href="https://arxiv.org/abs/2603.08796" target="_blank" rel="noopener noreferrer" aria-label="Read &quot;Images of the Thin Accretion Disk Around Kerr Black Holes coupled to time periodic scalar fields&quot; on arXiv">
+              <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12"
+                  viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                  stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"
+                  aria-hidden="true" focusable="false">
+                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+                <polyline points="15 3 21 3 21 9"/>
+                <line x1="10" y1="14" x2="21" y2="3"/>
+              </svg>arXiv
+              </a>
+            </div>
+          </article>
+
+          <article class="pub-item">
+            <div class="pub-item__info">
+              <p class="pub-item__title">Polarized Equatorial Emission around Kerr Black Holes with Synchronized Scalar Hair. I. Direct images</p>
+              <p class="pub-item__authors">Valentin Deliyski, Galin Gyulchev, Daniela Doneva, Petya Nedkova, Stoytcho Yazadjiev</p>
+              <div class="pub-item__meta">
+                <span class="pub-item__year">2026</span>
+                <span class="pub-item__journal">arXiv Preprint</span>
+              </div>
+            </div>
+            <div class="pub-item__link-col">
+              <a class="btn-pub-link" href="https://doi.org/10.48550/arXiv.2605.03006" target="_blank" rel="noopener noreferrer" aria-label="Read &quot;Polarized Equatorial Emission around Kerr Black Holes with Synchronized Scalar Hair. I. Direct images&quot; on arXiv">
+              <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12"
+                  viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                  stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"
+                  aria-hidden="true" focusable="false">
+                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+                <polyline points="15 3 21 3 21 9"/>
+                <line x1="10" y1="14" x2="21" y2="3"/>
+              </svg>arXiv
+              </a>
+            </div>
+          </article>
         </div>
 
         <a href="publications.html"
@@ -258,19 +505,18 @@
   <!-- /main -->
 
 
-  <!-- ====================================================================
-       FOOTER — static markup lives directly in this page (below).
-       (#global-footer-target is an unused legacy hook kept for compatibility.)
-       ==================================================================== -->
-  <div id="global-footer-target" aria-live="polite"></div>
-
-
 </div>
 <!-- /site-wrapper -->
 
 <!-- Global script — deferred so it runs after DOM is parsed -->
 <script src="js/app.js" defer></script>
 
+<!-- ====================================================================
+     FOOTER - inserted from partials/footer.html by
+     generate_pages/include_header_footer.py. Do NOT hand-edit between the
+     markers; re-run the generator to refresh.
+     ==================================================================== -->
+<!-- @@FOOTER@@ -->
 <footer class="site-footer" role="contentinfo">
   <div class="container">
     <div class="footer-grid">
@@ -290,14 +536,14 @@
             <p class="footer-col__subheading footer-nav-site-label">Site</p>
 
             <ul class="footer-links" role="list">
-              <li><a href="index.html">Home</a></li>
-              <li><a href="members.html">Members</a></li>
+              <li><a href="index.html"        data-nav="index.html">Home</a></li>
+              <li><a href="members.html"      data-nav="members.html">Members</a></li>
             </ul>
 
             <ul class="footer-links footer-nav-col2" role="list">
-              <li><a href="research.html">Research</a></li>
-              <li><a href="publications.html">Publications</a></li>
-              <li><a href="contacts.html">Contacts</a></li>
+              <li><a href="research.html"     data-nav="research.html">Research</a></li>
+              <li><a href="publications.html" data-nav="publications.html">Publications</a></li>
+              <li><a href="contacts.html"     data-nav="contacts.html">Contacts</a></li>
             </ul>
           </div>
         </nav>
@@ -390,8 +636,6 @@
 
     </div>
 
-
-    <!-- ── Sub-footer: copyright line ───────────────────────── -->
     <div class="footer-bottom">
       <p class="footer-bottom__copy">
         &copy; 2026 BeyondGR Research Group. All rights reserved.
@@ -400,6 +644,8 @@
 
   </div>
 </footer>
+
+<!-- @@/FOOTER@@ -->
 
 </body>
 </html>

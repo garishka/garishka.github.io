@@ -1,0 +1,312 @@
+/* ==========================================================================
+   BeyondGR PROJECT — Research Article Stylesheet
+   File: css/articles.css
+   Scope: Formatting for individual research-article pages
+          (e.g. research/research-article-1.html).
+
+   Loaded AFTER css/style.css, so every colour, space, type, and transition
+   token defined on :root / [data-theme="dark"] is available here. This file
+   adds NO new colours of its own — it only consumes the existing design
+   tokens, which means dark mode is handled automatically: when <html> carries
+   data-theme="dark", the same variable names resolve to the dark palette
+   (Midnight Slate card, Deep Void backdrop, Amber Gold accents).
+
+   Element map (from research-article-1.html):
+     .art-wrap            white container holding the whole article
+       .art-header        title + meta block
+         .art-title       <h2> article title
+         .art-meta        date · authors line
+         .art-divider     horizontal rule under the meta
+       .art-body          running text + equations
+         .art-section     a titled section
+         .art-section-title  <h3> with a gold underline
+       .art-tags          keyword chip row
+       .art-related       "Related publications" aside
+   ========================================================================== */
+
+
+/* --------------------------------------------------------------------------
+   1. PAGE BACKDROP
+   The standalone article page has no grey .page-body wrapper, so we tint the
+   <main> region with the alternate background token. In light mode this is
+   Background Grey (#F4F4F4); in dark mode it resolves to Deep Void (#01080E).
+   The white/slate article card then visibly floats on top of it — exactly the
+   relationship shown in the light- and dark-mode mock-ups.
+   -------------------------------------------------------------------------- */
+.site-main {
+  background-color: var(--color-bg-alt);
+  padding-block: var(--space-2xl);
+  transition: background-color var(--transition-base);
+}
+
+
+/* --------------------------------------------------------------------------
+   2. THE WHITE CONTAINER (.art-wrap)
+   - Background uses --color-bg: Pure White in light, Midnight Slate in dark.
+   - Height is intentionally NOT fixed: the box grows with its content so a
+     long article and a short one are both fully contained.
+   - Generous, symmetric padding on all four sides.
+   - Constrained measure (max-width) keeps line length comfortable to read,
+     centred within the 1200px global container.
+   -------------------------------------------------------------------------- */
+.art-wrap {
+  max-width: 1200px;
+  margin-inline: auto;
+  height: auto;                               /* grows to fit its content    */
+  background-color: var(--color-bg);          /* white  /  Midnight Slate     */
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-md);
+  box-sizing: border-box;
+  /* Padding on ALL sides — slightly tighter left/right than top/bottom. */
+  padding: var(--space-2xl) var(--space-2xl);
+  transition: background-color var(--transition-base),
+              border-color var(--transition-base),
+              box-shadow var(--transition-base);
+}
+
+
+/* --------------------------------------------------------------------------
+   3. ARTICLE HEADER — title, meta line, divider
+   -------------------------------------------------------------------------- */
+.art-header {
+  margin-bottom: var(--space-xl);
+}
+
+/* --- Title ---
+   Bold, Midnight-Blue in light mode (matches "Orbiting Hotspots" in the
+   reference). In dark mode the title switches to Amber Gold, mirroring the
+   "Article Title" treatment in the dark mock-up (the primary token alone
+   would be near-invisible Deep Navy on the slate card, so we override it). */
+.art-title {
+  font-size: clamp(1.75rem, 2.6vw, 2.0rem);
+  font-weight: var(--font-weight-bold);
+  line-height: 1.2;
+  color: var(--color-primary);
+  margin: 0 0 var(--space-md);
+}
+
+[data-theme="dark"] .art-title {
+  color: var(--color-accent);
+}
+
+/* --- Meta line: "March 2024  ·  T. Angelov, R. Bekir, …" --- */
+.art-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--space-sm);
+  font-size: var(--font-size-sm);
+  line-height: 1.1;
+}
+
+/* Date sits in the lighter muted tone */
+.art-date {
+  color: var(--color-text-muted);
+  display: none;
+}
+
+/* The middot separator — purely decorative, slightly faded */
+.art-separator {
+  color: var(--color-text-muted);
+  opacity: 0.65;
+  display: none;
+}
+
+/* Authors read a touch stronger than the date for a subtle hierarchy */
+.art-authors {
+  color: var(--color-text-muted);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: 0.01em;
+}
+
+/* --- Divider beneath the meta line --- */
+.art-divider {
+  height: 1px;
+  margin-top: var(--space-lg);
+  background-color: var(--color-border);
+  transition: background-color var(--transition-base);
+}
+
+
+/* --------------------------------------------------------------------------
+   4. ARTICLE BODY — sections, headings, paragraphs
+   -------------------------------------------------------------------------- */
+.art-body {
+  color: var(--color-text);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-base);
+}
+
+/* Vertical rhythm between titled sections */
+.art-section + .art-section {
+  margin-top: var(--space-2xl);
+}
+
+/* --- Section subtitle (<h3>) with the gold underline ---
+   `width: fit-content` makes the box hug its text, so the Egg-Yolk-Gold
+   border-bottom underlines only the heading itself (as in the reference),
+   never the full column width. The accent token gives Amber Gold in dark. */
+.art-section-title {
+  display: block;
+  width: fit-content;
+  max-width: 100%;
+  font-size: var(--font-size-h3);
+  font-weight: var(--font-weight-bold);
+  line-height: 1.1;
+  color: var(--color-primary);
+  border-bottom: 2px solid var(--color-accent);
+  padding-bottom: var(--space-sm);
+  margin: 0 0 var(--space-md);
+}
+
+[data-theme="dark"] .art-section-title {
+  color: var(--color-accent);
+}
+
+/* Body paragraphs — comfortable spacing, last one flush to the section end */
+.art-body p {
+  margin: 0 0 var(--space-md);
+}
+
+.art-body p:last-child {
+  margin-bottom: 0;
+}
+
+/* Inline links inside running text inherit the global anchor colours
+   (primary in light, accent in dark) but pick up a subtle underline so they
+   are distinguishable within dense academic prose. */
+.art-body a {
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+}
+
+
+/* --------------------------------------------------------------------------
+   6. KEYWORD TAGS (.art-tags / .art-tag)
+   Small flat chips. Tinted with the muted background token; on hover they
+   adopt the accent colour for the lightweight interactive feedback the
+   project calls for.
+   -------------------------------------------------------------------------- */
+.art-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+  margin-top: var(--space-2xl);
+  padding-top: var(--space-lg);
+  border-top: 1px solid var(--color-border);
+}
+
+.art-tag {
+  display: inline-block;
+  padding: var(--space-xs) var(--space-md);
+  font-size: var(--font-size-sm);
+  line-height: 1.4;
+  color: var(--color-text-muted);
+  background-color: var(--color-bg-alt);
+  border: 1px solid var(--color-border);
+  border-radius: 999px;                       /* fully rounded pill          */
+  transition: color var(--transition-fast),
+              background-color var(--transition-fast),
+              border-color var(--transition-fast);
+}
+
+.art-tag:hover {
+  color: var(--color-primary);
+  background-color: var(--color-accent);
+  border-color: var(--color-accent);
+}
+
+/* In dark mode the active-pill convention is gold fill with dark text,
+   matching the navigation's .is-active styling. */
+[data-theme="dark"] .art-tag:hover {
+  color: var(--color-primary);
+}
+
+
+/* --------------------------------------------------------------------------
+   7. RELATED PUBLICATIONS ASIDE (.art-related)
+   Echoes the gold-bar "equation block" treatment from the mock-up: an
+   accent left border with a faintly tinted panel. Sits at the foot of the
+   article as a clearly separated reference block.
+   -------------------------------------------------------------------------- */
+.art-related {
+  margin-top: var(--space-2xl);
+  padding: var(--space-lg) var(--space-xl);
+  background-color: var(--color-bg-alt);
+  border-left: 4px solid var(--color-blockquote-bar);
+  border-radius: var(--border-radius);
+  transition: background-color var(--transition-base),
+              border-color var(--transition-base);
+  box-sizing: border-box;
+}
+
+.art-related-title {
+  margin: 0 0 var(--space-sm);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+.art-related-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.art-related-list a {
+  font-size: var(--font-size-sm);
+  line-height: 1.5;
+  text-decoration: none;
+  transition: opacity var(--transition-fast), color var(--transition-fast);
+}
+
+.art-related-list a:hover {
+  opacity: 1;
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+}
+
+
+/* --------------------------------------------------------------------------
+   8. RESPONSIVE — tighten padding on smaller viewports
+   -------------------------------------------------------------------------- */
+
+/* Tablet */
+@media (max-width: 1023px) {
+  .art-wrap {
+    padding: var(--space-xl);
+    box-sizing: border-box;
+  }
+}
+
+/* Mobile */
+@media (max-width: 767px) {
+  .site-main {
+    padding-block: var(--space-lg);
+  }
+
+  .art-wrap {
+    padding: var(--space-lg) var(--space-md);
+    border-radius: var(--border-radius);
+    box-sizing: border-box;
+  }
+
+  .art-related {
+    padding: var(--space-md) var(--space-lg);
+    box-sizing: border-box;
+  }
+}
+
+/* Allow inline KaTeX expressions to wrap safely to the next line on small viewports */
+.art-body .katex {
+  white-space: normal; 
+}
+
+/* Ensure the individual math symbols inside stay grouped where possible */
+.art-body .katex .base {
+  white-space: nowrap;
+  display: inline-block;
+}

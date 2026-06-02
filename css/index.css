@@ -487,15 +487,24 @@
 
 
 /* --------------------------------------------------------------------------
-   §HR  HOME-RESEARCH PREVIEW CAROUSEL
+   §HR  HOME-RESEARCH PREVIEW GRID
    Dynamic research preview cards section on index.html (section §16 in HTML).
    Rendered by JS into .research-previews-track using the .features-grid layout.
+   All four articles are shown at once in a 2×2 grid (no pagination).
    -------------------------------------------------------------------------- */
 
 /* CSS token: max height of card description area.
-   JS reads this via FEATURE_CARD_DESC_MAX_HEIGHT (must stay in sync = 108px). */
+   JS reads this via FEATURE_CARD_DESC_MAX_HEIGHT (must stay in sync = 108px).
+   At the body line-height (1rem × 1.65 ≈ 26.4px) this clamps to ~4 lines. */
 :root {
   --feature-card-desc-max-height: 108px;
+}
+
+/* 2×2 grid: two equal columns, each row spanning the full container width.
+   Two classes (0,2,0) override the base .features-grid 3-col rule (0,1,0)
+   at all widths ≥768px; the mobile breakpoint collapses this to one column. */
+.research-previews-track.features-grid {
+  grid-template-columns: repeat(2, 1fr);
 }
 
 /* Clamp description height so cards in a row stay uniform.
@@ -503,16 +512,6 @@
 .research-previews-track .feature-card__desc {
   height: var(--feature-card-desc-max-height);
   overflow: hidden;
-}
-
-/* Date label (e.g. "Jan 2025") — sits above the card title */
-.feature-card__date {
-  font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-bold);
-  color: var(--color-text-muted);
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  margin-bottom: var(--space-xs);
 }
 
 /* Truncation marker "[...]" */
@@ -526,151 +525,13 @@
   color: var(--color-accent);
 }
 
-/* JS pagination visibility toggle — applied by renderResearchPage() */
-.feature-card.is-page-hidden {
-  display: none !important;
-}
-
-/* Outer carousel wrapper — track + footer stacked vertically */
-.research-previews-carousel {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-xl);
-}
-
-/* Bottom bar: "View All Articles →" left | prev/next right */
-.research-previews-footer {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--space-lg);
-  min-height: 40px; /* matches .btn-rp-nav height — prevents row collapse */
-}
-
-/* "View All Articles →" link */
-.research-viewall-link {
-  display: inline-flex;
-  align-items: center;
-  height: 40px;
-  gap: var(--space-xs);
-  font-weight: var(--font-weight-bold);
-  color: var(--color-primary);
-  text-decoration: none;
-  transition: opacity var(--transition-fast);
-}
-
-.research-viewall-link:hover {
-  opacity: 0.75;
-}
-
-/* Force arrow SVG inline (overrides the global svg { display:block } reset) */
-.research-viewall-link svg {
-  display: inline-block;
-  vertical-align: middle;
-  flex-shrink: 0;
-}
-
-[data-theme="dark"] .research-viewall-link {
-  color: var(--color-accent);
-}
-
-/* Desktop prev / next pagination controls */
-.research-previews-pagination {
-  display: flex;
-  align-items: center;
-  gap: var(--space-lg);
-}
-
-.btn-rp-nav {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  border: 2px solid var(--color-primary);
-  background: transparent;
-  color: var(--color-primary);
-  font-size: 1.5rem;
-  line-height: 1;
-  cursor: pointer;
-  transition:
-    background-color var(--transition-fast),
-    color            var(--transition-fast),
-    border-color     var(--transition-fast),
-    opacity          var(--transition-fast);
-}
-
-.btn-rp-nav:hover:not(:disabled) {
-  background-color: var(--color-primary);
-  color: var(--color-text-inverse);
-}
-
-[data-theme="dark"] .btn-rp-nav {
-  border-color: var(--color-accent);
-  color: var(--color-accent);
-}
-
-[data-theme="dark"] .btn-rp-nav:hover:not(:disabled) {
-  background-color: var(--color-accent);
-  color: var(--color-primary);
-}
-
-.btn-rp-nav:disabled {
-  opacity: 0.3;
-  cursor: not-allowed;
-}
-
-.btn-rp-nav:focus-visible {
-  outline: 2px solid var(--color-accent);
-  outline-offset: 3px;
-}
-
-.rp-page-indicator {
-  font-size: var(--font-size-sm);
-  color: var(--color-text-muted);
-  min-width: 3.5rem;
-  text-align: center;
-  font-variant-numeric: tabular-nums; /* prevents width jump between "1/2" and "2/2" */
-}
-
 
 /* --------------------------------------------------------------------------
    §resp  HOME PAGE — RESPONSIVE BREAKPOINTS
    -------------------------------------------------------------------------- */
 
-/* Tablet (768px–1023px): carousel-specific rules that need the min-width
-   bound to prevent the scroll-snap behaviour from also firing on mobile,
-   where the track switches to a plain vertical flex column instead. */
-@media (max-width: 1023px) and (min-width: 768px) {
-  .research-previews-track.features-grid {
-    display: flex;
-    flex-wrap: nowrap;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    -webkit-overflow-scrolling: touch;
-    gap: 24px;
-    padding-bottom: var(--space-sm);
-  }
-
-  .research-previews-track.features-grid::-webkit-scrollbar { display: none; }
-  .research-previews-track.features-grid { scrollbar-width: none; }
-
-  /* Each card occupies exactly half the track width */
-  .research-previews-track.features-grid .feature-card {
-    flex: 0 0 calc(50% - 12px); /* (100% - 1×24px gap) / 2 */
-    scroll-snap-align: start;
-    min-width: 0;
-  }
-}
-
 /* All viewports up to 1023px */
 @media (max-width: 1023px) {
-  /* Hide desktop prev/next buttons; "View All" link fills the row alone */
-  .research-previews-pagination {
-    display: none !important;
-  }
-
   .hero__inner {
     grid-template-columns: 1fr;
     gap: var(--space-2xl);
@@ -714,14 +575,18 @@
     grid-template-columns: 1fr;
   }
 
+  /* Two classes (0,2,0) override the base 2-col grid rule for the research
+     track so it collapses to a single column (4×1 stack) on mobile. */
   .research-previews-track.features-grid {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-lg);
+    grid-template-columns: 1fr;
   }
 
-  .research-previews-track.features-grid .feature-card {
-    width: 100%;
+  /* Mobile cards are full-width and tall, so the 4-line preview clamp leaves a
+     large empty gap. Double the clamp (~8 lines) so the body text fills the
+     card. applyCardTruncations() reads this height live from the element, so
+     no JS change is needed for the extra text to render. */
+  :root {
+    --feature-card-desc-max-height: 216px;
   }
 
   .pub-item {
