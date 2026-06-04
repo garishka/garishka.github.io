@@ -1,7 +1,7 @@
 [
   {
     "name": "Dr. Petya Nedkova",
-    "title": "Group Leader",
+    "title": "Project Leader",
     "interests": [
       "Gravitational Lensing",
       "Black Hole Thermodynamics"
@@ -32,7 +32,7 @@
       "Accretion Disks"
     ],
     "email": "gyulchev@phys.uni-sofia.bg",
-    "researchgate": "https://www.researchgate.net/profile/Galin-Gyulchev",
+    "orcid": "https://orcid.org/0000-0003-2427-0534",
     "photo": "assets/photos/gyulchev.jpg"
   },
   {
@@ -47,16 +47,19 @@
     "researchgate": null,
     "photo": "assets/photos/staykov.jpg"
   },
-  {
+    {
     "name": "Dr. Valentin Deliyski",
     "title": "Junior Researcher",
     "interests": [
-      "Numerical Relativity",
-      "Radiative Transfer"
+      "Gravitational Lensing", 
+      "Black Hole Imaging", 
+      "Numerical Relativity", 
+      "Gravitational Waves", 
+      "Magnetohydrodynamics"
     ],
     "email": "valentin.deliyski@phys.uni-sofia.bg",
-    "arxiv": null,
-    "researchgate": "https://www.researchgate.net/profile/Valentin-Deliyski",
+    "orcid": "https://orcid.org/0009-0007-8324-6127",
+    "github": "https://github.com/ValentinDeliyski/Mjolnir_GRRT",
     "photo": "assets/photos/deliyski.jpg"
   },
   {

@@ -307,6 +307,57 @@
   border-color: var(--color-accent);
 }
 
+/* ── Icon-only profile link (GitHub, ORCID, …) ─────────────────
+   Strips the pill chrome and renders the external SVG as a mask, so
+   it's painted with the theme colour: navy (light) / amber (dark). */
+.member-profile-link--icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: none;
+  border-radius: 0;
+  height: calc(var(--font-size-sm) * 1.6 + 9px);  /* match pill outer height */
+  color: var(--color-primary);
+}
+
+[data-theme="dark"] .member-profile-link--icon {
+  color: var(--color-accent);
+}
+
+/* The masked icon span. --icon-url is set inline per icon by the generator. */
+.member-profile-icon {
+  display: block;
+  width: 26px;
+  height: 26px;
+  background-color: currentColor;
+  -webkit-mask-image: var(--icon-url);
+          mask-image: var(--icon-url);
+  -webkit-mask-repeat: no-repeat;
+          mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+          mask-position: center;
+  -webkit-mask-size: contain;
+          mask-size: contain;
+  transition: background-color var(--transition-fast),
+              opacity var(--transition-fast);
+}
+
+/* Cancel the inherited pill hover (navy fill + white text) for the
+   borderless icon — dim instead. Placed after the base
+   .member-profile-link:hover rules so source order wins (equal specificity). */
+.member-profile-link--icon:hover {
+  background-color: transparent;
+  color: var(--color-primary);
+  opacity: 0.7;
+}
+
+[data-theme="dark"] .member-profile-link--icon:hover {
+  background-color: transparent;
+  color: var(--color-accent);
+  opacity: 0.7;
+}
+
 
 /* --------------------------------------------------------------------------
    §52  MEMBERS PAGE: STATE & ERROR FEEDBACK

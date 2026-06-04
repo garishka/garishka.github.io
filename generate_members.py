@@ -43,10 +43,9 @@ from pathlib import Path
 # Only fields with a truthy value (non-null, non-empty) produce a pill-link.
 PROFILE_FIELD_MAP = [
     ("inspirehep",   "InspireHEP"),
-    ("inspirehep",   "InspireHEP"),
+    ("orcid",        "ORCID"),
     ("arxiv",        "arXiv"),
     ("researchgate", "ResearchGate"),
-    ("orcid",        "ORCID"),
     ("scholar",      "Google Scholar"),
     ("github",       "GitHub"),
 ]
@@ -55,6 +54,14 @@ PROFILE_FIELD_MAP = [
 # the <section class="members-grid"> in members.html.
 CARD_INDENT = " " * 10
 
+
+# Profile label -> external SVG path (relative to the HTML page). When a
+# profile's label is present here, build_profile_link() renders a masked
+# currentColor icon (navy / amber) instead of a text pill.
+PROFILE_ICONS = {
+    "github": "/assets/icons/github.svg",
+    "orcid":  "/assets/icons/orcid.svg",
+}
 
 # -----------------------------------------------------------------------------
 # HELPERS
@@ -101,6 +108,31 @@ def resolve_focus(member: dict):
 # -----------------------------------------------------------------------------
 # CARD BUILDER
 # -----------------------------------------------------------------------------
+def build_profile_link(prof: dict, member_name: str) -> str:
+    """One <li> profile link -> a masked external icon if the label is in
+    PROFILE_ICONS, otherwise the text pill."""
+    p_name, p_url = prof["name"], prof["url"]
+
+    # Case-insensitive lookup: collect_profiles emits the PROFILE_FIELD_MAP
+    # label ("GitHub"), while PROFILE_ICONS may be keyed "github". Try the
+    # label as-is first, then its lowercased form.
+    icon_path = PROFILE_ICONS.get(p_name) or PROFILE_ICONS.get(p_name.lower())
+
+    if icon_path:
+        return (
+            f'        <li><a class="member-profile-link member-profile-link--icon"'
+            f' href="{esc(p_url)}" target="_blank" rel="noopener noreferrer"'
+            f' aria-label="{esc(p_name)} profile of {esc(member_name)} — opens in new tab">'
+            f'<span class="member-profile-icon" aria-hidden="true"'
+            f" style=\"--icon-url:url('{esc(icon_path)}')\"></span></a></li>"
+        )
+
+    return (
+        f'        <li><a class="member-profile-link" href="{esc(p_url)}"'
+        f' target="_blank" rel="noopener noreferrer"'
+        f' aria-label="{esc(p_name)} profile of {esc(member_name)}'
+        f' — opens in new tab">{esc(p_name)}</a></li>'
+    )
 
 def build_member_card(member: dict) -> str:
     """Return one <article class="member-card"> as an HTML string."""
@@ -160,7 +192,10 @@ def build_member_card(member: dict) -> str:
 
     out.append("    </dl>")
 
-    # External profiles (rendered only when there is at least one link).
+    # External profiles — wrapped in the .member-profiles / .member-profiles__list
+    # structure that the stylesheet targets. Without these wrappers the <li>s
+    # render as a default bulleted vertical list instead of a single horizontal
+    # row of pills/icons. Block is emitted only when there's at least one link.
     profiles = collect_profiles(member)
     if profiles:
         out.append(
@@ -169,13 +204,7 @@ def build_member_card(member: dict) -> str:
         )
         out.append('      <ul class="member-profiles__list" role="list">')
         for prof in profiles:
-            p_name, p_url = prof["name"], prof["url"]
-            out.append(
-                f'        <li><a class="member-profile-link" href="{esc(p_url)}"'
-                f' target="_blank" rel="noopener noreferrer"'
-                f' aria-label="{esc(p_name)} profile of {esc(name)}'
-                f' — opens in new tab">{esc(p_name)}</a></li>'
-            )
+            out.append(build_profile_link(prof, name))
         out.append("      </ul>")
         out.append("    </div>")
 
