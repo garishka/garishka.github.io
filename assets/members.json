@@ -17,8 +17,9 @@
     "interests": [
       "Modified Gravity",
       "Mathematical Relativity",
-      "Black Hole Physics",
-      "Neutron Stars"
+      "Gravitational Lensing",
+      "Black Hole Imaging",
+      "Gravitational Waves"
     ],
     "email": "yazad@phys.uni-sofia.bg",
     "inspirehep": "https://inspirehep.net/authors/1024142",
@@ -26,21 +27,28 @@
   },
   {
     "name": "Dr. Galin Gyulchev",
-    "title": "Researcher",
+    "title": "Senior Research Associate (R2 Researcher)",
     "interests": [
-      "Gravitational Lensing",
-      "Accretion Disks"
+      "Gravitational Lensing in Strong Gravitational Fields",
+      "Black Hole Shadows",
+      "Polarization",
+      "Accretion Disk Imaging",
+      "Compact Objects in GR and Modified Theories of Gravity"
     ],
     "email": "gyulchev@phys.uni-sofia.bg",
-    "orcid": "https://orcid.org/0000-0003-2427-0534",
+    "phone": "+359 2 8161670",
+    "inspirehep": "https://inspirehep.net/authors/1045855",
     "photo": "assets/photos/gyulchev.jpg"
   },
   {
     "name": "Dr. Kalin Staykov",
-    "title": "Researcher",
+    "title": "Senior Research Associate (R2 Researcher)",
     "interests": [
-      "Alternative Gravity",
-      "Neutron Stars"
+      "Theoretical Astrophysics",
+      "Gravitational Physics",
+      "Compact Objects",
+      "Modified Theories of Gravity",
+      "Gravitational Waves"
     ],
     "email": "kstaykov@phys.uni-sofia.bg",
     "inspirehep": "https://inspirehep.net/authors/1924394",
@@ -49,7 +57,7 @@
   },
     {
     "name": "Dr. Valentin Deliyski",
-    "title": "Junior Researcher",
+    "title": "Junior (R1) Researcher",
     "interests": [
       "Gravitational Lensing", 
       "Black Hole Imaging", 
@@ -64,7 +72,7 @@
   },
   {
     "name": "Gergana Daskalova",
-    "title": "Junior Researcher & Site Admin",
+    "title": "Junior (R1) Researcher & Site Admin",
     "interests": [
       "Numerical Relativity"
     ],
